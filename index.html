@@ -74,9 +74,11 @@
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
   .grid4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
+  .grid5 { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 10px; }
   @media (max-width: 600px) {
     .grid4 { grid-template-columns: 1fr 1fr; }
     .grid3 { grid-template-columns: 1fr 1fr; }
+    .grid5 { grid-template-columns: 1fr 1fr; }
   }
 
   label { font-size: 11px; color: var(--text-sec); display: block; margin-bottom: 3px; }
@@ -135,6 +137,15 @@
   }
   .add-btn:hover { background: var(--bg-sec); }
 
+  .timing-subsection {
+    background: var(--bg-sec); border: 0.5px solid var(--border);
+    border-radius: var(--radius-md); padding: 8px 10px; margin-bottom: 10px;
+  }
+  .timing-subsection-title {
+    font-size: 10px; font-weight: 500; color: var(--text-ter);
+    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px;
+  }
+
   .action-row { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
   .gen-btn {
     padding: 8px 20px; border-radius: var(--radius-md); border: 0.5px solid var(--border-pri);
@@ -173,6 +184,17 @@
   .out-panel { display: none; }
   .out-panel.active { display: block; }
 
+  /* Per-probe output tabs */
+  .probe-out-tabs { display: flex; gap: 5px; margin-bottom: 0.5rem; flex-wrap: wrap; }
+  .probe-out-tab {
+    padding: 3px 10px; border-radius: var(--radius-md); border: 0.5px solid var(--border-sec);
+    background: var(--bg-sec); color: var(--text-sec); cursor: pointer;
+    font-size: 11px; font-family: var(--font); transition: all 0.15s;
+  }
+  .probe-out-tab.active { background: var(--bg); color: var(--text); border-color: var(--border-pri); }
+  .probe-out-panel { display: none; }
+  .probe-out-panel.active { display: block; }
+
   .info-row { display: flex; gap: 8px; margin-bottom: 0.5rem; flex-wrap: wrap; }
   .info-chip {
     font-size: 11px; color: var(--text-sec); background: var(--bg-sec);
@@ -182,7 +204,6 @@
   svg.preview { width: 100%; border-radius: var(--radius-md); background: var(--bg-sec); display: block; }
 
   /* ── Draw mode ── */
-  #draw-mode { display: none; }
   .toolbar {
     display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 0.75rem; align-items: center;
   }
@@ -238,18 +259,17 @@
   <!-- ══════════════════════════════════════════════ CONFIG MODE ══ -->
   <div id="config-mode">
 
-    <!-- Global timing -->
+    <!-- Measurement scheme params -->
     <div class="section">
-      <div class="section-title">Global timing</div>
+      <div class="section-title">Measurement scheme</div>
       <div class="grid4">
-        <div><label>t<sub>gap</sub> (μs)</label><input type="number" id="g_tgap" value="10" step="1" min="0" oninput="autoGenerate()"></div>
-        <div><label>t<sub>rise</sub> (ns)</label><input type="number" id="g_trise" value="100" step="10" min="1" oninput="autoGenerate()"></div>
-        <div><label>t<sub>fall</sub> (ns)</label><input type="number" id="g_tfall" value="100" step="10" min="1" oninput="autoGenerate()"></div>
-        <div><label>N cycles</label><input type="number" id="g_ncycles" value="1" step="1" min="1" oninput="autoGenerate()"></div>
+        <div><label>t<sub>low</sub> — integration window (ns)</label><input type="number" id="m_tlow" value="100" step="10" min="1" oninput="autoGenerate()"></div>
+        <div><label>t<sub>high</sub> — averaging time (ns)</label><input type="number" id="m_thigh" value="10" step="1" min="1" oninput="autoGenerate()"></div>
+        <div><label>Max points / row</label><input type="number" id="m_maxpts" value="4000" step="100" min="1" oninput="autoGenerate()"></div>
+        <div><label>Current range (A)</label><input type="number" id="m_irange" value="0.001" step="0.0001" oninput="autoGenerate()"></div>
       </div>
-      <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
-        <div style="flex:1; min-width:120px;"><label>V<sub>baseline</sub> gate (V)</label><input type="number" id="g_vbase" value="1.0" step="0.1" oninput="autoGenerate()"></div>
-        <div style="flex:1; min-width:120px;"><label>V<sub>pulse</sub> gate (V)</label><input type="number" id="g_vpulse" value="0.0" step="0.1" oninput="autoGenerate()"></div>
+      <div class="grid2" style="margin-top:10px;">
+        <div><label>Voltage range (V)</label><input type="number" id="m_vrange" value="2" step="0.5" oninput="autoGenerate()"></div>
       </div>
     </div>
 
@@ -268,20 +288,6 @@
       <div id="probe-bulk" class="probe-panel"></div>
     </div>
 
-    <!-- Measurement scheme params -->
-    <div class="section">
-      <div class="section-title">Measurement scheme</div>
-      <div class="grid3">
-        <div><label>t<sub>low</sub> — integration window (ns)</label><input type="number" id="m_tlow" value="100" step="10" min="1" oninput="autoGenerate()"></div>
-        <div><label>t<sub>high</sub> — averaging time (ns)</label><input type="number" id="m_thigh" value="10" step="1" min="1" oninput="autoGenerate()"></div>
-        <div><label>Max points / row</label><input type="number" id="m_maxpts" value="4000" step="100" min="1" oninput="autoGenerate()"></div>
-      </div>
-      <div class="grid2" style="margin-top:10px;">
-        <div><label>Current range (A)</label><input type="number" id="m_irange" value="0.001" step="0.0001" oninput="autoGenerate()"></div>
-        <div><label>Voltage range (V)</label><input type="number" id="m_vrange" value="2" step="0.5" oninput="autoGenerate()"></div>
-      </div>
-    </div>
-
     <!-- Actions -->
     <div class="action-row">
       <button class="gen-btn" onclick="exportCSV()">Export CSV</button>
@@ -297,11 +303,41 @@
       </div>
 
       <div id="out-pulse" class="out-panel active">
-        <div class="out-header">
-          <div class="info-row" id="pulse-info" style="margin:0;"></div>
-          <button class="copy-btn" onclick="copyTable('pulse-table-wrap', this)">Copy</button>
+        <!-- Per-probe sub-tabs -->
+        <div class="probe-out-tabs">
+          <div class="probe-out-tab active" onclick="switchProbeOut('gate',this)">Gate (G)</div>
+          <div class="probe-out-tab" onclick="switchProbeOut('drain',this)">Drain (D)</div>
+          <div class="probe-out-tab" onclick="switchProbeOut('source',this)">Source (S)</div>
+          <div class="probe-out-tab" onclick="switchProbeOut('bulk',this)">Bulk (B)</div>
         </div>
-        <div class="table-wrap" id="pulse-table-wrap"></div>
+        <div id="probe-out-gate" class="probe-out-panel active">
+          <div class="out-header">
+            <div class="info-row" id="pulse-info-gate" style="margin:0;"></div>
+            <button class="copy-btn" onclick="copyTable('pulse-table-gate', this)">Copy</button>
+          </div>
+          <div class="table-wrap" id="pulse-table-gate"></div>
+        </div>
+        <div id="probe-out-drain" class="probe-out-panel">
+          <div class="out-header">
+            <div class="info-row" id="pulse-info-drain" style="margin:0;"></div>
+            <button class="copy-btn" onclick="copyTable('pulse-table-drain', this)">Copy</button>
+          </div>
+          <div class="table-wrap" id="pulse-table-drain"></div>
+        </div>
+        <div id="probe-out-source" class="probe-out-panel">
+          <div class="out-header">
+            <div class="info-row" id="pulse-info-source" style="margin:0;"></div>
+            <button class="copy-btn" onclick="copyTable('pulse-table-source', this)">Copy</button>
+          </div>
+          <div class="table-wrap" id="pulse-table-source"></div>
+        </div>
+        <div id="probe-out-bulk" class="probe-out-panel">
+          <div class="out-header">
+            <div class="info-row" id="pulse-info-bulk" style="margin:0;"></div>
+            <button class="copy-btn" onclick="copyTable('pulse-table-bulk', this)">Copy</button>
+          </div>
+          <div class="table-wrap" id="pulse-table-bulk"></div>
+        </div>
       </div>
 
       <div id="out-meas" class="out-panel">
@@ -320,7 +356,7 @@
   </div><!-- end config-mode -->
 
   <!-- ══════════════════════════════════════════════ DRAW MODE ══ -->
-  <div id="draw-mode">
+  <div id="draw-mode" style="display:none">
 
     <!-- Probe selector + global timing -->
     <div class="section">
@@ -429,14 +465,41 @@ function switchAppMode(m) {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   CONFIG MODE
+   CONFIG MODE — Per-probe independent state
 ══════════════════════════════════════════════════════════════ */
+
+// Each probe has its own timing params + waveform mode
 const probeState = {
-  gate:   { mode: 'pulse',    pulses: [{ tpulse: 1000, repeat: 1, sweep: false, vlo: 0, vhi: 1, vstep: 0.1 }], constant: 1.0 },
-  drain:  { mode: 'constant', pulses: [], constant: 1.8 },
-  source: { mode: 'constant', pulses: [], constant: 0.0 },
-  bulk:   { mode: 'constant', pulses: [], constant: 0.0 },
+  gate: {
+    mode: 'pulse',
+    pulses: [{ tpulse: 1000, repeat: 1, sweep: false, vlo: 0, vhi: 1, vstep: 0.1 }],
+    constant: 1.0,
+    sweep: { vstart: 0, vstop: 1, vstep: 0.1, tpulse: 1000 },
+    timing: { tgap: 10, trise: 100, tfall: 100, ncycles: 1, vbase: 1.0, vpulse: 0.0 }
+  },
+  drain: {
+    mode: 'constant',
+    pulses: [{ tpulse: 1000, repeat: 1, vlo: 1.8 }],
+    constant: 1.8,
+    sweep: { vstart: 0, vstop: 2, vstep: 0.2, tpulse: 1000 },
+    timing: { tgap: 10, trise: 100, tfall: 100, ncycles: 1, vbase: 1.8, vpulse: 0.0 }
+  },
+  source: {
+    mode: 'constant',
+    pulses: [{ tpulse: 1000, repeat: 1, vlo: 0.0 }],
+    constant: 0.0,
+    sweep: { vstart: 0, vstop: 1, vstep: 0.1, tpulse: 1000 },
+    timing: { tgap: 10, trise: 100, tfall: 100, ncycles: 1, vbase: 0.0, vpulse: 0.5 }
+  },
+  bulk: {
+    mode: 'constant',
+    pulses: [{ tpulse: 1000, repeat: 1, vlo: 0.0 }],
+    constant: 0.0,
+    sweep: { vstart: 0, vstop: 1, vstep: 0.1, tpulse: 1000 },
+    timing: { tgap: 10, trise: 100, tfall: 100, ncycles: 1, vbase: 0.0, vpulse: 0.5 }
+  }
 };
+
 const probeColors = { gate: '#378ADD', drain: '#1D9E75', source: '#D85A30', bulk: '#D4537E' };
 let currentProbe = 'gate';
 let generatedData = null;
@@ -456,25 +519,49 @@ function switchProbe(p) {
   renderProbePanel(p);
 }
 
+// Renders the full probe panel: timing + waveform mode + params
 function renderProbePanel(p) {
   const s = probeState[p];
-  const isGate = p === 'gate';
+  const t = s.timing;
   const el = document.getElementById('probe-'+p);
 
-  const modeBtns = isGate
-    ? `<button class="mode-btn ${s.mode==='pulse'?'active':''}" onclick="setMode('${p}','pulse')">Pulsed</button>
-       <button class="mode-btn ${s.mode==='multipulse'?'active':''}" onclick="setMode('${p}','multipulse')">Multi-pulse</button>`
-    : `<button class="mode-btn ${s.mode==='constant'?'active':''}" onclick="setMode('${p}','constant')">Constant</button>
-       <button class="mode-btn ${s.mode==='pulse'?'active':''}" onclick="setMode('${p}','pulse')">Pulsed</button>
-       <button class="mode-btn ${s.mode==='sweep'?'active':''}" onclick="setMode('${p}','sweep')">Sweep</button>`;
+  // All probes get all 5 modes
+  const modeBtns =
+    `<button class="mode-btn ${s.mode==='constant'?'active':''}"    onclick="setMode('${p}','constant')">Constant</button>
+     <button class="mode-btn ${s.mode==='sweep'?'active':''}"       onclick="setMode('${p}','sweep')">Sweep</button>
+     <button class="mode-btn ${s.mode==='pulse'?'active':''}"       onclick="setMode('${p}','pulse')">Pulsed</button>
+     <button class="mode-btn ${s.mode==='multipulse'?'active':''}"  onclick="setMode('${p}','multipulse')">Multi-pulse</button>`;
 
+  // Timing sub-section (shown for pulsed/multipulse/sweep)
+  const showTiming = (s.mode === 'pulse' || s.mode === 'multipulse' || s.mode === 'sweep');
+  const timingHtml = showTiming ? `
+    <div class="timing-subsection">
+      <div class="timing-subsection-title">Timing — ${p}</div>
+      <div class="grid5">
+        <div><label>t<sub>gap</sub> (μs)</label><input type="number" step="1" min="0" value="${t.tgap}"
+          onchange="probeState['${p}'].timing.tgap=parseFloat(this.value);autoGenerate()"></div>
+        <div><label>t<sub>rise</sub> (ns)</label><input type="number" step="10" min="1" value="${t.trise}"
+          onchange="probeState['${p}'].timing.trise=parseFloat(this.value);autoGenerate()"></div>
+        <div><label>t<sub>fall</sub> (ns)</label><input type="number" step="10" min="1" value="${t.tfall}"
+          onchange="probeState['${p}'].timing.tfall=parseFloat(this.value);autoGenerate()"></div>
+        <div><label>N cycles</label><input type="number" step="1" min="1" value="${t.ncycles}"
+          onchange="probeState['${p}'].timing.ncycles=parseInt(this.value);autoGenerate()"></div>
+        <div><label>V<sub>baseline</sub> (V)</label><input type="number" step="0.1" value="${t.vbase}"
+          onchange="probeState['${p}'].timing.vbase=parseFloat(this.value);autoGenerate()"></div>
+      </div>
+      <div class="grid2" style="margin-top:8px;">
+        <div><label>V<sub>pulse</sub> (V)</label><input type="number" step="0.1" value="${t.vpulse}"
+          onchange="probeState['${p}'].timing.vpulse=parseFloat(this.value);autoGenerate()"></div>
+      </div>
+    </div>` : '';
+
+  // Mode body
   let body = '';
   if (s.mode === 'constant') {
     body = `<div style="max-width:160px;"><label>Voltage (V)</label>
       <input type="number" step="0.1" value="${s.constant}"
         onchange="probeState['${p}'].constant=parseFloat(this.value);autoGenerate()"></div>`;
   } else if (s.mode === 'sweep') {
-    if (!s.sweep) s.sweep = { vstart: 0, vstop: 2, vstep: 0.2, tpulse: 1000 };
     const sw = s.sweep;
     body = `<div class="grid4">
       <div><label>V start (V)</label><input type="number" step="0.1" value="${sw.vstart}" onchange="probeState['${p}'].sweep.vstart=parseFloat(this.value);autoGenerate()"></div>
@@ -483,12 +570,10 @@ function renderProbePanel(p) {
       <div><label>t<sub>pulse</sub> (μs)</label><input type="number" step="1" value="${sw.tpulse}" onchange="probeState['${p}'].sweep.tpulse=parseFloat(this.value);autoGenerate()"></div>
     </div>`;
   } else {
+    // pulse or multipulse
     let items = '';
     s.pulses.forEach((pu, i) => {
-      const extraV = isGate ? '' : `<div><label>Voltage (V)</label>
-        <input type="number" step="0.1" value="${pu.vlo !== undefined ? pu.vlo : 0}"
-          onchange="probeState['${p}'].pulses[${i}].vlo=parseFloat(this.value);autoGenerate()"></div>`;
-      const sweepToggle = (isGate && s.mode === 'multipulse') ? `
+      const sweepToggle = (s.mode === 'multipulse') ? `
         <div style="margin-top:6px;">
           <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
             <input type="checkbox" ${pu.sweep?'checked':''} onchange="probeState['${p}'].pulses[${i}].sweep=this.checked;renderProbePanel('${p}');autoGenerate()">
@@ -501,6 +586,11 @@ function renderProbePanel(p) {
           </div>` : ''}
         </div>` : '';
 
+      // For pulse mode, show a voltage field
+      const voltageField = (s.mode === 'pulse') ? `
+        <div><label>V pulse (V)</label><input type="number" step="0.1" value="${pu.vlo !== undefined ? pu.vlo : probeState[p].timing.vpulse}"
+          onchange="probeState['${p}'].pulses[${i}].vlo=parseFloat(this.value);autoGenerate()"></div>` : '';
+
       items += `<div class="pulse-item">
         <div class="pulse-item-header">
           <span class="pulse-label">Segment ${i+1}</span>
@@ -509,7 +599,7 @@ function renderProbePanel(p) {
         <div class="grid3">
           <div><label>t<sub>pulse</sub> (μs)</label><input type="number" step="1" min="0" value="${pu.tpulse}" onchange="probeState['${p}'].pulses[${i}].tpulse=parseFloat(this.value);autoGenerate()"></div>
           <div><label>Repeat</label><input type="number" step="1" min="1" value="${pu.repeat||1}" onchange="probeState['${p}'].pulses[${i}].repeat=parseInt(this.value);autoGenerate()"></div>
-          ${extraV}
+          ${voltageField}
         </div>
         ${sweepToggle}
       </div>`;
@@ -518,19 +608,24 @@ function renderProbePanel(p) {
       <button class="add-btn" onclick="addPulse('${p}')">+ Add segment</button>`;
   }
 
-  el.innerHTML = `<div class="pulse-mode-row"><span style="font-size:12px;color:var(--text-sec);">Mode:</span>${modeBtns}</div>${body}`;
+  el.innerHTML = `
+    <div class="pulse-mode-row">
+      <span style="font-size:12px;color:var(--text-sec);">Mode:</span>${modeBtns}
+    </div>
+    ${timingHtml}
+    ${body}`;
 }
 
 function setMode(p, m) {
   probeState[p].mode = m;
   if ((m==='pulse'||m==='multipulse') && probeState[p].pulses.length===0)
-    probeState[p].pulses = [{ tpulse: 1000, repeat: 1, sweep: false, vlo: 0, vhi: 1, vstep: 0.1 }];
+    probeState[p].pulses = [{ tpulse: 1000, repeat: 1, sweep: false, vlo: probeState[p].timing.vpulse, vhi: 1, vstep: 0.1 }];
   renderProbePanel(p);
   autoGenerate();
 }
 
 function addPulse(p) {
-  probeState[p].pulses.push({ tpulse: 1000, repeat: 1, sweep: false, vlo: 0, vhi: 1, vstep: 0.1 });
+  probeState[p].pulses.push({ tpulse: 1000, repeat: 1, sweep: false, vlo: probeState[p].timing.vpulse, vhi: 1, vstep: 0.1 });
   renderProbePanel(p);
   autoGenerate();
 }
@@ -548,40 +643,64 @@ function switchOut(tab) {
   });
 }
 
-function getParams() {
-  return {
-    tgap:    parseFloat(document.getElementById('g_tgap').value)    * 1e-6,
-    trise:   parseFloat(document.getElementById('g_trise').value)   * 1e-9,
-    tfall:   parseFloat(document.getElementById('g_tfall').value)   * 1e-9,
-    ncycles: parseInt(document.getElementById('g_ncycles').value),
-    vbase:   parseFloat(document.getElementById('g_vbase').value),
-    vpulse:  parseFloat(document.getElementById('g_vpulse').value),
-    tlow:    parseFloat(document.getElementById('m_tlow').value)    * 1e-9,
-    thigh:   parseFloat(document.getElementById('m_thigh').value)   * 1e-9,
-    maxpts:  parseInt(document.getElementById('m_maxpts').value),
-    irange:  parseFloat(document.getElementById('m_irange').value),
-    vrange:  parseFloat(document.getElementById('m_vrange').value),
-  };
+function switchProbeOut(probe, btn) {
+  ['gate','drain','source','bulk'].forEach(p => {
+    document.getElementById('probe-out-'+p).classList.toggle('active', p === probe);
+  });
+  btn.parentElement.querySelectorAll('.probe-out-tab').forEach(el => el.classList.remove('active'));
+  btn.classList.add('active');
 }
 
-function buildGateWaveform(params) {
-  const { tgap, trise, tfall, vbase, vpulse, ncycles } = params;
-  const gs = probeState.gate;
+/* ── Per-probe waveform builders ── */
+
+function buildProbeWaveformIndependent(probe) {
+  const s = probeState[probe];
+  const t = s.timing;
+  const tgap   = t.tgap   * 1e-6;
+  const trise  = t.trise  * 1e-9;
+  const tfall  = t.tfall  * 1e-9;
+  const ncycles= t.ncycles;
+  const vbase  = t.vbase;
+  const vpulse = t.vpulse;
+
+  if (s.mode === 'constant') {
+    // Just return a flat line — duration will be normalised later
+    return [{ t: 0, v: s.constant }];
+  }
+
+  if (s.mode === 'sweep') {
+    const sw = s.sweep;
+    const steps = Math.max(1, Math.round(Math.abs(sw.vstop - sw.vstart) / (Math.abs(sw.vstep)||0.1)));
+    let pts = [{ t: 0, v: vbase }];
+    for (let c = 0; c < ncycles; c++) {
+      for (let i = 0; i <= steps; i++) {
+        const v = sw.vstart + i * Math.abs(sw.vstep) * Math.sign(sw.vstop - sw.vstart);
+        const last = pts[pts.length-1].t;
+        pts.push({ t: last + tgap,                           v: vbase });
+        pts.push({ t: last + tgap + trise,                   v: v });
+        pts.push({ t: last + tgap + trise + sw.tpulse*1e-6,  v: v });
+        pts.push({ t: last + tgap + trise + sw.tpulse*1e-6 + tfall, v: vbase });
+      }
+    }
+    return pts;
+  }
+
+  // pulse or multipulse
   let pts = [{ t: 0, v: vbase }];
   for (let c = 0; c < ncycles; c++) {
     let segs = [];
-    if (gs.mode === 'pulse') {
-      gs.pulses.forEach(pu => {
+    if (s.mode === 'pulse') {
+      s.pulses.forEach(pu => {
         for (let r = 0; r < (pu.repeat||1); r++)
-          segs.push({ tpulse: pu.tpulse * 1e-6, voltage: vpulse });
+          segs.push({ tpulse: pu.tpulse * 1e-6, voltage: pu.vlo !== undefined ? pu.vlo : vpulse });
       });
-    } else {
-      gs.pulses.forEach(pu => {
+    } else { // multipulse
+      s.pulses.forEach(pu => {
         const reps = pu.repeat || 1;
         if (pu.sweep) {
-          const steps = Math.max(1, Math.round(Math.abs(pu.vhi - pu.vlo) / (pu.vstep||0.1)));
-          for (let s = 0; s <= steps; s++) {
-            const v = pu.vlo + s * (pu.vstep||0.1) * Math.sign(pu.vhi - pu.vlo);
+          const steps = Math.max(1, Math.round(Math.abs(pu.vhi - pu.vlo) / (Math.abs(pu.vstep)||0.1)));
+          for (let st = 0; st <= steps; st++) {
+            const v = pu.vlo + st * Math.abs(pu.vstep) * Math.sign(pu.vhi - pu.vlo);
             for (let r = 0; r < reps; r++)
               segs.push({ tpulse: pu.tpulse * 1e-6, voltage: v });
           }
@@ -593,44 +712,17 @@ function buildGateWaveform(params) {
     }
     segs.forEach(seg => {
       const last = pts[pts.length-1].t;
-      pts.push({ t: last + tgap, v: vbase });
-      pts.push({ t: last + tgap + trise, v: seg.voltage });
-      pts.push({ t: last + tgap + trise + seg.tpulse, v: seg.voltage });
+      pts.push({ t: last + tgap,                            v: vbase });
+      pts.push({ t: last + tgap + trise,                    v: seg.voltage });
+      pts.push({ t: last + tgap + trise + seg.tpulse,       v: seg.voltage });
       pts.push({ t: last + tgap + trise + seg.tpulse + tfall, v: vbase });
     });
   }
   return pts;
 }
 
-function buildProbeWaveform(probe, gateWfm, params) {
-  const s = probeState[probe];
-  const { tgap, trise, tfall } = params;
-  const tTotal = gateWfm[gateWfm.length-1].t;
-  if (s.mode === 'constant') return [{ t: 0, v: s.constant }, { t: tTotal, v: s.constant }];
-  if (s.mode === 'sweep') {
-    const sw = s.sweep || { vstart:0, vstop:2, vstep:0.2 };
-    const steps = Math.max(1, Math.round(Math.abs(sw.vstop - sw.vstart) / (sw.vstep||0.1)));
-    const pts = [];
-    for (let i = 0; i <= steps; i++)
-      pts.push({ t: (i / steps) * tTotal, v: sw.vstart + i * (sw.vstep||0.1) * Math.sign(sw.vstop - sw.vstart) });
-    return pts;
-  }
-  let pts = [{ t: 0, v: s.constant||0 }];
-  s.pulses.forEach(pu => {
-    for (let r = 0; r < (pu.repeat||1); r++) {
-      const last = pts[pts.length-1].t;
-      const vl = pu.vlo !== undefined ? pu.vlo : 0;
-      pts.push({ t: last + tgap, v: s.constant||0 });
-      pts.push({ t: last + tgap + trise, v: vl });
-      pts.push({ t: last + tgap + trise + pu.tpulse*1e-6, v: vl });
-      pts.push({ t: last + tgap + trise + pu.tpulse*1e-6 + tfall, v: s.constant||0 });
-    }
-  });
-  if (pts[pts.length-1].t < tTotal) pts.push({ t: tTotal, v: s.constant||0 });
-  return pts;
-}
-
 function interpWfm(wfm, t) {
+  if (wfm.length === 1) return wfm[0].v;
   for (let i = 0; i < wfm.length-1; i++) {
     if (t >= wfm[i].t && t <= wfm[i+1].t) {
       const span = wfm[i+1].t - wfm[i].t;
@@ -641,56 +733,88 @@ function interpWfm(wfm, t) {
   return wfm[wfm.length-1].v;
 }
 
+function getMeasParams() {
+  return {
+    tlow:   parseFloat(document.getElementById('m_tlow').value)   * 1e-9,
+    thigh:  parseFloat(document.getElementById('m_thigh').value)  * 1e-9,
+    maxpts: parseInt(document.getElementById('m_maxpts').value),
+    irange: parseFloat(document.getElementById('m_irange').value),
+    vrange: parseFloat(document.getElementById('m_vrange').value),
+  };
+}
+
 function generate() {
-  const params = getParams();
-  const gWfm = buildGateWaveform(params);
-  const dWfm = buildProbeWaveform('drain',  gWfm, params);
-  const sWfm = buildProbeWaveform('source', gWfm, params);
-  const bWfm = buildProbeWaveform('bulk',   gWfm, params);
-  const tTotal = gWfm[gWfm.length-1].t;
+  // Build independent waveforms for each probe
+  const wfms = {};
+  ['gate','drain','source','bulk'].forEach(p => {
+    wfms[p] = buildProbeWaveformIndependent(p);
+  });
 
-  const allT = [...new Set([
-    ...gWfm.map(p=>p.t), ...dWfm.map(p=>p.t),
-    ...sWfm.map(p=>p.t), ...bWfm.map(p=>p.t),
-  ])].sort((a,b) => a-b);
+  // Find tTotal per probe (constant probes get tTotal = 0, handled below)
+  const tTotals = {};
+  ['gate','drain','source','bulk'].forEach(p => {
+    const w = wfms[p];
+    tTotals[p] = w.length > 1 ? w[w.length-1].t : 0;
+  });
 
-  const pulseRows = allT.map(t => ({
-    t, g: interpWfm(gWfm, t), d: interpWfm(dWfm, t),
-    s: interpWfm(sWfm, t), b: interpWfm(bWfm, t),
-  }));
+  // For constant probes, extend to the max tTotal of any probe
+  const maxT = Math.max(...Object.values(tTotals));
 
-  const { tlow, thigh, maxpts, irange, vrange } = params;
+  ['gate','drain','source','bulk'].forEach(p => {
+    const w = wfms[p];
+    if (w.length === 1) {
+      // constant — extend to maxT
+      wfms[p] = [{ t: 0, v: w[0].v }, { t: maxT || 1e-6, v: w[0].v }];
+      tTotals[p] = maxT || 1e-6;
+    }
+  });
+
+  // Build per-probe pulse tables (each probe's own time axis)
+  const probePulseRows = {};
+  ['gate','drain','source','bulk'].forEach(p => {
+    const wfm = wfms[p];
+    probePulseRows[p] = wfm.map(pt => ({ t: pt.t, v: pt.v }));
+  });
+
+  // Measurement scheme — use the longest probe's duration
+  const meas = getMeasParams();
+  const { tlow, thigh, maxpts, irange, vrange } = meas;
   const tPerPt  = tlow + thigh;
   const tPerRow = maxpts * tPerPt;
-  const numFull = Math.floor(tTotal / tPerRow);
-  const lastPts = Math.ceil((tTotal - numFull * tPerRow) / tPerPt);
+  const totalT  = maxT || 1e-6;
+  const numFull = Math.floor(totalT / tPerRow);
+  const lastPts = Math.ceil((totalT - numFull * tPerRow) / tPerPt);
   const totalRows = numFull + (lastPts > 0 ? 1 : 0);
   const measRows = [];
   for (let r = 0; r < totalRows; r++)
     measRows.push({ start: r*tPerRow, npts: r<numFull ? maxpts : lastPts, cycleDur: tPerPt, avgTime: thigh, irange, vrange });
 
-  generatedData = { pulseRows, measRows, tTotal, gWfm, dWfm, sWfm, bWfm, tPerPt };
-  renderPulseTable(pulseRows, tTotal);
-  renderMeasTable(measRows, tTotal, tPerPt);
-  renderPreview(gWfm, dWfm, sWfm, bWfm, tTotal);
+  generatedData = { probePulseRows, measRows, wfms, tTotals, maxT, tPerPt };
+  renderAllProbeTables(probePulseRows, tTotals);
+  renderMeasTable(measRows, totalT, tPerPt);
+  renderPreview(wfms, maxT);
   document.getElementById('output-section').style.display = '';
 }
 
 function fmtE(v) { return v.toExponential(4); }
 function fmtF(v, d=4) { return Number(v).toFixed(d); }
 
-function renderPulseTable(rows, tTotal) {
-  document.getElementById('pulse-info').innerHTML =
-    `<span class="info-chip">Points: ${rows.length}</span>
-     <span class="info-chip">Total time: ${(tTotal*1e6).toFixed(3)} μs</span>`;
-  let html = `<table><thead><tr>
-    <th>Time (s)</th><th>V_gate (V)</th><th>V_drain (V)</th><th>V_source (V)</th><th>V_bulk (V)</th>
-  </tr></thead><tbody>`;
-  rows.forEach(r => {
-    html += `<tr><td>${fmtE(r.t)}</td><td>${fmtF(r.g)}</td><td>${fmtF(r.d)}</td><td>${fmtF(r.s)}</td><td>${fmtF(r.b)}</td></tr>`;
+function renderAllProbeTables(probePulseRows, tTotals) {
+  ['gate','drain','source','bulk'].forEach(p => {
+    const rows = probePulseRows[p];
+    const tTotal = tTotals[p];
+    document.getElementById('pulse-info-'+p).innerHTML =
+      `<span class="info-chip">Points: ${rows.length}</span>
+       <span class="info-chip">Total time: ${(tTotal*1e6).toFixed(3)} μs</span>`;
+    let html = `<table><thead><tr>
+      <th>Time (s)</th><th>Voltage (V)</th>
+    </tr></thead><tbody>`;
+    rows.forEach(r => {
+      html += `<tr><td>${fmtE(r.t)}</td><td>${fmtF(r.v)}</td></tr>`;
+    });
+    html += '</tbody></table>';
+    document.getElementById('pulse-table-'+p).innerHTML = html;
   });
-  html += '</tbody></table>';
-  document.getElementById('pulse-table-wrap').innerHTML = html;
 }
 
 function renderMeasTable(rows, tTotal, tPerPt) {
@@ -711,16 +835,21 @@ function renderMeasTable(rows, tTotal, tPerPt) {
   document.getElementById('meas-table-wrap').innerHTML = html;
 }
 
-function renderPreview(gWfm, dWfm, sWfm, bWfm, tTotal) {
-  const W = 660, H = 200, padL = 38, padR = 12, padT = 10, padB = 26;
+function renderPreview(wfms, maxT) {
+  const W = 660, H = 220, padL = 38, padR = 12, padT = 10, padB = 26;
   const plotW = W - padL - padR, plotH = H - padT - padB;
-  const allV = [...gWfm,...dWfm,...sWfm,...bWfm].map(p=>p.v);
+  const allV = Object.values(wfms).flatMap(w => w.map(p=>p.v));
   const vMin = Math.min(...allV) - 0.1;
   const vMax = Math.max(...allV) + 0.1;
   const vSpan = vMax - vMin || 1;
+  const tTotal = maxT || 1e-6;
   const tx = t => padL + (t / tTotal) * plotW;
   const ty = v => padT + (1 - (v - vMin) / vSpan) * plotH;
   function path(wfm, color) {
+    if (wfm.length < 2) {
+      const x1 = padL, x2 = padL + plotW, y = ty(wfm[0].v);
+      return `<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${color}" stroke-width="1.5"/>`;
+    }
     const d = wfm.map((p,i) => `${i===0?'M':'L'}${tx(p.t).toFixed(1)},${ty(p.v).toFixed(1)}`).join(' ');
     return `<path d="${d}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round"/>`;
   }
@@ -737,10 +866,8 @@ function renderPreview(gWfm, dWfm, sWfm, bWfm, tTotal) {
     const x = padL + f * plotW;
     svg += `<text x="${x.toFixed(1)}" y="${padT+plotH+14}" text-anchor="middle" font-size="10" fill="currentColor" opacity="0.5">${(f*tTotal*1e6).toFixed(2)}μs</text>`;
   });
-  svg += path(gWfm, probeColors.gate);
-  svg += path(dWfm, probeColors.drain);
-  svg += path(sWfm, probeColors.source);
-  svg += path(bWfm, probeColors.bulk);
+  const probeOrder = ['gate','drain','source','bulk'];
+  probeOrder.forEach(p => { svg += path(wfms[p], probeColors[p]); });
   const legend = [['G', probeColors.gate], ['D', probeColors.drain], ['S', probeColors.source], ['B', probeColors.bulk]];
   legend.forEach(([lbl, col], i) => {
     const lx = padL + 8 + i * 54;
@@ -763,10 +890,13 @@ function copyTable(id, btn) {
 
 function exportCSV() {
   if (!generatedData) generate();
-  const { pulseRows, measRows } = generatedData;
-  let csv = 'Time_s,V_gate_V,V_drain_V,V_source_V,V_bulk_V\n';
-  pulseRows.forEach(r => {
-    csv += `${r.t.toExponential(6)},${r.g.toFixed(4)},${r.d.toFixed(4)},${r.s.toFixed(4)},${r.b.toFixed(4)}\n`;
+  const { probePulseRows, measRows } = generatedData;
+  let csv = '';
+  ['gate','drain','source','bulk'].forEach(p => {
+    csv += `\n${p.toUpperCase()} Probe\nTime_s,Voltage_V\n`;
+    probePulseRows[p].forEach(r => {
+      csv += `${r.t.toExponential(6)},${r.v.toFixed(4)}\n`;
+    });
   });
   csv += '\nMeasurement Scheme\nStart_s,N_points,Cycle_s,Avg_s,I_range_A,V_range_V\n';
   measRows.forEach(r => {
@@ -807,10 +937,13 @@ const PAD = { l:46, r:12, t:12, b:36 };
 
 function resizeCanvas() {
   DPR = devicePixelRatio || 1;
-  const rect = canvas.parentElement.getBoundingClientRect();
-  cW = rect.width; cH = 300;
+  const wrap = document.getElementById('canvas-wrap');
+  if (!wrap) return;
+  const rect = wrap.getBoundingClientRect();
+  cW = rect.width || 600; cH = 300;
   canvas.style.width = cW+'px'; canvas.style.height = cH+'px';
-  canvas.width = cW*DPR; canvas.height = cH*DPR;
+  canvas.width = Math.round(cW*DPR); canvas.height = Math.round(cH*DPR);
+  ctx.setTransform(1,0,0,1,0,0);
   ctx.scale(DPR, DPR);
   redraw();
 }
@@ -831,6 +964,7 @@ function nodeToReal(n) {
 }
 
 function redraw() {
+  if (!cW || !cH) return;
   ctx.clearRect(0,0,cW,cH);
   drawGrid();
   PROBES.forEach(p => { if (p !== drawState.probe) drawProbeWfm(p, PC[p], 0.35); });
@@ -842,9 +976,8 @@ function redraw() {
 
 function drawGrid() {
   const vm=dvMin(), vM=dvMax(), tt=dtTotal();
-  ctx.save();
-  // Attempt dark mode detection
   const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  ctx.save();
   ctx.fillStyle = isDark ? '#202020' : '#f8f7f5';
   ctx.fillRect(0,0,cW,cH);
   const vTicks = niceTicks(vm,vM,5);
@@ -977,9 +1110,9 @@ canvas.addEventListener('contextmenu', e => {
   const hit=hitNode(drawState.probe,x,y);
   if (hit>=0) { drawState.nodes[drawState.probe].splice(hit,1); redraw(); }
 });
-canvas.addEventListener('touchstart', e => { e.preventDefault(); canvas.dispatchEvent(new MouseEvent('mousedown',{clientX:e.touches[0].clientX,clientY:e.touches[0].clientY})); });
-canvas.addEventListener('touchmove',  e => { e.preventDefault(); canvas.dispatchEvent(new MouseEvent('mousemove',{clientX:e.touches[0].clientX,clientY:e.touches[0].clientY})); });
-canvas.addEventListener('touchend',   e => { e.preventDefault(); canvas.dispatchEvent(new MouseEvent('mouseup')); });
+canvas.addEventListener('touchstart', e => { e.preventDefault(); canvas.dispatchEvent(new MouseEvent('mousedown',{clientX:e.touches[0].clientX,clientY:e.touches[0].clientY})); }, {passive:false});
+canvas.addEventListener('touchmove',  e => { e.preventDefault(); canvas.dispatchEvent(new MouseEvent('mousemove',{clientX:e.touches[0].clientX,clientY:e.touches[0].clientY})); }, {passive:false});
+canvas.addEventListener('touchend',   e => { e.preventDefault(); canvas.dispatchEvent(new MouseEvent('mouseup')); }, {passive:false});
 
 function renderSegList() {
   const probe=drawState.probe;
@@ -1041,7 +1174,7 @@ function clamp(v,mn,mx) { return Math.max(mn,Math.min(mx,v)); }
 
 function niceTicks(lo,hi,n) {
   const raw=(hi-lo)/n;
-  const exp=Math.pow(10,Math.floor(Math.log10(raw)));
+  const exp=Math.pow(10,Math.floor(Math.log10(raw||1)));
   const nice=[1,2,2.5,5,10].find(f=>f*exp>=raw)*exp;
   const start=Math.ceil(lo/nice)*nice;
   const ticks=[];
@@ -1158,7 +1291,6 @@ function switchDrawOut(tab) {
 
 function exportDrawCSV() {
   drawGenerate();
-  // Get current table data from the DOM
   const rows = document.getElementById('dpulse-tbl').querySelectorAll('tr');
   let csv = [...rows].map(r=>[...r.querySelectorAll('th,td')].map(c=>c.textContent).join(',')).join('\n');
   const a = Object.assign(document.createElement('a'), {
@@ -1170,23 +1302,28 @@ function exportDrawCSV() {
 
 /* ── Init ── */
 ['gate','drain','source','bulk'].forEach(p => renderProbePanel(p));
-new ResizeObserver(() => { if (appMode==='draw') resizeCanvas(); }).observe(document.getElementById('canvas-wrap'));
+
+// ResizeObserver for draw canvas
+const canvasWrap = document.getElementById('canvas-wrap');
+if (canvasWrap) {
+  new ResizeObserver(() => { if (appMode==='draw') resizeCanvas(); }).observe(canvasWrap);
+}
 
 // Pre-populate draw canvas with example waveform
 (function() {
-  const tt=parseFloat(document.getElementById('dt_total').value)||100;
-  const vm=dvMin(), vM=dvMax();
-  const nodes=[
-    {t:0/tt,   v:(1-vm)/(vM-vm)},
-    {t:10/tt,  v:(1-vm)/(vM-vm)},
-    {t:10.001/tt, v:(0-vm)/(vM-vm)},
-    {t:60/tt,  v:(0-vm)/(vM-vm)},
-    {t:60.001/tt, v:(1-vm)/(vM-vm)},
-    {t:1,      v:(1-vm)/(vM-vm)},
+  const tt = parseFloat(document.getElementById('dt_total').value)||100;
+  const vm = dvMin(), vM = dvMax();
+  const nodes = [
+    {t:0/tt,      v:(1-vm)/(vM-vm)},
+    {t:10/tt,     v:(1-vm)/(vM-vm)},
+    {t:10.1/tt,   v:(0-vm)/(vM-vm)},
+    {t:60/tt,     v:(0-vm)/(vM-vm)},
+    {t:60.1/tt,   v:(1-vm)/(vM-vm)},
+    {t:1,         v:(1-vm)/(vM-vm)},
   ];
-  const vd=1.8;
-  drawState.nodes.drain=[{t:0,v:(vd-vm)/(vM-vm)},{t:1,v:(vd-vm)/(vM-vm)}];
-  drawState.nodes.gate=nodes.map(n=>({t:clamp(n.t,0,1),v:clamp(n.v,0,1)}));
+  const vd = 1.8;
+  drawState.nodes.drain = [{t:0, v:(vd-vm)/(vM-vm)}, {t:1, v:(vd-vm)/(vM-vm)}];
+  drawState.nodes.gate  = nodes.map(n=>({t:clamp(n.t,0,1), v:clamp(n.v,0,1)}));
 })();
 
 // Auto-generate config output on load
