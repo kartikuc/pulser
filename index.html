@@ -694,12 +694,9 @@ function generate(){
   } else {
     const meas=getMeasParams();
     const {tlow,thigh,maxpts,irange,vrange}=meas;
-    const tPerPt=tlow+thigh,tPerRow=maxpts*tPerPt;
-    // Measurement scheme covers 1 cycle only; find shortest non-trivial probe duration as 1-cycle ref
-    const refProbe=['gate','drain','source','bulk'].reduce((a,b)=>tTotals[a]>=tTotals[b]?a:b);
-    const ncycles=probeState[refProbe].timing.ncycles||1;
-    const totalT=(maxT||1e-6)/ncycles;    const numFull=Math.floor(totalT/tPerRow),lastPts=Math.ceil((totalT-numFull*tPerRow)/tPerPt);
-        const totalRows=numFull+(lastPts>0?1:0);
+    const tPerPt=tlow+thigh,tPerRow=maxpts*tPerPt,totalT=maxT||1e-6;
+    const numFull=Math.floor(totalT/tPerRow),lastPts=Math.ceil((totalT-numFull*tPerRow)/tPerPt);
+    const totalRows=numFull+(lastPts>0?1:0);
     for(let r=0;r<totalRows;r++) measRows.push({start:r*tPerRow,npts:r<numFull?maxpts:lastPts,tlow,thigh,irange,vrange,label:''});
     totalMeasPts=measRows.reduce((a,r)=>a+r.npts,0);
     generatedData={probePulseRows,measRows,wfms,tTotals,maxT,totalMeasPts};
