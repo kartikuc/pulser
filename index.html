@@ -96,11 +96,9 @@
   .info-chip.smart { color:var(--text-smart); background:var(--bg-smart); border-color:var(--border-smart); }
   .info-chip.err   { color:var(--text-err);   background:var(--bg-err);   border-color:var(--border-err); }
   svg.preview { width:100%; border-radius:var(--radius-md); background:var(--bg-sec); display:block; }
-  /* Error banner */
   .err-banner { background:var(--bg-err); border:.5px solid var(--border-err); border-radius:var(--radius-md); padding:8px 12px; margin-bottom:.75rem; font-size:12px; color:var(--text-err); display:none; }
   .err-banner.visible { display:block; }
   .err-banner ul { margin:4px 0 0 16px; }
-  /* Smart sampling UI */
   .smart-outer { display:flex; gap:12px; }
   @media(max-width:640px) { .smart-outer { flex-direction:column; } }
   .seg-browser { flex:0 0 250px; min-width:0; }
@@ -125,7 +123,6 @@
   .subseg-row { background:var(--bg-sec); border:.5px solid var(--border); border-radius:var(--radius-md); padding:8px 10px; }
   .subseg-row-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:7px; }
   .subseg-lbl { font-size:11px; font-weight:600; color:var(--text-sec); }
-  /* draw mode */
   .toolbar { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:.75rem; align-items:center; }
   .tool-btn { padding:5px 13px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:var(--bg-sec); color:var(--text-sec); cursor:pointer; font-size:12px; font-family:var(--font); transition:all .15s; }
   .tool-btn:hover { background:var(--bg-ter); }
@@ -186,7 +183,6 @@
 
       <!-- Smart params -->
       <div id="smart-params" style="display:none">
-        <!-- Global defaults + budget -->
         <div class="seg-global">
           <div class="seg-global-title">Defaults for new rows</div>
           <div class="grid4">
@@ -196,7 +192,6 @@
             <div><label>Voltage range (V)</label><input type="number" id="s_vrange" value="2" step="0.5" oninput="updateBudget()"></div>
           </div>
         </div>
-        <!-- Budget bars -->
         <div class="budget-grid">
           <div>
             <div class="budget-item-label"><span>Meas rows</span><span id="b-rows-lbl" style="color:var(--text-sec)">0/1500</span></div>
@@ -211,7 +206,6 @@
             <div class="budget-bar-bg"><div class="budget-bar" id="b-pulse-bar" style="width:0%;background:var(--border-smart)"></div></div>
           </div>
         </div>
-        <!-- Two-column layout -->
         <div class="smart-outer">
           <div class="seg-browser">
             <div class="seg-browser-title">Segments (1 cycle, reference probe)</div>
@@ -402,7 +396,7 @@ let generatedData = null;
 let autoGenTimer = null;
 
 /* Smart state */
-let smartSegs = [];       // [{label, kind, tStart, tEnd, dur, subRows:[]}]
+let smartSegs = [];
 let selSmartSeg = -1;
 
 function autoGenerate() { clearTimeout(autoGenTimer); autoGenTimer = setTimeout(generate, 120); }
@@ -470,14 +464,19 @@ function switchProbeOut(probe,btn){ ['gate','drain','source','bulk'].forEach(p=>
 
 /* ─────────────────────────────────────────────
    WAVEFORM BUILDER
+   overrideNcycles: optional, forces ncycles for
+   1-cycle measurement scheme calculation
 ───────────────────────────────────────────── */
 function addPt(pts,t,v){
   if(pts.length>0&&Math.abs(t-pts[pts.length-1].t)<1e-18){ if(Math.abs(v-pts[pts.length-1].v)>1e-12) pts[pts.length-1].v=v; return; }
   pts.push({t,v});
 }
-function buildProbeWaveform(probe){
+
+function buildProbeWaveform(probe, overrideNcycles){
   const s=probeState[probe],t=s.timing;
-  const tgap=t.tgap*1e-6,trise=t.trise*1e-9,tfall=t.tfall*1e-9,ncycles=t.ncycles,vbase=t.vbase,vpulse=t.vpulse;
+  const tgap=t.tgap*1e-6,trise=t.trise*1e-9,tfall=t.tfall*1e-9;
+  const ncycles = (overrideNcycles !== undefined) ? overrideNcycles : t.ncycles;
+  const vbase=t.vbase,vpulse=t.vpulse;
   if(s.mode==='constant') return [{t:0,v:s.constant}];
   if(s.mode==='sweep'){
     const sw=s.sweep,steps=Math.max(1,Math.round(Math.abs(sw.vstop-sw.vstart)/(Math.abs(sw.vstep)||0.1)));
@@ -499,8 +498,6 @@ function buildProbeWaveform(probe){
    SEGMENT EXTRACTION
 ───────────────────────────────────────────── */
 function extractSegments(wfm){
-  // Use the first cycle only: from t=0 up to first cycle's end
-  // Detect cycle end as the time after the first "return to initial voltage" after a pulse
   const segs=[];
   for(let i=0;i<wfm.length-1;i++){
     const dur=wfm[i+1].t-wfm[i].t;
@@ -615,7 +612,6 @@ function setBar(barId,lblId,val,max){
 }
 
 function updateBudget(){
-  // smart meas totals
   let totalRows=0,totalPts=0,timingErr=false;
   smartSegs.forEach(seg=>{(seg.subRows||[]).forEach(row=>{totalRows++;totalPts+=row.npts;if(row.tlow_ns<H.MIN_T_NS||row.thigh_ns<H.MIN_T_NS)timingErr=true;});});
   const pulsePts=generatedData?Math.max(...Object.values(generatedData.probePulseRows).map(r=>r.length)):0;
@@ -653,22 +649,33 @@ function getMeasParams(){
 }
 
 function generate(){
+  // ── Full N-cycle waveforms: used for pulse sequence table + preview ──
   const wfms={};
   ['gate','drain','source','bulk'].forEach(p=>{ wfms[p]=buildProbeWaveform(p); });
   const tTotals={};
   ['gate','drain','source','bulk'].forEach(p=>{ tTotals[p]=wfms[p].length>1?wfms[p][wfms[p].length-1].t:0; });
   const maxT=Math.max(...Object.values(tTotals));
   ['gate','drain','source','bulk'].forEach(p=>{if(wfms[p].length===1){wfms[p]=[{t:0,v:wfms[p][0].v},{t:maxT||1e-6,v:wfms[p][0].v}];tTotals[p]=maxT||1e-6;}});
+
+  // ── 1-cycle waveforms: used ONLY for measurement scheme ──
+  // N cycles applies to the pulse sequence; measurement scheme always covers 1 cycle.
+  const wfms1={};
+  ['gate','drain','source','bulk'].forEach(p=>{ wfms1[p]=buildProbeWaveform(p, 1); });
+  const tTotals1={};
+  ['gate','drain','source','bulk'].forEach(p=>{ tTotals1[p]=wfms1[p].length>1?wfms1[p][wfms1[p].length-1].t:0; });
+  const maxT1=Math.max(...Object.values(tTotals1));
+  ['gate','drain','source','bulk'].forEach(p=>{if(wfms1[p].length===1){wfms1[p]=[{t:0,v:wfms1[p][0].v},{t:maxT1||1e-6,v:wfms1[p][0].v}];tTotals1[p]=maxT1||1e-6;}});
+
   const probePulseRows={};
   ['gate','drain','source','bulk'].forEach(p=>{ probePulseRows[p]=wfms[p].map(pt=>({t:pt.t,v:pt.v})); });
   const maxPulsePts=Math.max(...Object.values(probePulseRows).map(r=>r.length));
   let measRows=[],totalMeasPts=0;
 
   if(measSchemeType==='smart'){
-    // Rebuild segments from reference probe (longest, or gate if tied)
-    const refP=['gate','drain','source','bulk'].reduce((a,b)=>tTotals[a]>=tTotals[b]?a:b);
-    const newSegs=extractSegments(wfms[refP]);
-    // Preserve existing subRows by matching index+kind+approximate start
+    // Use 1-cycle reference for segment browser — N cycles never duplicates segments
+    const refP=['gate','drain','source','bulk'].reduce((a,b)=>tTotals1[a]>=tTotals1[b]?a:b);
+    const newSegs=extractSegments(wfms1[refP]);
+    // Preserve existing subRows by matching index + kind + approximate start
     newSegs.forEach((ns,i)=>{
       const ex=smartSegs[i];
       ns.subRows=(ex&&ex.kind===ns.kind&&Math.abs(ex.tStart-ns.tStart)<1e-12)?ex.subRows:[];
@@ -677,7 +684,7 @@ function generate(){
     buildSegBrowser(smartSegs);
     if(selSmartSeg>=0&&selSmartSeg<smartSegs.length) renderSegDetail(selSmartSeg);
 
-    // Flatten subRows → measRows
+    // Flatten subRows → measRows (positions are within 1-cycle timeline)
     const irange=parseFloat(document.getElementById('s_irange').value)||0.001;
     const vrange=parseFloat(document.getElementById('s_vrange').value)||2;
     smartSegs.forEach((seg,si)=>{
@@ -692,9 +699,10 @@ function generate(){
     generatedData={probePulseRows,measRows,wfms,tTotals,maxT,totalMeasPts};
     updateBudget();
   } else {
+    // Linear: cover exactly 1 cycle (maxT1), regardless of N cycles
     const meas=getMeasParams();
     const {tlow,thigh,maxpts,irange,vrange}=meas;
-    const tPerPt=tlow+thigh,tPerRow=maxpts*tPerPt,totalT=maxT||1e-6;
+    const tPerPt=tlow+thigh,tPerRow=maxpts*tPerPt,totalT=maxT1||1e-6;
     const numFull=Math.floor(totalT/tPerRow),lastPts=Math.ceil((totalT-numFull*tPerRow)/tPerPt);
     const totalRows=numFull+(lastPts>0?1:0);
     for(let r=0;r<totalRows;r++) measRows.push({start:r*tPerRow,npts:r<numFull?maxpts:lastPts,tlow,thigh,irange,vrange,label:''});
@@ -729,7 +737,7 @@ function renderMeasTable(rows,totalMeasPts){
   const isSmart=measSchemeType==='smart';
   const rOver=rows.length>H.MEAS_ROWS,pOver=totalMeasPts>H.MEAS_PTS;
   document.getElementById('meas-info').innerHTML=
-    `<span class="info-chip${rOver?' err':''}">Rows: ${rows.length}</span><span class="info-chip${pOver?' err':''}">Pts: ${totalMeasPts}</span>${isSmart?'<span class="info-chip smart">Smart</span>':''}`;
+    `<span class="info-chip${rOver?' err':''}">Rows: ${rows.length}</span><span class="info-chip${pOver?' err':''}">Pts: ${totalMeasPts}</span><span class="info-chip${isSmart?' smart':''}">1 cycle${isSmart?' · Smart':''}</span>`;
   let h=`<table><thead><tr><th>Start (s)</th><th>N pts</th><th>t<sub>low</sub> (s)</th><th>t<sub>high</sub> (s)</th><th>Cycle (s)</th><th>I range (A)</th><th>V range (V)</th>${isSmart?'<th>Segment</th>':''}</tr></thead><tbody>`;
   rows.forEach(r=>{const cyc=r.tlow+r.thigh;h+=`<tr><td>${fmtE(r.start)}</td><td>${r.npts}</td><td>${fmtE(r.tlow)}</td><td>${fmtE(r.thigh)}</td><td>${fmtE(cyc)}</td><td>${fmtE(r.irange)}</td><td>${fmtF(r.vrange,2)}</td>${isSmart?`<td style="font-size:11px">${r.label||''}</td>`:''}</tr>`;});
   document.getElementById('meas-table-wrap').innerHTML=h+'</tbody></table>';
@@ -766,7 +774,7 @@ function exportCSV(){
   const {probePulseRows,measRows}=generatedData;
   let csv='';
   ['gate','drain','source','bulk'].forEach(p=>{csv+=`\n${p.toUpperCase()} Probe\nTime_s,Voltage_V\n`;probePulseRows[p].forEach(r=>{csv+=`${r.t.toExponential(6)},${r.v.toFixed(4)}\n`;});});
-  csv+='\nMeasurement Scheme\nStart_s,N_points,Low_Time_s,High_Time_s,Cycle_Time_s,I_range_A,V_range_V\n';
+  csv+='\nMeasurement Scheme (1 cycle)\nStart_s,N_points,Low_Time_s,High_Time_s,Cycle_Time_s,I_range_A,V_range_V\n';
   measRows.forEach(r=>{const cyc=r.tlow+r.thigh;csv+=`${r.start.toExponential(6)},${r.npts},${r.tlow.toExponential(6)},${r.thigh.toExponential(6)},${cyc.toExponential(6)},${r.irange.toExponential(3)},${r.vrange.toFixed(2)}\n`;});
   Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([csv],{type:'text/csv'})),download:'pulse_sequence.csv'}).click();
 }
