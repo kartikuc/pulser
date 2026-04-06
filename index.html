@@ -77,10 +77,24 @@
   th { background:var(--bg-sec); padding:5px 8px; text-align:left; border-bottom:.5px solid var(--border); font-weight:500; white-space:nowrap; font-family:var(--font); font-size:11px; color:var(--text-sec); }
   td { padding:4px 8px; border-bottom:.5px solid var(--border); white-space:nowrap; color:var(--text); }
   tr:last-child td { border-bottom:none; }
-  .out-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:.5rem; }
-  .copy-btn { font-size:11px; padding:3px 10px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:none; color:var(--text-sec); cursor:pointer; font-family:var(--font); transition:all .15s; }
+  .out-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:.5rem; flex-wrap:wrap; gap:6px; }
+  .btn-group { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+
+  /* ── Copy buttons ── */
+  .copy-btn { font-size:11px; padding:4px 12px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:none; color:var(--text-sec); cursor:pointer; font-family:var(--font); transition:all .15s; }
   .copy-btn:hover { background:var(--bg-sec); }
   .copy-btn.copied { color:#1D9E75; border-color:#1D9E75; }
+
+  /* ── Excel copy button — distinct green ── */
+  .excel-btn { font-size:11px; padding:4px 12px; border-radius:var(--radius-md); border:.5px solid #5cb87a; background:var(--bg-smart); color:var(--text-smart); cursor:pointer; font-family:var(--font); font-weight:500; transition:all .15s; display:flex; align-items:center; gap:4px; }
+  .excel-btn:hover { background:#c6e9d2; }
+  .excel-btn.copied { background:#1D9E75; color:#fff; border-color:#1D9E75; }
+  .excel-icon { font-size:13px; line-height:1; }
+
+  /* ── Excel hint banner ── */
+  .excel-hint { background:var(--bg-smart); border:.5px solid var(--border-smart); border-radius:var(--radius-md); padding:7px 12px; font-size:11px; color:var(--text-smart); margin-bottom:.6rem; display:flex; align-items:center; gap:6px; }
+  .excel-hint-icon { font-size:14px; }
+
   .tabs-output { display:flex; gap:6px; margin-bottom:.75rem; flex-wrap:wrap; }
   .out-tab { padding:4px 12px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:var(--bg-sec); color:var(--text-sec); cursor:pointer; font-size:12px; font-family:var(--font); transition:all .15s; }
   .out-tab.active { background:var(--bg); color:var(--text); border-color:var(--border-pri); }
@@ -241,6 +255,13 @@
 
     <div class="section" id="output-section" style="display:none">
       <div class="section-title">Output</div>
+
+      <!-- Excel hint -->
+      <div class="excel-hint">
+        <span class="excel-hint-icon">📋</span>
+        <span>Use <strong>Copy for Excel</strong> on any table, then paste directly into Excel (Ctrl+V). Each column will land in its own cell.</span>
+      </div>
+
       <div class="tabs-output">
         <div class="out-tab active" onclick="switchOut('pulse')">Pulse sequence</div>
         <div class="out-tab" onclick="switchOut('meas')">Measurement scheme</div>
@@ -254,24 +275,54 @@
           <div class="probe-out-tab" onclick="switchProbeOut('bulk',this)">Bulk (B)</div>
         </div>
         <div id="probe-out-gate" class="probe-out-panel active">
-          <div class="out-header"><div class="info-row" id="pulse-info-gate" style="margin:0"></div><button class="copy-btn" onclick="copyTable('pulse-table-gate',this)">Copy</button></div>
+          <div class="out-header">
+            <div class="info-row" id="pulse-info-gate" style="margin:0"></div>
+            <div class="btn-group">
+              <button class="copy-btn" onclick="copyTablePlain('pulse-table-gate',this)">Copy</button>
+              <button class="excel-btn" onclick="copyTableExcel('pulse-table-gate',this)"><span class="excel-icon">⊞</span> Copy for Excel</button>
+            </div>
+          </div>
           <div class="table-wrap" id="pulse-table-gate"></div>
         </div>
         <div id="probe-out-drain" class="probe-out-panel">
-          <div class="out-header"><div class="info-row" id="pulse-info-drain" style="margin:0"></div><button class="copy-btn" onclick="copyTable('pulse-table-drain',this)">Copy</button></div>
+          <div class="out-header">
+            <div class="info-row" id="pulse-info-drain" style="margin:0"></div>
+            <div class="btn-group">
+              <button class="copy-btn" onclick="copyTablePlain('pulse-table-drain',this)">Copy</button>
+              <button class="excel-btn" onclick="copyTableExcel('pulse-table-drain',this)"><span class="excel-icon">⊞</span> Copy for Excel</button>
+            </div>
+          </div>
           <div class="table-wrap" id="pulse-table-drain"></div>
         </div>
         <div id="probe-out-source" class="probe-out-panel">
-          <div class="out-header"><div class="info-row" id="pulse-info-source" style="margin:0"></div><button class="copy-btn" onclick="copyTable('pulse-table-source',this)">Copy</button></div>
+          <div class="out-header">
+            <div class="info-row" id="pulse-info-source" style="margin:0"></div>
+            <div class="btn-group">
+              <button class="copy-btn" onclick="copyTablePlain('pulse-table-source',this)">Copy</button>
+              <button class="excel-btn" onclick="copyTableExcel('pulse-table-source',this)"><span class="excel-icon">⊞</span> Copy for Excel</button>
+            </div>
+          </div>
           <div class="table-wrap" id="pulse-table-source"></div>
         </div>
         <div id="probe-out-bulk" class="probe-out-panel">
-          <div class="out-header"><div class="info-row" id="pulse-info-bulk" style="margin:0"></div><button class="copy-btn" onclick="copyTable('pulse-table-bulk',this)">Copy</button></div>
+          <div class="out-header">
+            <div class="info-row" id="pulse-info-bulk" style="margin:0"></div>
+            <div class="btn-group">
+              <button class="copy-btn" onclick="copyTablePlain('pulse-table-bulk',this)">Copy</button>
+              <button class="excel-btn" onclick="copyTableExcel('pulse-table-bulk',this)"><span class="excel-icon">⊞</span> Copy for Excel</button>
+            </div>
+          </div>
           <div class="table-wrap" id="pulse-table-bulk"></div>
         </div>
       </div>
       <div id="out-meas" class="out-panel">
-        <div class="out-header"><div class="info-row" id="meas-info" style="margin:0"></div><button class="copy-btn" onclick="copyTable('meas-table-wrap',this)">Copy</button></div>
+        <div class="out-header">
+          <div class="info-row" id="meas-info" style="margin:0"></div>
+          <div class="btn-group">
+            <button class="copy-btn" onclick="copyTablePlain('meas-table-wrap',this)">Copy</button>
+            <button class="excel-btn" onclick="copyTableExcel('meas-table-wrap',this)"><span class="excel-icon">⊞</span> Copy for Excel</button>
+          </div>
+        </div>
         <div class="table-wrap" id="meas-table-wrap"></div>
       </div>
       <div id="out-preview" class="out-panel">
@@ -335,16 +386,35 @@
     <div class="action-row"><button class="gen-btn" onclick="exportDrawCSV()">Export CSV</button></div>
     <div id="draw-output-section" class="section" style="display:none">
       <div class="section-title">Output</div>
+
+      <!-- Excel hint -->
+      <div class="excel-hint">
+        <span class="excel-hint-icon">📋</span>
+        <span>Use <strong>Copy for Excel</strong> on any table, then paste directly into Excel (Ctrl+V).</span>
+      </div>
+
       <div style="display:flex;gap:6px;margin-bottom:.75rem;flex-wrap:wrap">
         <div class="out-tab active" id="dot-pulse" onclick="switchDrawOut('pulse')">Pulse sequence</div>
         <div class="out-tab" id="dot-meas" onclick="switchDrawOut('meas')">Measurement scheme</div>
       </div>
       <div id="dop-pulse" class="out-panel active">
-        <div class="out-header"><span id="dpulse-chips"></span><button class="copy-btn" onclick="copyTable('dpulse-tbl',this)">Copy</button></div>
+        <div class="out-header">
+          <span id="dpulse-chips"></span>
+          <div class="btn-group">
+            <button class="copy-btn" onclick="copyTablePlain('dpulse-tbl',this)">Copy</button>
+            <button class="excel-btn" onclick="copyTableExcel('dpulse-tbl',this)"><span class="excel-icon">⊞</span> Copy for Excel</button>
+          </div>
+        </div>
         <div class="table-wrap"><table id="dpulse-tbl"></table></div>
       </div>
       <div id="dop-meas" class="out-panel">
-        <div class="out-header"><span id="dmeas-chips"></span><button class="copy-btn" onclick="copyTable('dmeas-tbl',this)">Copy</button></div>
+        <div class="out-header">
+          <span id="dmeas-chips"></span>
+          <div class="btn-group">
+            <button class="copy-btn" onclick="copyTablePlain('dmeas-tbl',this)">Copy</button>
+            <button class="excel-btn" onclick="copyTableExcel('dmeas-tbl',this)"><span class="excel-icon">⊞</span> Copy for Excel</button>
+          </div>
+        </div>
         <div class="table-wrap"><table id="dmeas-tbl"></table></div>
       </div>
     </div>
@@ -400,6 +470,66 @@ let smartSegs = [];
 let selSmartSeg = -1;
 
 function autoGenerate() { clearTimeout(autoGenTimer); autoGenTimer = setTimeout(generate, 120); }
+
+/* ─────────────────────────────────────────────
+   COPY FUNCTIONS
+   copyTablePlain  — tab-separated, no HTML (works in most text editors)
+   copyTableExcel  — TSV with proper line endings, ideal for Excel paste
+───────────────────────────────────────────── */
+function extractTSV(containerId) {
+  const container = document.getElementById(containerId);
+  const rows = container.querySelectorAll('table tr');
+  return [...rows].map(row =>
+    [...row.querySelectorAll('th,td')]
+      .map(cell => cell.textContent.trim())
+      .join('\t')
+  ).join('\r\n');  // \r\n for Excel on Windows
+}
+
+function copyTablePlain(id, btn) {
+  const tsv = extractTSV(id);
+  navigator.clipboard.writeText(tsv).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1600);
+  });
+}
+
+function copyTableExcel(id, btn) {
+  const tsv = extractTSV(id);
+
+  // Build ClipboardItem with both text/plain and text/html versions
+  // Excel on Windows reads text/plain TSV perfectly; on Mac it also works.
+  // We also provide an HTML table so Excel on Mac renders with proper column widths.
+  const container = document.getElementById(id);
+  const table = container.querySelector('table');
+  const htmlContent = table ? table.outerHTML : '';
+
+  const htmlBlob = new Blob(
+    [`<html><body>${htmlContent}</body></html>`],
+    { type: 'text/html' }
+  );
+  const textBlob = new Blob([tsv], { type: 'text/plain' });
+
+  try {
+    const item = new ClipboardItem({ 'text/html': htmlBlob, 'text/plain': textBlob });
+    navigator.clipboard.write([item]).then(() => {
+      flashExcelBtn(btn, true);
+    }).catch(() => {
+      // Fallback: plain TSV
+      navigator.clipboard.writeText(tsv).then(() => flashExcelBtn(btn, true));
+    });
+  } catch(e) {
+    navigator.clipboard.writeText(tsv).then(() => flashExcelBtn(btn, true));
+  }
+}
+
+function flashExcelBtn(btn, ok) {
+  const orig = btn.innerHTML;
+  btn.textContent = ok ? '✓ Copied for Excel!' : '✗ Failed';
+  btn.classList.add('copied');
+  setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+}
 
 /* ─────────────────────────────────────────────
    PROBE PANEL
@@ -464,8 +594,6 @@ function switchProbeOut(probe,btn){ ['gate','drain','source','bulk'].forEach(p=>
 
 /* ─────────────────────────────────────────────
    WAVEFORM BUILDER
-   overrideNcycles: optional, forces ncycles for
-   1-cycle measurement scheme calculation
 ───────────────────────────────────────────── */
 function addPt(pts,t,v){
   if(pts.length>0&&Math.abs(t-pts[pts.length-1].t)<1e-18){ if(Math.abs(v-pts[pts.length-1].v)>1e-12) pts[pts.length-1].v=v; return; }
@@ -649,7 +777,6 @@ function getMeasParams(){
 }
 
 function generate(){
-  // ── Full N-cycle waveforms: used for pulse sequence table + preview ──
   const wfms={};
   ['gate','drain','source','bulk'].forEach(p=>{ wfms[p]=buildProbeWaveform(p); });
   const tTotals={};
@@ -657,8 +784,6 @@ function generate(){
   const maxT=Math.max(...Object.values(tTotals));
   ['gate','drain','source','bulk'].forEach(p=>{if(wfms[p].length===1){wfms[p]=[{t:0,v:wfms[p][0].v},{t:maxT||1e-6,v:wfms[p][0].v}];tTotals[p]=maxT||1e-6;}});
 
-  // ── 1-cycle waveforms: used ONLY for measurement scheme ──
-  // N cycles applies to the pulse sequence; measurement scheme always covers 1 cycle.
   const wfms1={};
   ['gate','drain','source','bulk'].forEach(p=>{ wfms1[p]=buildProbeWaveform(p, 1); });
   const tTotals1={};
@@ -672,10 +797,8 @@ function generate(){
   let measRows=[],totalMeasPts=0;
 
   if(measSchemeType==='smart'){
-    // Use 1-cycle reference for segment browser — N cycles never duplicates segments
     const refP=['gate','drain','source','bulk'].reduce((a,b)=>tTotals1[a]>=tTotals1[b]?a:b);
     const newSegs=extractSegments(wfms1[refP]);
-    // Preserve existing subRows by matching index + kind + approximate start
     newSegs.forEach((ns,i)=>{
       const ex=smartSegs[i];
       ns.subRows=(ex&&ex.kind===ns.kind&&Math.abs(ex.tStart-ns.tStart)<1e-12)?ex.subRows:[];
@@ -684,7 +807,6 @@ function generate(){
     buildSegBrowser(smartSegs);
     if(selSmartSeg>=0&&selSmartSeg<smartSegs.length) renderSegDetail(selSmartSeg);
 
-    // Flatten subRows → measRows (positions are within 1-cycle timeline)
     const irange=parseFloat(document.getElementById('s_irange').value)||0.001;
     const vrange=parseFloat(document.getElementById('s_vrange').value)||2;
     smartSegs.forEach((seg,si)=>{
@@ -699,7 +821,6 @@ function generate(){
     generatedData={probePulseRows,measRows,wfms,tTotals,maxT,totalMeasPts};
     updateBudget();
   } else {
-    // Linear: cover exactly 1 cycle (maxT1), regardless of N cycles
     const meas=getMeasParams();
     const {tlow,thigh,maxpts,irange,vrange}=meas;
     const tPerPt=tlow+thigh,tPerRow=maxpts*tPerPt,totalT=maxT1||1e-6;
@@ -738,7 +859,7 @@ function renderMeasTable(rows,totalMeasPts){
   const rOver=rows.length>H.MEAS_ROWS,pOver=totalMeasPts>H.MEAS_PTS;
   document.getElementById('meas-info').innerHTML=
     `<span class="info-chip${rOver?' err':''}">Rows: ${rows.length}</span><span class="info-chip${pOver?' err':''}">Pts: ${totalMeasPts}</span><span class="info-chip${isSmart?' smart':''}">1 cycle${isSmart?' · Smart':''}</span>`;
-  let h=`<table><thead><tr><th>Start (s)</th><th>N pts</th><th>t<sub>low</sub> (s)</th><th>t<sub>high</sub> (s)</th><th>Cycle (s)</th><th>I range (A)</th><th>V range (V)</th>${isSmart?'<th>Segment</th>':''}</tr></thead><tbody>`;
+  let h=`<table><thead><tr><th>Start (s)</th><th>N pts</th><th>t_low (s)</th><th>t_high (s)</th><th>Cycle (s)</th><th>I range (A)</th><th>V range (V)</th>${isSmart?'<th>Segment</th>':''}</tr></thead><tbody>`;
   rows.forEach(r=>{const cyc=r.tlow+r.thigh;h+=`<tr><td>${fmtE(r.start)}</td><td>${r.npts}</td><td>${fmtE(r.tlow)}</td><td>${fmtE(r.thigh)}</td><td>${fmtE(cyc)}</td><td>${fmtE(r.irange)}</td><td>${fmtF(r.vrange,2)}</td>${isSmart?`<td style="font-size:11px">${r.label||''}</td>`:''}</tr>`;});
   document.getElementById('meas-table-wrap').innerHTML=h+'</tbody></table>';
 }
@@ -760,12 +881,6 @@ function renderPreview(wfms,maxT){
   s+=`<text x="10" y="${pT+pH/2}" text-anchor="middle" font-size="10" fill="currentColor" opacity="0.45" transform="rotate(-90 10 ${pT+pH/2})">Voltage (V)</text>`;
   s+='</svg>';
   document.getElementById('preview-container').innerHTML=s;
-}
-
-function copyTable(id,btn){
-  const rows=document.getElementById(id).querySelectorAll('tr');
-  const text=[...rows].map(r=>[...r.querySelectorAll('th,td')].map(c=>c.textContent).join('\t')).join('\n');
-  navigator.clipboard.writeText(text).then(()=>{btn.textContent='Copied!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},1600);});
 }
 
 function exportCSV(){
