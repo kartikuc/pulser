@@ -259,7 +259,7 @@
       <!-- Excel hint -->
       <div class="excel-hint">
         <span class="excel-hint-icon">📋</span>
-        <span>Use <strong>Copy for Excel</strong> on any table, then paste directly into Excel (Ctrl+V). Each column will land in its own cell.</span>
+        <span>Use <strong>Copy for software</strong> on any table — this copies a fully-structured HTML table that pastes directly into your measurement software or Excel with each value in its own cell.</span>
       </div>
 
       <div class="tabs-output">
@@ -278,8 +278,8 @@
           <div class="out-header">
             <div class="info-row" id="pulse-info-gate" style="margin:0"></div>
             <div class="btn-group">
-              <button class="copy-btn" onclick="copyTablePlain('pulse-table-gate',this)">Copy</button>
-              <button class="excel-btn" onclick="copyTableExcel('pulse-table-gate',this)"><span class="excel-icon">⊞</span> Copy for Excel</button>
+              <button class="copy-btn" onclick="copyTablePlain('pulse-table-gate',this)">Copy text</button>
+              <button class="excel-btn" onclick="copyTableExcel('pulse-table-gate',this)"><span class="excel-icon">⊞</span> Copy for software</button>
             </div>
           </div>
           <div class="table-wrap" id="pulse-table-gate"></div>
@@ -288,8 +288,8 @@
           <div class="out-header">
             <div class="info-row" id="pulse-info-drain" style="margin:0"></div>
             <div class="btn-group">
-              <button class="copy-btn" onclick="copyTablePlain('pulse-table-drain',this)">Copy</button>
-              <button class="excel-btn" onclick="copyTableExcel('pulse-table-drain',this)"><span class="excel-icon">⊞</span> Copy for Excel</button>
+              <button class="copy-btn" onclick="copyTablePlain('pulse-table-drain',this)">Copy text</button>
+              <button class="excel-btn" onclick="copyTableExcel('pulse-table-drain',this)"><span class="excel-icon">⊞</span> Copy for software</button>
             </div>
           </div>
           <div class="table-wrap" id="pulse-table-drain"></div>
@@ -298,8 +298,8 @@
           <div class="out-header">
             <div class="info-row" id="pulse-info-source" style="margin:0"></div>
             <div class="btn-group">
-              <button class="copy-btn" onclick="copyTablePlain('pulse-table-source',this)">Copy</button>
-              <button class="excel-btn" onclick="copyTableExcel('pulse-table-source',this)"><span class="excel-icon">⊞</span> Copy for Excel</button>
+              <button class="copy-btn" onclick="copyTablePlain('pulse-table-source',this)">Copy text</button>
+              <button class="excel-btn" onclick="copyTableExcel('pulse-table-source',this)"><span class="excel-icon">⊞</span> Copy for software</button>
             </div>
           </div>
           <div class="table-wrap" id="pulse-table-source"></div>
@@ -308,8 +308,8 @@
           <div class="out-header">
             <div class="info-row" id="pulse-info-bulk" style="margin:0"></div>
             <div class="btn-group">
-              <button class="copy-btn" onclick="copyTablePlain('pulse-table-bulk',this)">Copy</button>
-              <button class="excel-btn" onclick="copyTableExcel('pulse-table-bulk',this)"><span class="excel-icon">⊞</span> Copy for Excel</button>
+              <button class="copy-btn" onclick="copyTablePlain('pulse-table-bulk',this)">Copy text</button>
+              <button class="excel-btn" onclick="copyTableExcel('pulse-table-bulk',this)"><span class="excel-icon">⊞</span> Copy for software</button>
             </div>
           </div>
           <div class="table-wrap" id="pulse-table-bulk"></div>
@@ -319,8 +319,8 @@
         <div class="out-header">
           <div class="info-row" id="meas-info" style="margin:0"></div>
           <div class="btn-group">
-            <button class="copy-btn" onclick="copyTablePlain('meas-table-wrap',this)">Copy</button>
-            <button class="excel-btn" onclick="copyTableExcel('meas-table-wrap',this)"><span class="excel-icon">⊞</span> Copy for Excel</button>
+            <button class="copy-btn" onclick="copyTablePlain('meas-table-wrap',this)">Copy text</button>
+            <button class="excel-btn" onclick="copyTableExcel('meas-table-wrap',this)"><span class="excel-icon">⊞</span> Copy for software</button>
           </div>
         </div>
         <div class="table-wrap" id="meas-table-wrap"></div>
@@ -390,7 +390,7 @@
       <!-- Excel hint -->
       <div class="excel-hint">
         <span class="excel-hint-icon">📋</span>
-        <span>Use <strong>Copy for Excel</strong> on any table, then paste directly into Excel (Ctrl+V).</span>
+        <span>Use <strong>Copy for software</strong> on any table — pastes directly into your measurement software or Excel.</span>
       </div>
 
       <div style="display:flex;gap:6px;margin-bottom:.75rem;flex-wrap:wrap">
@@ -401,8 +401,8 @@
         <div class="out-header">
           <span id="dpulse-chips"></span>
           <div class="btn-group">
-            <button class="copy-btn" onclick="copyTablePlain('dpulse-tbl',this)">Copy</button>
-            <button class="excel-btn" onclick="copyTableExcel('dpulse-tbl',this)"><span class="excel-icon">⊞</span> Copy for Excel</button>
+            <button class="copy-btn" onclick="copyTablePlain('dpulse-tbl',this)">Copy text</button>
+            <button class="excel-btn" onclick="copyTableExcel('dpulse-tbl',this)"><span class="excel-icon">⊞</span> Copy for software</button>
           </div>
         </div>
         <div class="table-wrap"><table id="dpulse-tbl"></table></div>
@@ -411,8 +411,8 @@
         <div class="out-header">
           <span id="dmeas-chips"></span>
           <div class="btn-group">
-            <button class="copy-btn" onclick="copyTablePlain('dmeas-tbl',this)">Copy</button>
-            <button class="excel-btn" onclick="copyTableExcel('dmeas-tbl',this)"><span class="excel-icon">⊞</span> Copy for Excel</button>
+            <button class="copy-btn" onclick="copyTablePlain('dmeas-tbl',this)">Copy text</button>
+            <button class="excel-btn" onclick="copyTableExcel('dmeas-tbl',this)"><span class="excel-icon">⊞</span> Copy for software</button>
           </div>
         </div>
         <div class="table-wrap"><table id="dmeas-tbl"></table></div>
@@ -473,8 +473,15 @@ function autoGenerate() { clearTimeout(autoGenTimer); autoGenTimer = setTimeout(
 
 /* ─────────────────────────────────────────────
    COPY FUNCTIONS
-   copyTablePlain  — tab-separated, no HTML (works in most text editors)
-   copyTableExcel  — TSV with proper line endings, ideal for Excel paste
+
+   copyTablePlain  — tab-separated plain text (text editors, simple apps)
+   copyTableExcel  — HTML table + TSV fallback (Excel, measurement software)
+
+   The key fix: we now build a properly structured HTML table with explicit
+   inline styles and a complete <html><body> wrapper. This is the exact format
+   that applications expect when they read the text/html clipboard flavour.
+   Many measurement software packages (and Excel itself) only parse the HTML
+   flavour — plain TSV is ignored unless the app specifically requests it.
 ───────────────────────────────────────────── */
 function extractTSV(containerId) {
   const container = document.getElementById(containerId);
@@ -483,7 +490,7 @@ function extractTSV(containerId) {
     [...row.querySelectorAll('th,td')]
       .map(cell => cell.textContent.trim())
       .join('\t')
-  ).join('\r\n');  // \r\n for Excel on Windows
+  ).join('\r\n');
 }
 
 function copyTablePlain(id, btn) {
@@ -491,34 +498,51 @@ function copyTablePlain(id, btn) {
   navigator.clipboard.writeText(tsv).then(() => {
     btn.textContent = 'Copied!';
     btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1600);
+    setTimeout(() => { btn.textContent = 'Copy text'; btn.classList.remove('copied'); }, 1600);
   });
 }
 
 function copyTableExcel(id, btn) {
-  const tsv = extractTSV(id);
-
-  // Build ClipboardItem with both text/plain and text/html versions
-  // Excel on Windows reads text/plain TSV perfectly; on Mac it also works.
-  // We also provide an HTML table so Excel on Mac renders with proper column widths.
   const container = document.getElementById(id);
   const table = container.querySelector('table');
-  const htmlContent = table ? table.outerHTML : '';
+  if (!table) { flashExcelBtn(btn, false); return; }
 
-  const htmlBlob = new Blob(
-    [`<html><body>${htmlContent}</body></html>`],
-    { type: 'text/html' }
-  );
-  const textBlob = new Blob([tsv], { type: 'text/plain' });
+  /* Rebuild the table with explicit inline styles on every cell.
+     This ensures apps that parse the HTML clipboard flavour see a proper
+     table regardless of whether they apply external stylesheets. */
+  const styledRows = [...table.querySelectorAll('tr')].map(row => {
+    const cells = [...row.querySelectorAll('th,td')].map(cell => {
+      const tag  = cell.tagName.toLowerCase();
+      const base = 'border:1px solid #cccccc;padding:4px 8px;font-family:Arial,sans-serif;font-size:12px;white-space:nowrap;vertical-align:middle;';
+      const hdr  = tag === 'th' ? 'font-weight:bold;background-color:#f0f0f0;' : 'background-color:#ffffff;';
+      return '<' + tag + ' style="' + base + hdr + '">' + cell.textContent.trim() + '</' + tag + '>';
+    }).join('');
+    return '<tr>' + cells + '</tr>';
+  }).join('');
+
+  /* Full HTML document wrapper — this is what Excel and most lab software
+     expect when reading the text/html clipboard flavour. */
+  const htmlPayload =
+    '<html><head><meta charset="UTF-8"></head><body>' +
+    '<table style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:12px;">' +
+    styledRows +
+    '</table></body></html>';
+
+  /* TSV is included as text/plain so plain-text targets still work. */
+  const tsv = extractTSV(id);
+
+  const htmlBlob = new Blob([htmlPayload], { type: 'text/html' });
+  const textBlob = new Blob([tsv],         { type: 'text/plain' });
 
   try {
     const item = new ClipboardItem({ 'text/html': htmlBlob, 'text/plain': textBlob });
-    navigator.clipboard.write([item]).then(() => {
-      flashExcelBtn(btn, true);
-    }).catch(() => {
-      // Fallback: plain TSV
-      navigator.clipboard.writeText(tsv).then(() => flashExcelBtn(btn, true));
-    });
+    navigator.clipboard.write([item])
+      .then(()  => flashExcelBtn(btn, true))
+      .catch(()  => {
+        /* Some browsers block ClipboardItem outside a direct user gesture;
+           fall back to plain TSV which at least works in most contexts. */
+        navigator.clipboard.writeText(tsv).then(() => flashExcelBtn(btn, true));
+      });
   } catch(e) {
     navigator.clipboard.writeText(tsv).then(() => flashExcelBtn(btn, true));
   }
@@ -526,7 +550,7 @@ function copyTableExcel(id, btn) {
 
 function flashExcelBtn(btn, ok) {
   const orig = btn.innerHTML;
-  btn.textContent = ok ? '✓ Copied for Excel!' : '✗ Failed';
+  btn.textContent = ok ? '✓ Copied!' : '✗ Failed';
   btn.classList.add('copied');
   setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
 }
@@ -859,8 +883,8 @@ function renderMeasTable(rows,totalMeasPts){
   const rOver=rows.length>H.MEAS_ROWS,pOver=totalMeasPts>H.MEAS_PTS;
   document.getElementById('meas-info').innerHTML=
     `<span class="info-chip${rOver?' err':''}">Rows: ${rows.length}</span><span class="info-chip${pOver?' err':''}">Pts: ${totalMeasPts}</span><span class="info-chip${isSmart?' smart':''}">1 cycle${isSmart?' · Smart':''}</span>`;
-  let h=`<table><thead><tr><th>Start (s)</th><th>N pts</th><th>t_low (s)</th><th>t_high (s)</th><th>Cycle (s)</th><th>I range (A)</th><th>V range (V)</th>${isSmart?'<th>Segment</th>':''}</tr></thead><tbody>`;
-  rows.forEach(r=>{const cyc=r.tlow+r.thigh;h+=`<tr><td>${fmtE(r.start)}</td><td>${r.npts}</td><td>${fmtE(r.tlow)}</td><td>${fmtE(r.thigh)}</td><td>${fmtE(cyc)}</td><td>${fmtE(r.irange)}</td><td>${fmtF(r.vrange,2)}</td>${isSmart?`<td style="font-size:11px">${r.label||''}</td>`:''}</tr>`;});
+  let h=`<table><thead><tr><th>Start (s)</th><th>N pts</th><th>Cycle (s)</th><th>Avg time / t_high (s)</th><th>I range (A)</th><th>V range (V)</th>${isSmart?'<th>Segment</th>':''}</tr></thead><tbody>`;
+  rows.forEach(r=>{const cyc=r.tlow+r.thigh;h+=`<tr><td>${fmtE(r.start)}</td><td>${r.npts}</td><td>${fmtE(cyc)}</td><td>${fmtE(r.thigh)}</td><td>${fmtE(r.irange)}</td><td>${fmtF(r.vrange,2)}</td>${isSmart?`<td style="font-size:11px">${r.label||''}</td>`:''}</tr>`;});
   document.getElementById('meas-table-wrap').innerHTML=h+'</tbody></table>';
 }
 
@@ -964,7 +988,7 @@ function drawGenerate(){
   document.getElementById('draw-output-section').style.display='';
 }
 function renderDrawPulseTable(rows,totalT){document.getElementById('dpulse-chips').innerHTML=`<span class="info-chip${rows.length>H.PULSE_PTS?' err':''}">Points: ${rows.length}</span> &nbsp;<span class="info-chip">Total: ${(totalT*1e6).toFixed(3)} μs</span>`;let h=`<thead><tr><th>Time (s)</th><th>V_gate</th><th>V_drain</th><th>V_source</th><th>V_bulk</th></tr></thead><tbody>`;rows.forEach(r=>{h+=`<tr><td>${r.t.toExponential(5)}</td><td>${r.gate.toFixed(4)}</td><td>${r.drain.toFixed(4)}</td><td>${r.source.toFixed(4)}</td><td>${r.bulk.toFixed(4)}</td></tr>`;});document.getElementById('dpulse-tbl').innerHTML=h+'</tbody>';}
-function renderDrawMeasTable(rows,totalMeasPts){const ro=rows.length>H.MEAS_ROWS,po=totalMeasPts>H.MEAS_PTS;document.getElementById('dmeas-chips').innerHTML=`<span class="info-chip${ro?' err':''}">Rows: ${rows.length}</span>&nbsp;<span class="info-chip${po?' err':''}">Pts: ${totalMeasPts}</span>`;let h=`<thead><tr><th>Start (s)</th><th>N pts</th><th>t_low (s)</th><th>t_high (s)</th><th>Cycle (s)</th><th>I range (A)</th></tr></thead><tbody>`;rows.forEach(r=>{const cyc=r.tlow+r.thigh;h+=`<tr><td>${r.start.toExponential(5)}</td><td>${r.npts}</td><td>${r.tlow.toExponential(4)}</td><td>${r.thigh.toExponential(4)}</td><td>${cyc.toExponential(4)}</td><td>${r.irange.toExponential(3)}</td></tr>`;});document.getElementById('dmeas-tbl').innerHTML=h+'</tbody>';}
+function renderDrawMeasTable(rows,totalMeasPts){const ro=rows.length>H.MEAS_ROWS,po=totalMeasPts>H.MEAS_PTS;document.getElementById('dmeas-chips').innerHTML=`<span class="info-chip${ro?' err':''}">Rows: ${rows.length}</span>&nbsp;<span class="info-chip${po?' err':''}">Pts: ${totalMeasPts}</span>`;let h=`<thead><tr><th>Start (s)</th><th>N pts</th><th>Cycle (s)</th><th>Avg time / t_high (s)</th><th>I range (A)</th></tr></thead><tbody>`;rows.forEach(r=>{const cyc=r.tlow+r.thigh;h+=`<tr><td>${r.start.toExponential(5)}</td><td>${r.npts}</td><td>${cyc.toExponential(4)}</td><td>${r.thigh.toExponential(4)}</td><td>${r.irange.toExponential(3)}</td></tr>`;});document.getElementById('dmeas-tbl').innerHTML=h+'</tbody>';}
 function switchDrawOut(tab){['pulse','meas'].forEach(t=>{document.getElementById('dot-'+t).classList.toggle('active',t===tab);document.getElementById('dop-'+t).classList.toggle('active',t===tab);document.getElementById('dop-'+t).style.display=t===tab?'':'none';});}
 function exportDrawCSV(){drawGenerate();const rows=document.getElementById('dpulse-tbl').querySelectorAll('tr');const csv=[...rows].map(r=>[...r.querySelectorAll('th,td')].map(c=>c.textContent).join(',')).join('\n');Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([csv],{type:'text/csv'})),download:'custom_waveform.csv'}).click();}
 
