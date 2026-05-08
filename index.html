@@ -79,22 +79,15 @@
   tr:last-child td { border-bottom:none; }
   .out-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:.5rem; flex-wrap:wrap; gap:6px; }
   .btn-group { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
-
-  /* ── Copy buttons ── */
   .copy-btn { font-size:11px; padding:4px 12px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:none; color:var(--text-sec); cursor:pointer; font-family:var(--font); transition:all .15s; }
   .copy-btn:hover { background:var(--bg-sec); }
   .copy-btn.copied { color:#1D9E75; border-color:#1D9E75; }
-
-  /* ── Excel copy button — distinct green ── */
   .excel-btn { font-size:11px; padding:4px 12px; border-radius:var(--radius-md); border:.5px solid #5cb87a; background:var(--bg-smart); color:var(--text-smart); cursor:pointer; font-family:var(--font); font-weight:500; transition:all .15s; display:flex; align-items:center; gap:4px; }
   .excel-btn:hover { background:#c6e9d2; }
   .excel-btn.copied { background:#1D9E75; color:#fff; border-color:#1D9E75; }
   .excel-icon { font-size:13px; line-height:1; }
-
-  /* ── Excel hint banner ── */
   .excel-hint { background:var(--bg-smart); border:.5px solid var(--border-smart); border-radius:var(--radius-md); padding:7px 12px; font-size:11px; color:var(--text-smart); margin-bottom:.6rem; display:flex; align-items:center; gap:6px; }
   .excel-hint-icon { font-size:14px; }
-
   .tabs-output { display:flex; gap:6px; margin-bottom:.75rem; flex-wrap:wrap; }
   .out-tab { padding:4px 12px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:var(--bg-sec); color:var(--text-sec); cursor:pointer; font-size:12px; font-family:var(--font); transition:all .15s; }
   .out-tab.active { background:var(--bg); color:var(--text); border-color:var(--border-pri); }
@@ -185,13 +178,13 @@
       <!-- Linear params -->
       <div id="linear-params">
         <div class="grid4">
-          <div><label>t<sub>low</sub> — integration (ns)</label><input type="number" id="m_tlow" value="100" step="10" min="10" oninput="autoGenerate()"></div>
+          <div><label>t<sub>cycle</sub> — integration (ns)</label><input type="number" id="m_tcycle" value="100" step="10" min="10" oninput="autoGenerate()"></div>
           <div><label>t<sub>high</sub> — avg time (ns)</label><input type="number" id="m_thigh" value="10" step="10" min="10" oninput="autoGenerate()"></div>
           <div><label>Max pts / row</label><input type="number" id="m_maxpts" value="4000" step="100" min="1" oninput="autoGenerate()"></div>
-          <div><label>Current range (A)</label><input type="number" id="m_irange" value="0.001" step="0.0001" oninput="autoGenerate()"></div>
+          <div><label>Current range (A)</label><input type="number" id="m_irange" value="0" step="0.0001" oninput="autoGenerate()"></div>
         </div>
         <div class="grid2" style="margin-top:10px;">
-          <div><label>Voltage range (V)</label><input type="number" id="m_vrange" value="2" step="0.5" oninput="autoGenerate()"></div>
+          <div><label>Voltage range (V)</label><input type="number" id="m_vrange" value="0" step="0.5" oninput="autoGenerate()"></div>
         </div>
       </div>
 
@@ -200,10 +193,10 @@
         <div class="seg-global">
           <div class="seg-global-title">Defaults for new rows</div>
           <div class="grid4">
-            <div><label>Default t<sub>low</sub> (ns)</label><input type="number" id="s_def_tlow" value="100" step="10" min="10" oninput="updateBudget()"></div>
+            <div><label>Default t<sub>cycle</sub> (ns)</label><input type="number" id="s_def_tcycle" value="100" step="10" min="10" oninput="updateBudget()"></div>
             <div><label>Default t<sub>high</sub> (ns)</label><input type="number" id="s_def_thigh" value="10" step="10" min="10" oninput="updateBudget()"></div>
-            <div><label>Current range (A)</label><input type="number" id="s_irange" value="0.001" step="0.0001" oninput="updateBudget()"></div>
-            <div><label>Voltage range (V)</label><input type="number" id="s_vrange" value="2" step="0.5" oninput="updateBudget()"></div>
+            <div><label>Current range (A)</label><input type="number" id="s_irange" value="0" step="0.0001" oninput="updateBudget()"></div>
+            <div><label>Voltage range (V)</label><input type="number" id="s_vrange" value="0" step="0.5" oninput="updateBudget()"></div>
           </div>
         </div>
         <div class="budget-grid">
@@ -255,13 +248,10 @@
 
     <div class="section" id="output-section" style="display:none">
       <div class="section-title">Output</div>
-
-      <!-- Excel hint -->
       <div class="excel-hint">
         <span class="excel-hint-icon">📋</span>
         <span>Use <strong>Copy for software</strong> on any table — this copies a fully-structured HTML table that pastes directly into your measurement software or Excel with each value in its own cell.</span>
       </div>
-
       <div class="tabs-output">
         <div class="out-tab active" onclick="switchOut('pulse')">Pulse sequence</div>
         <div class="out-tab" onclick="switchOut('meas')">Measurement scheme</div>
@@ -377,22 +367,19 @@
     <div class="section">
       <div class="section-title">Measurement scheme params</div>
       <div class="grid4">
-        <div><label>t<sub>low</sub> (ns)</label><input type="number" id="dm_tlow" value="100" step="10" min="10" oninput="drawGenerate()"></div>
+        <div><label>t<sub>cycle</sub> (ns)</label><input type="number" id="dm_tcycle" value="100" step="10" min="10" oninput="drawGenerate()"></div>
         <div><label>t<sub>high</sub> (ns)</label><input type="number" id="dm_thigh" value="10" step="10" min="10" oninput="drawGenerate()"></div>
         <div><label>Max pts / row</label><input type="number" id="dm_maxpts" value="4000" step="100" oninput="drawGenerate()"></div>
-        <div><label>I range (A)</label><input type="number" id="dm_irange" value="0.001" step="0.0001" oninput="drawGenerate()"></div>
+        <div><label>I range (A)</label><input type="number" id="dm_irange" value="0" step="0.0001" oninput="drawGenerate()"></div>
       </div>
     </div>
     <div class="action-row"><button class="gen-btn" onclick="exportDrawCSV()">Export CSV</button></div>
     <div id="draw-output-section" class="section" style="display:none">
       <div class="section-title">Output</div>
-
-      <!-- Excel hint -->
       <div class="excel-hint">
         <span class="excel-hint-icon">📋</span>
         <span>Use <strong>Copy for software</strong> on any table — pastes directly into your measurement software or Excel.</span>
       </div>
-
       <div style="display:flex;gap:6px;margin-bottom:.75rem;flex-wrap:wrap">
         <div class="out-tab active" id="dot-pulse" onclick="switchDrawOut('pulse')">Pulse sequence</div>
         <div class="out-tab" id="dot-meas" onclick="switchDrawOut('meas')">Measurement scheme</div>
@@ -453,12 +440,17 @@ function setMeasScheme(type) {
 
 /* ─────────────────────────────────────────────
    PROBE STATE
+   - "pulse" mode: each segment has its own voltage (vlo field)
+   - "multipulse" mode: same as pulse but each segment can independently
+     sweep its voltage across cycles (vlo → vhi by vstep, over N cycles)
+   - "constant" mode: single fixed voltage
+   - sweep mode removed
 ───────────────────────────────────────────── */
 const probeState = {
-  gate:   { mode:'pulse',    pulses:[{tpulse:1000,repeat:1,sweep:false,vlo:0,vhi:1,vstep:0.1}], constant:1.0, sweep:{vstart:0,vstop:1,vstep:0.1,tpulse:1000}, timing:{tgap:10,trise:100,tfall:100,ncycles:1,vbase:1.0,vpulse:0.0} },
-  drain:  { mode:'constant', pulses:[{tpulse:1000,repeat:1,vlo:1.8}],  constant:1.8, sweep:{vstart:0,vstop:2,vstep:0.2,tpulse:1000}, timing:{tgap:10,trise:100,tfall:100,ncycles:1,vbase:1.8,vpulse:0.0} },
-  source: { mode:'constant', pulses:[{tpulse:1000,repeat:1,vlo:0.0}],  constant:0.0, sweep:{vstart:0,vstop:1,vstep:0.1,tpulse:1000}, timing:{tgap:10,trise:100,tfall:100,ncycles:1,vbase:0.0,vpulse:0.5} },
-  bulk:   { mode:'constant', pulses:[{tpulse:1000,repeat:1,vlo:0.0}],  constant:0.0, sweep:{vstart:0,vstop:1,vstep:0.1,tpulse:1000}, timing:{tgap:10,trise:100,tfall:100,ncycles:1,vbase:0.0,vpulse:0.5} }
+  gate:   { mode:'pulse',    pulses:[{tpulse:1000,repeat:1,sweep:false,vlo:0,vhi:1,vstep:0.1}], constant:0, timing:{tgap:10,trise:100,tfall:100,ncycles:1,vbase:0} },
+  drain:  { mode:'constant', pulses:[{tpulse:1000,repeat:1,sweep:false,vlo:0,vhi:1,vstep:0.1}], constant:0, timing:{tgap:10,trise:100,tfall:100,ncycles:1,vbase:0} },
+  source: { mode:'constant', pulses:[{tpulse:1000,repeat:1,sweep:false,vlo:0,vhi:1,vstep:0.1}], constant:0, timing:{tgap:10,trise:100,tfall:100,ncycles:1,vbase:0} },
+  bulk:   { mode:'constant', pulses:[{tpulse:1000,repeat:1,sweep:false,vlo:0,vhi:1,vstep:0.1}], constant:0, timing:{tgap:10,trise:100,tfall:100,ncycles:1,vbase:0} }
 };
 const probeColors = {gate:'#378ADD',drain:'#1D9E75',source:'#D85A30',bulk:'#D4537E'};
 let currentProbe = 'gate';
@@ -473,15 +465,6 @@ function autoGenerate() { clearTimeout(autoGenTimer); autoGenTimer = setTimeout(
 
 /* ─────────────────────────────────────────────
    COPY FUNCTIONS
-
-   copyTablePlain  — tab-separated plain text (text editors, simple apps)
-   copyTableExcel  — HTML table + TSV fallback (Excel, measurement software)
-
-   The key fix: we now build a properly structured HTML table with explicit
-   inline styles and a complete <html><body> wrapper. This is the exact format
-   that applications expect when they read the text/html clipboard flavour.
-   Many measurement software packages (and Excel itself) only parse the HTML
-   flavour — plain TSV is ignored unless the app specifically requests it.
 ───────────────────────────────────────────── */
 function extractTSV(containerId) {
   const container = document.getElementById(containerId);
@@ -506,10 +489,6 @@ function copyTableExcel(id, btn) {
   const container = document.getElementById(id);
   const table = container.querySelector('table');
   if (!table) { flashExcelBtn(btn, false); return; }
-
-  /* Rebuild the table with explicit inline styles on every cell.
-     This ensures apps that parse the HTML clipboard flavour see a proper
-     table regardless of whether they apply external stylesheets. */
   const styledRows = [...table.querySelectorAll('tr')].map(row => {
     const cells = [...row.querySelectorAll('th,td')].map(cell => {
       const tag  = cell.tagName.toLowerCase();
@@ -519,30 +498,18 @@ function copyTableExcel(id, btn) {
     }).join('');
     return '<tr>' + cells + '</tr>';
   }).join('');
-
-  /* Full HTML document wrapper — this is what Excel and most lab software
-     expect when reading the text/html clipboard flavour. */
   const htmlPayload =
     '<html><head><meta charset="UTF-8"></head><body>' +
     '<table style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:12px;">' +
-    styledRows +
-    '</table></body></html>';
-
-  /* TSV is included as text/plain so plain-text targets still work. */
+    styledRows + '</table></body></html>';
   const tsv = extractTSV(id);
-
   const htmlBlob = new Blob([htmlPayload], { type: 'text/html' });
   const textBlob = new Blob([tsv],         { type: 'text/plain' });
-
   try {
     const item = new ClipboardItem({ 'text/html': htmlBlob, 'text/plain': textBlob });
     navigator.clipboard.write([item])
       .then(()  => flashExcelBtn(btn, true))
-      .catch(()  => {
-        /* Some browsers block ClipboardItem outside a direct user gesture;
-           fall back to plain TSV which at least works in most contexts. */
-        navigator.clipboard.writeText(tsv).then(() => flashExcelBtn(btn, true));
-      });
+      .catch(()  => { navigator.clipboard.writeText(tsv).then(() => flashExcelBtn(btn, true)); });
   } catch(e) {
     navigator.clipboard.writeText(tsv).then(() => flashExcelBtn(btn, true));
   }
@@ -568,80 +535,182 @@ function switchProbe(p) {
 }
 
 function renderProbePanel(p) {
-  const s=probeState[p], t=s.timing, el=document.getElementById('probe-'+p);
-  const mb = (m) => `<button class="mode-btn ${s.mode===m?'active':''}" onclick="setMode('${p}','${m}')">${{constant:'Constant',sweep:'Sweep',pulse:'Pulsed',multipulse:'Multi-pulse'}[m]}</button>`;
-  const showTiming = s.mode==='pulse'||s.mode==='multipulse'||s.mode==='sweep';
+  const s = probeState[p], t = s.timing, el = document.getElementById('probe-'+p);
+
+  /* Mode buttons — no sweep */
+  const mb = (m) => `<button class="mode-btn ${s.mode===m?'active':''}" onclick="setMode('${p}','${m}')">${{constant:'Constant',pulse:'Pulsed',multipulse:'Multi-pulse'}[m]}</button>`;
+
+  /* Timing block shown for pulsed & multipulse — no vpulse field */
+  const showTiming = s.mode === 'pulse' || s.mode === 'multipulse';
   const timingHtml = showTiming ? `
     <div class="timing-subsection">
       <div class="timing-subsection-title">Timing — ${p}</div>
-      <div class="grid5">
+      <div class="grid4">
         <div><label>t<sub>gap</sub> (μs)</label><input type="number" step="1" min="0" value="${t.tgap}" onchange="probeState['${p}'].timing.tgap=parseFloat(this.value);autoGenerate()"></div>
         <div><label>t<sub>rise</sub> (ns)</label><input type="number" step="10" min="1" value="${t.trise}" onchange="probeState['${p}'].timing.trise=parseFloat(this.value);autoGenerate()"></div>
         <div><label>t<sub>fall</sub> (ns)</label><input type="number" step="10" min="1" value="${t.tfall}" onchange="probeState['${p}'].timing.tfall=parseFloat(this.value);autoGenerate()"></div>
         <div><label>N cycles</label><input type="number" step="1" min="1" value="${t.ncycles}" onchange="probeState['${p}'].timing.ncycles=parseInt(this.value);autoGenerate()"></div>
+      </div>
+      <div class="grid2" style="margin-top:8px;">
         <div><label>V<sub>base</sub> (V)</label><input type="number" step="0.1" value="${t.vbase}" onchange="probeState['${p}'].timing.vbase=parseFloat(this.value);autoGenerate()"></div>
       </div>
-      <div class="grid2" style="margin-top:8px;"><div><label>V<sub>pulse</sub> (V)</label><input type="number" step="0.1" value="${t.vpulse}" onchange="probeState['${p}'].timing.vpulse=parseFloat(this.value);autoGenerate()"></div></div>
     </div>` : '';
+
   let body = '';
-  if (s.mode==='constant') {
+
+  if (s.mode === 'constant') {
     body = `<div style="max-width:160px;"><label>Voltage (V)</label><input type="number" step="0.1" value="${s.constant}" onchange="probeState['${p}'].constant=parseFloat(this.value);autoGenerate()"></div>`;
-  } else if (s.mode==='sweep') {
-    const sw=s.sweep;
-    body = `<div class="grid4">
-      <div><label>V start</label><input type="number" step="0.1" value="${sw.vstart}" onchange="probeState['${p}'].sweep.vstart=parseFloat(this.value);autoGenerate()"></div>
-      <div><label>V stop</label><input type="number" step="0.1" value="${sw.vstop}" onchange="probeState['${p}'].sweep.vstop=parseFloat(this.value);autoGenerate()"></div>
-      <div><label>V step</label><input type="number" step="0.05" value="${sw.vstep}" onchange="probeState['${p}'].sweep.vstep=parseFloat(this.value);autoGenerate()"></div>
-      <div><label>t<sub>pulse</sub> (μs)</label><input type="number" step="1" value="${sw.tpulse}" onchange="probeState['${p}'].sweep.tpulse=parseFloat(this.value);autoGenerate()"></div>
-    </div>`;
-  } else {
-    let items='';
-    s.pulses.forEach((pu,i)=>{
-      const sweepToggle = s.mode==='multipulse' ? `<div style="margin-top:6px;">
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" ${pu.sweep?'checked':''} onchange="probeState['${p}'].pulses[${i}].sweep=this.checked;renderProbePanel('${p}');autoGenerate()"> Sweep voltage across repeats</label>
-          ${pu.sweep?`<div class="grid3" style="margin-top:6px;"><div><label>V lo</label><input type="number" step="0.1" value="${pu.vlo||0}" onchange="probeState['${p}'].pulses[${i}].vlo=parseFloat(this.value);autoGenerate()"></div><div><label>V hi</label><input type="number" step="0.1" value="${pu.vhi||1}" onchange="probeState['${p}'].pulses[${i}].vhi=parseFloat(this.value);autoGenerate()"></div><div><label>V step</label><input type="number" step="0.1" value="${pu.vstep||0.1}" onchange="probeState['${p}'].pulses[${i}].vstep=parseFloat(this.value);autoGenerate()"></div></div>`:''}
-        </div>` : '';
-      const vf = s.mode==='pulse'?`<div><label>V pulse (V)</label><input type="number" step="0.1" value="${pu.vlo!==undefined?pu.vlo:probeState[p].timing.vpulse}" onchange="probeState['${p}'].pulses[${i}].vlo=parseFloat(this.value);autoGenerate()"></div>`:'';
-      items+=`<div class="pulse-item"><div class="pulse-item-header"><span class="pulse-label">Segment ${i+1}</span><button class="del-btn" onclick="delPulse('${p}',${i})">Remove</button></div>
-        <div class="grid3"><div><label>t<sub>pulse</sub> (μs)</label><input type="number" step="1" min="0" value="${pu.tpulse}" onchange="probeState['${p}'].pulses[${i}].tpulse=parseFloat(this.value);autoGenerate()"></div><div><label>Repeat</label><input type="number" step="1" min="1" value="${pu.repeat||1}" onchange="probeState['${p}'].pulses[${i}].repeat=parseInt(this.value);autoGenerate()"></div>${vf}</div>${sweepToggle}</div>`;
+
+  } else if (s.mode === 'pulse') {
+    /* Pulsed: segments each with their own voltage */
+    let items = '';
+    s.pulses.forEach((pu, i) => {
+      items += `<div class="pulse-item">
+        <div class="pulse-item-header"><span class="pulse-label">Segment ${i+1}</span><button class="del-btn" onclick="delPulse('${p}',${i})">Remove</button></div>
+        <div class="grid3">
+          <div><label>t<sub>pulse</sub> (μs)</label><input type="number" step="1" min="0" value="${pu.tpulse}" onchange="probeState['${p}'].pulses[${i}].tpulse=parseFloat(this.value);autoGenerate()"></div>
+          <div><label>Repeat</label><input type="number" step="1" min="1" value="${pu.repeat||1}" onchange="probeState['${p}'].pulses[${i}].repeat=parseInt(this.value);autoGenerate()"></div>
+          <div><label>V pulse (V)</label><input type="number" step="0.1" value="${pu.vlo!==undefined?pu.vlo:0}" onchange="probeState['${p}'].pulses[${i}].vlo=parseFloat(this.value);autoGenerate()"></div>
+        </div>
+      </div>`;
+    });
+    body = `<div class="pulse-list">${items}</div><button class="add-btn" onclick="addPulse('${p}')">+ Add segment</button>`;
+
+  } else if (s.mode === 'multipulse') {
+    /*
+      Multi-pulse: same structure as pulsed (each segment has its own tpulse, repeat, vlo)
+      but each segment independently optionally sweeps its voltage across cycles.
+      vlo → vhi by vstep over N cycles. N cycles is set in the timing block.
+    */
+    let items = '';
+    s.pulses.forEach((pu, i) => {
+      const sweepBlock = pu.sweep ? `
+        <div class="grid3" style="margin-top:6px;">
+          <div><label>V lo (V)</label><input type="number" step="0.1" value="${pu.vlo!==undefined?pu.vlo:0}" onchange="probeState['${p}'].pulses[${i}].vlo=parseFloat(this.value);autoGenerate()"></div>
+          <div><label>V hi (V)</label><input type="number" step="0.1" value="${pu.vhi!==undefined?pu.vhi:1}" onchange="probeState['${p}'].pulses[${i}].vhi=parseFloat(this.value);autoGenerate()"></div>
+          <div><label>V step (V)</label><input type="number" step="0.1" value="${pu.vstep!==undefined?pu.vstep:0.1}" onchange="probeState['${p}'].pulses[${i}].vstep=parseFloat(this.value);autoGenerate()"></div>
+        </div>` : `
+        <div style="margin-top:6px;">
+          <div style="max-width:160px;"><label>V pulse (V)</label><input type="number" step="0.1" value="${pu.vlo!==undefined?pu.vlo:0}" onchange="probeState['${p}'].pulses[${i}].vlo=parseFloat(this.value);autoGenerate()"></div>
+        </div>`;
+      items += `<div class="pulse-item">
+        <div class="pulse-item-header"><span class="pulse-label">Segment ${i+1}</span><button class="del-btn" onclick="delPulse('${p}',${i})">Remove</button></div>
+        <div class="grid2">
+          <div><label>t<sub>pulse</sub> (μs)</label><input type="number" step="1" min="0" value="${pu.tpulse}" onchange="probeState['${p}'].pulses[${i}].tpulse=parseFloat(this.value);autoGenerate()"></div>
+          <div><label>Repeat (per cycle)</label><input type="number" step="1" min="1" value="${pu.repeat||1}" onchange="probeState['${p}'].pulses[${i}].repeat=parseInt(this.value);autoGenerate()"></div>
+        </div>
+        <div style="margin-top:6px;">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+            <input type="checkbox" ${pu.sweep?'checked':''} onchange="probeState['${p}'].pulses[${i}].sweep=this.checked;renderProbePanel('${p}');autoGenerate()">
+            Sweep voltage across cycles
+          </label>
+        </div>
+        ${sweepBlock}
+      </div>`;
     });
     body = `<div class="pulse-list">${items}</div><button class="add-btn" onclick="addPulse('${p}')">+ Add segment</button>`;
   }
-  el.innerHTML=`<div class="pulse-mode-row"><span style="font-size:12px;color:var(--text-sec)">Mode:</span>${mb('constant')}${mb('sweep')}${mb('pulse')}${mb('multipulse')}</div>${timingHtml}${body}`;
+
+  el.innerHTML = `<div class="pulse-mode-row"><span style="font-size:12px;color:var(--text-sec)">Mode:</span>${mb('constant')}${mb('pulse')}${mb('multipulse')}</div>${timingHtml}${body}`;
 }
 
-function setMode(p,m){ probeState[p].mode=m; if((m==='pulse'||m==='multipulse')&&probeState[p].pulses.length===0) probeState[p].pulses=[{tpulse:1000,repeat:1,sweep:false,vlo:probeState[p].timing.vpulse,vhi:1,vstep:0.1}]; renderProbePanel(p); autoGenerate(); }
-function addPulse(p){ probeState[p].pulses.push({tpulse:1000,repeat:1,sweep:false,vlo:probeState[p].timing.vpulse,vhi:1,vstep:0.1}); renderProbePanel(p); autoGenerate(); }
-function delPulse(p,i){ probeState[p].pulses.splice(i,1); renderProbePanel(p); autoGenerate(); }
-function switchOut(tab){ ['pulse','meas','preview'].forEach((t,i)=>{ document.querySelectorAll('.out-tab')[i].classList.toggle('active',t===tab); document.getElementById('out-'+t).classList.toggle('active',t===tab); }); }
-function switchProbeOut(probe,btn){ ['gate','drain','source','bulk'].forEach(p=>document.getElementById('probe-out-'+p).classList.toggle('active',p===probe)); btn.parentElement.querySelectorAll('.probe-out-tab').forEach(el=>el.classList.remove('active')); btn.classList.add('active'); }
+function setMode(p, m) {
+  probeState[p].mode = m;
+  if ((m === 'pulse' || m === 'multipulse') && probeState[p].pulses.length === 0) {
+    probeState[p].pulses = [{tpulse:1000, repeat:1, sweep:false, vlo:0, vhi:1, vstep:0.1}];
+  }
+  renderProbePanel(p);
+  autoGenerate();
+}
+function addPulse(p) {
+  probeState[p].pulses.push({tpulse:1000, repeat:1, sweep:false, vlo:0, vhi:1, vstep:0.1});
+  renderProbePanel(p);
+  autoGenerate();
+}
+function delPulse(p, i) {
+  probeState[p].pulses.splice(i, 1);
+  renderProbePanel(p);
+  autoGenerate();
+}
+function switchOut(tab) {
+  ['pulse','meas','preview'].forEach((t,i) => {
+    document.querySelectorAll('.out-tab')[i].classList.toggle('active', t===tab);
+    document.getElementById('out-'+t).classList.toggle('active', t===tab);
+  });
+}
+function switchProbeOut(probe, btn) {
+  ['gate','drain','source','bulk'].forEach(p => document.getElementById('probe-out-'+p).classList.toggle('active', p===probe));
+  btn.parentElement.querySelectorAll('.probe-out-tab').forEach(el => el.classList.remove('active'));
+  btn.classList.add('active');
+}
 
 /* ─────────────────────────────────────────────
    WAVEFORM BUILDER
+   Multi-pulse sweep logic:
+     Each cycle c (0-indexed), for each segment with sweep enabled,
+     the voltage for that cycle = vlo + c * vstep (clamped to vhi direction).
+     Fixed segments just use vlo every cycle.
 ───────────────────────────────────────────── */
-function addPt(pts,t,v){
-  if(pts.length>0&&Math.abs(t-pts[pts.length-1].t)<1e-18){ if(Math.abs(v-pts[pts.length-1].v)>1e-12) pts[pts.length-1].v=v; return; }
-  pts.push({t,v});
+function addPt(pts, t, v) {
+  if (pts.length > 0 && Math.abs(t - pts[pts.length-1].t) < 1e-18) {
+    if (Math.abs(v - pts[pts.length-1].v) > 1e-12) pts[pts.length-1].v = v;
+    return;
+  }
+  pts.push({t, v});
 }
 
-function buildProbeWaveform(probe, overrideNcycles){
-  const s=probeState[probe],t=s.timing;
-  const tgap=t.tgap*1e-6,trise=t.trise*1e-9,tfall=t.tfall*1e-9;
+function buildProbeWaveform(probe, overrideNcycles) {
+  const s = probeState[probe], t = s.timing;
+  const tgap  = t.tgap  * 1e-6;
+  const trise = t.trise * 1e-9;
+  const tfall = t.tfall * 1e-9;
   const ncycles = (overrideNcycles !== undefined) ? overrideNcycles : t.ncycles;
-  const vbase=t.vbase,vpulse=t.vpulse;
-  if(s.mode==='constant') return [{t:0,v:s.constant}];
-  if(s.mode==='sweep'){
-    const sw=s.sweep,steps=Math.max(1,Math.round(Math.abs(sw.vstop-sw.vstart)/(Math.abs(sw.vstep)||0.1)));
-    let pts=[];addPt(pts,0,vbase);
-    for(let c=0;c<ncycles;c++) for(let i=0;i<=steps;i++){const v=sw.vstart+i*Math.abs(sw.vstep)*Math.sign(sw.vstop-sw.vstart),last=pts[pts.length-1].t;addPt(pts,last+tgap,vbase);addPt(pts,last+tgap+trise,v);addPt(pts,last+tgap+trise+sw.tpulse*1e-6,v);addPt(pts,last+tgap+trise+sw.tpulse*1e-6+tfall,vbase);}
-    return pts;
-  }
-  let pts=[];addPt(pts,0,vbase);
-  for(let c=0;c<ncycles;c++){
-    let segs=[];
-    if(s.mode==='pulse') s.pulses.forEach(pu=>{for(let r=0;r<(pu.repeat||1);r++) segs.push({tpulse:pu.tpulse*1e-6,voltage:pu.vlo!==undefined?pu.vlo:vpulse});});
-    else s.pulses.forEach(pu=>{const reps=pu.repeat||1;if(pu.sweep){const steps=Math.max(1,Math.round(Math.abs(pu.vhi-pu.vlo)/(Math.abs(pu.vstep)||0.1)));for(let st=0;st<=steps;st++){const v=pu.vlo+st*Math.abs(pu.vstep)*Math.sign(pu.vhi-pu.vlo);for(let r=0;r<reps;r++) segs.push({tpulse:pu.tpulse*1e-6,voltage:v});}}else{for(let r=0;r<reps;r++) segs.push({tpulse:pu.tpulse*1e-6,voltage:vpulse});}});
-    segs.forEach(seg=>{const last=pts[pts.length-1].t;addPt(pts,last+tgap,vbase);addPt(pts,last+tgap+trise,seg.voltage);addPt(pts,last+tgap+trise+seg.tpulse,seg.voltage);addPt(pts,last+tgap+trise+seg.tpulse+tfall,vbase);});
+  const vbase = t.vbase;
+
+  if (s.mode === 'constant') return [{t:0, v:s.constant}];
+
+  let pts = [];
+  addPt(pts, 0, vbase);
+
+  for (let c = 0; c < ncycles; c++) {
+    /* Build the list of {tpulse, voltage} for this cycle */
+    let segs = [];
+
+    if (s.mode === 'pulse') {
+      /* Fixed voltage per segment, repeat times */
+      s.pulses.forEach(pu => {
+        const v = pu.vlo !== undefined ? pu.vlo : 0;
+        for (let r = 0; r < (pu.repeat || 1); r++) {
+          segs.push({tpulse: pu.tpulse * 1e-6, voltage: v});
+        }
+      });
+    } else if (s.mode === 'multipulse') {
+      /* Per segment, voltage either fixed or swept over cycles */
+      s.pulses.forEach(pu => {
+        const reps = pu.repeat || 1;
+        let v;
+        if (pu.sweep) {
+          const vstep = Math.abs(pu.vstep) || 0.1;
+          const dir   = (pu.vhi >= pu.vlo) ? 1 : -1;
+          const maxSteps = Math.round(Math.abs(pu.vhi - pu.vlo) / vstep);
+          const step  = Math.min(c, maxSteps);
+          v = pu.vlo + dir * step * vstep;
+        } else {
+          v = pu.vlo !== undefined ? pu.vlo : 0;
+        }
+        for (let r = 0; r < reps; r++) {
+          segs.push({tpulse: pu.tpulse * 1e-6, voltage: v});
+        }
+      });
+    }
+
+    segs.forEach(seg => {
+      const last = pts[pts.length-1].t;
+      addPt(pts, last + tgap,                          vbase);
+      addPt(pts, last + tgap + trise,                  seg.voltage);
+      addPt(pts, last + tgap + trise + seg.tpulse,     seg.voltage);
+      addPt(pts, last + tgap + trise + seg.tpulse + tfall, vbase);
+    });
   }
   return pts;
 }
@@ -649,57 +718,57 @@ function buildProbeWaveform(probe, overrideNcycles){
 /* ─────────────────────────────────────────────
    SEGMENT EXTRACTION
 ───────────────────────────────────────────── */
-function extractSegments(wfm){
-  const segs=[];
-  for(let i=0;i<wfm.length-1;i++){
-    const dur=wfm[i+1].t-wfm[i].t;
-    if(dur<=0) continue;
-    const dv=wfm[i+1].v-wfm[i].v;
-    const kind = dv>1e-6?'rise':dv<-1e-6?'fall':'hold';
-    segs.push({label:`Seg ${i+1}`,kind,tStart:wfm[i].t,tEnd:wfm[i+1].t,dur,subRows:[]});
+function extractSegments(wfm) {
+  const segs = [];
+  for (let i = 0; i < wfm.length - 1; i++) {
+    const dur = wfm[i+1].t - wfm[i].t;
+    if (dur <= 0) continue;
+    const dv = wfm[i+1].v - wfm[i].v;
+    const kind = dv > 1e-6 ? 'rise' : dv < -1e-6 ? 'fall' : 'hold';
+    segs.push({label:`Seg ${i+1}`, kind, tStart:wfm[i].t, tEnd:wfm[i+1].t, dur, subRows:[]});
   }
   return segs;
 }
 
-function fmtUS(t){return(t*1e6).toFixed(3)+'μs';}
-function kindIcon(k){return k==='rise'?'↑':k==='fall'?'↓':'—';}
-function capitalize(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+function fmtUS(t) { return (t * 1e6).toFixed(3) + 'μs'; }
+function kindIcon(k) { return k==='rise' ? '↑' : k==='fall' ? '↓' : '—'; }
+function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
 /* ─────────────────────────────────────────────
    SEGMENT BROWSER
 ───────────────────────────────────────────── */
-function buildSegBrowser(segs){
-  const list=document.getElementById('seg-browser-list');
-  if(!segs.length){list.innerHTML='<div style="font-size:12px;color:var(--text-ter);padding:8px 0">No variable segments.</div>';return;}
-  list.innerHTML=segs.map((seg,i)=>{
-    const pts=(seg.subRows||[]).reduce((a,r)=>a+r.npts,0);
-    const rows=(seg.subRows||[]).length;
+function buildSegBrowser(segs) {
+  const list = document.getElementById('seg-browser-list');
+  if (!segs.length) { list.innerHTML = '<div style="font-size:12px;color:var(--text-ter);padding:8px 0">No variable segments.</div>'; return; }
+  list.innerHTML = segs.map((seg, i) => {
+    const pts  = (seg.subRows || []).reduce((a, r) => a + r.npts, 0);
+    const rows = (seg.subRows || []).length;
     return `<div class="seg-item${i===selSmartSeg?' sel':''}" onclick="selectSmartSeg(${i})">
       <div class="seg-item-head">${kindIcon(seg.kind)} <span>${capitalize(seg.kind)}</span>
-        ${rows>0?`<span class="pts-badge">${rows}row${rows>1?'s':''}·${pts}pts</span>`:''}
+        ${rows > 0 ? `<span class="pts-badge">${rows}row${rows>1?'s':''}·${pts}pts</span>` : ''}
       </div>
       <div class="seg-item-meta">${fmtUS(seg.tStart)} → ${fmtUS(seg.tEnd)}</div>
     </div>`;
   }).join('');
 }
 
-function selectSmartSeg(i){
-  selSmartSeg=i;
+function selectSmartSeg(i) {
+  selSmartSeg = i;
   buildSegBrowser(smartSegs);
   renderSegDetail(i);
 }
 
-function renderSegDetail(i){
-  const det=document.getElementById('seg-detail');
-  if(i<0||i>=smartSegs.length){det.innerHTML='<div class="seg-detail-empty">Select a segment to configure its measurement rows.</div>';return;}
-  const seg=smartSegs[i];
-  if(!seg.subRows) seg.subRows=[];
-  let html=`<div style="font-size:12px;font-weight:600;color:var(--text-sec);margin-bottom:8px;">${kindIcon(seg.kind)} ${capitalize(seg.kind)} &nbsp;<span style="font-size:11px;font-weight:400;color:var(--text-ter)">${fmtUS(seg.tStart)} → ${fmtUS(seg.tEnd)} (Δt=${fmtUS(seg.dur)})</span></div>`;
-  if(seg.subRows.length===0){html+='<div style="font-size:11px;color:var(--text-ter);margin-bottom:8px;">No measurement rows defined for this segment yet.</div>';}
-  html+='<div class="subseg-list">';
-  seg.subRows.forEach((row,ri)=>{
-    const tlErr=row.tlow_ns<H.MIN_T_NS, thErr=row.thigh_ns<H.MIN_T_NS;
-    html+=`<div class="subseg-row">
+function renderSegDetail(i) {
+  const det = document.getElementById('seg-detail');
+  if (i < 0 || i >= smartSegs.length) { det.innerHTML = '<div class="seg-detail-empty">Select a segment to configure its measurement rows.</div>'; return; }
+  const seg = smartSegs[i];
+  if (!seg.subRows) seg.subRows = [];
+  let html = `<div style="font-size:12px;font-weight:600;color:var(--text-sec);margin-bottom:8px;">${kindIcon(seg.kind)} ${capitalize(seg.kind)} &nbsp;<span style="font-size:11px;font-weight:400;color:var(--text-ter)">${fmtUS(seg.tStart)} → ${fmtUS(seg.tEnd)} (Δt=${fmtUS(seg.dur)})</span></div>`;
+  if (seg.subRows.length === 0) { html += '<div style="font-size:11px;color:var(--text-ter);margin-bottom:8px;">No measurement rows defined for this segment yet.</div>'; }
+  html += '<div class="subseg-list">';
+  seg.subRows.forEach((row, ri) => {
+    const tcErr = row.tcycle_ns < H.MIN_T_NS, thErr = row.thigh_ns < H.MIN_T_NS;
+    html += `<div class="subseg-row">
       <div class="subseg-row-head"><span class="subseg-lbl">Row ${ri+1}</span><button class="del-btn" onclick="delSubRow(${i},${ri})">Remove</button></div>
       <div class="grid5">
         <div>
@@ -714,9 +783,9 @@ function renderSegDetail(i){
             onchange="smartSegs[${i}].subRows[${ri}].npts=Math.max(1,parseInt(this.value)||1);updateBudget();buildSegBrowser(smartSegs)">
         </div>
         <div>
-          <label>t<sub>low</sub> (ns) ≥${H.MIN_T_NS}</label>
-          <input type="number" step="10" min="${H.MIN_T_NS}" value="${row.tlow_ns}" class="${tlErr?'invalid':''}"
-            onchange="smartSegs[${i}].subRows[${ri}].tlow_ns=parseFloat(this.value)||${H.MIN_T_NS};this.classList.toggle('invalid',smartSegs[${i}].subRows[${ri}].tlow_ns<${H.MIN_T_NS});updateBudget()">
+          <label>t<sub>cycle</sub> (ns) ≥${H.MIN_T_NS}</label>
+          <input type="number" step="10" min="${H.MIN_T_NS}" value="${row.tcycle_ns}" class="${tcErr?'invalid':''}"
+            onchange="smartSegs[${i}].subRows[${ri}].tcycle_ns=parseFloat(this.value)||${H.MIN_T_NS};this.classList.toggle('invalid',smartSegs[${i}].subRows[${ri}].tcycle_ns<${H.MIN_T_NS});updateBudget()">
         </div>
         <div>
           <label>t<sub>high</sub> (ns) ≥${H.MIN_T_NS}</label>
@@ -724,28 +793,28 @@ function renderSegDetail(i){
             onchange="smartSegs[${i}].subRows[${ri}].thigh_ns=parseFloat(this.value)||${H.MIN_T_NS};this.classList.toggle('invalid',smartSegs[${i}].subRows[${ri}].thigh_ns<${H.MIN_T_NS});updateBudget()">
         </div>
         <div>
-          <label>Cycle (ns)</label>
-          <input type="number" value="${row.tlow_ns+row.thigh_ns}" readonly style="opacity:.5;cursor:default">
+          <label>t<sub>low</sub> (ns)</label>
+          <input type="number" value="${row.tcycle_ns - row.thigh_ns}" readonly style="opacity:.5;cursor:default">
         </div>
       </div>
     </div>`;
   });
-  html+='</div>';
-  html+=`<button class="add-btn" onclick="addSubRow(${i})">+ Add measurement row</button>`;
-  det.innerHTML=html;
+  html += '</div>';
+  html += `<button class="add-btn" onclick="addSubRow(${i})">+ Add measurement row</button>`;
+  det.innerHTML = html;
 }
 
-function addSubRow(segIdx){
-  const defTlow  = Math.max(H.MIN_T_NS, parseFloat(document.getElementById('s_def_tlow').value)||100);
-  const defThigh = Math.max(H.MIN_T_NS, parseFloat(document.getElementById('s_def_thigh').value)||10);
-  if(!smartSegs[segIdx].subRows) smartSegs[segIdx].subRows=[];
-  smartSegs[segIdx].subRows.push({tOffset:0,npts:100,tlow_ns:defTlow,thigh_ns:defThigh});
+function addSubRow(segIdx) {
+  const defTcycle = Math.max(H.MIN_T_NS, parseFloat(document.getElementById('s_def_tcycle').value) || 100);
+  const defThigh  = Math.max(H.MIN_T_NS, parseFloat(document.getElementById('s_def_thigh').value)  || 10);
+  if (!smartSegs[segIdx].subRows) smartSegs[segIdx].subRows = [];
+  smartSegs[segIdx].subRows.push({tOffset:0, npts:100, tcycle_ns:defTcycle, thigh_ns:defThigh});
   renderSegDetail(segIdx);
   buildSegBrowser(smartSegs);
   updateBudget();
 }
-function delSubRow(segIdx,rowIdx){
-  smartSegs[segIdx].subRows.splice(rowIdx,1);
+function delSubRow(segIdx, rowIdx) {
+  smartSegs[segIdx].subRows.splice(rowIdx, 1);
   renderSegDetail(segIdx);
   buildSegBrowser(smartSegs);
   updateBudget();
@@ -754,249 +823,550 @@ function delSubRow(segIdx,rowIdx){
 /* ─────────────────────────────────────────────
    BUDGET / VALIDATION
 ───────────────────────────────────────────── */
-function barColor(f){return f>1?'#e24b4a':f>.8?'#d48c30':'#5cb87a';}
-function setBar(barId,lblId,val,max){
-  const f=val/max,pct=Math.min(100,f*100).toFixed(1);
-  document.getElementById(barId).style.width=pct+'%';
-  document.getElementById(barId).style.background=barColor(f);
-  document.getElementById(lblId).textContent=`${val}/${max}`;
-  document.getElementById(lblId).style.color=f>1?'var(--text-err)':f>.8?'#d48c30':'var(--text-sec)';
+function barColor(f) { return f > 1 ? '#e24b4a' : f > .8 ? '#d48c30' : '#5cb87a'; }
+function setBar(barId, lblId, val, max) {
+  const f = val / max, pct = Math.min(100, f * 100).toFixed(1);
+  document.getElementById(barId).style.width = pct + '%';
+  document.getElementById(barId).style.background = barColor(f);
+  document.getElementById(lblId).textContent = `${val}/${max}`;
+  document.getElementById(lblId).style.color = f > 1 ? 'var(--text-err)' : f > .8 ? '#d48c30' : 'var(--text-sec)';
 }
 
-function updateBudget(){
-  let totalRows=0,totalPts=0,timingErr=false;
-  smartSegs.forEach(seg=>{(seg.subRows||[]).forEach(row=>{totalRows++;totalPts+=row.npts;if(row.tlow_ns<H.MIN_T_NS||row.thigh_ns<H.MIN_T_NS)timingErr=true;});});
-  const pulsePts=generatedData?Math.max(...Object.values(generatedData.probePulseRows).map(r=>r.length)):0;
-  setBar('b-rows-bar','b-rows-lbl',totalRows,H.MEAS_ROWS);
-  setBar('b-pts-bar','b-pts-lbl',totalPts,H.MEAS_PTS);
-  setBar('b-pulse-bar','b-pulse-lbl',pulsePts,H.PULSE_PTS);
-  const errs=[];
-  if(timingErr) errs.push(`t<sub>low</sub> and t<sub>high</sub> must each be ≥ ${H.MIN_T_NS} ns.`);
-  if(totalRows>H.MEAS_ROWS) errs.push(`Meas rows <strong>${totalRows}</strong> exceeds limit <strong>${H.MEAS_ROWS}</strong>.`);
-  if(totalPts>H.MEAS_PTS)   errs.push(`Total N pts <strong>${totalPts}</strong> exceeds limit <strong>${H.MEAS_PTS}</strong>.`);
-  if(pulsePts>H.PULSE_PTS)  errs.push(`Pulse sequence pts <strong>${pulsePts}</strong> exceeds limit <strong>${H.PULSE_PTS}</strong>.`);
+function updateBudget() {
+  let totalRows = 0, totalPts = 0, timingErr = false;
+  smartSegs.forEach(seg => {
+    (seg.subRows || []).forEach(row => {
+      totalRows++;
+      totalPts += row.npts;
+      if (row.tcycle_ns < H.MIN_T_NS || row.thigh_ns < H.MIN_T_NS) timingErr = true;
+    });
+  });
+  const pulsePts = generatedData ? Math.max(...Object.values(generatedData.probePulseRows).map(r => r.length)) : 0;
+  setBar('b-rows-bar',  'b-rows-lbl',  totalRows, H.MEAS_ROWS);
+  setBar('b-pts-bar',   'b-pts-lbl',   totalPts,  H.MEAS_PTS);
+  setBar('b-pulse-bar', 'b-pulse-lbl', pulsePts,  H.PULSE_PTS);
+  const errs = [];
+  if (timingErr)            errs.push(`t<sub>cycle</sub> and t<sub>high</sub> must each be ≥ ${H.MIN_T_NS} ns.`);
+  if (totalRows > H.MEAS_ROWS) errs.push(`Meas rows <strong>${totalRows}</strong> exceeds limit <strong>${H.MEAS_ROWS}</strong>.`);
+  if (totalPts  > H.MEAS_PTS)  errs.push(`Total N pts <strong>${totalPts}</strong> exceeds limit <strong>${H.MEAS_PTS}</strong>.`);
+  if (pulsePts  > H.PULSE_PTS) errs.push(`Pulse sequence pts <strong>${pulsePts}</strong> exceeds limit <strong>${H.PULSE_PTS}</strong>.`);
   showBanner(errs);
-  return errs.length===0;
+  return errs.length === 0;
 }
 
-function showBanner(errs){
-  const b=document.getElementById('global-err');
-  if(errs.length){b.className='err-banner visible';b.innerHTML='<strong>Limit exceeded:</strong><ul>'+errs.map(e=>`<li>${e}</li>`).join('')+'</ul>';}
-  else b.className='err-banner';
+function showBanner(errs) {
+  const b = document.getElementById('global-err');
+  if (errs.length) { b.className = 'err-banner visible'; b.innerHTML = '<strong>Limit exceeded:</strong><ul>' + errs.map(e => `<li>${e}</li>`).join('') + '</ul>'; }
+  else b.className = 'err-banner';
 }
 
-function validateLinear(meas,pulsePts){
-  const errs=[];
-  if(meas.tlow<H.MIN_T_NS*1e-9)  errs.push(`t<sub>low</sub> must be ≥ ${H.MIN_T_NS} ns.`);
-  if(meas.thigh<H.MIN_T_NS*1e-9) errs.push(`t<sub>high</sub> must be ≥ ${H.MIN_T_NS} ns.`);
-  if(pulsePts>H.PULSE_PTS)        errs.push(`Pulse pts <strong>${pulsePts}</strong> exceeds <strong>${H.PULSE_PTS}</strong>.`);
+function validateLinear(meas, pulsePts) {
+  const errs = [];
+  if (meas.tcycle < H.MIN_T_NS * 1e-9) errs.push(`t<sub>cycle</sub> must be ≥ ${H.MIN_T_NS} ns.`);
+  if (meas.thigh  < H.MIN_T_NS * 1e-9) errs.push(`t<sub>high</sub> must be ≥ ${H.MIN_T_NS} ns.`);
+  if (pulsePts > H.PULSE_PTS)           errs.push(`Pulse pts <strong>${pulsePts}</strong> exceeds <strong>${H.PULSE_PTS}</strong>.`);
   return errs;
 }
 
 /* ─────────────────────────────────────────────
    MAIN GENERATE
 ───────────────────────────────────────────── */
-function getMeasParams(){
-  return {tlow:parseFloat(document.getElementById('m_tlow').value)*1e-9,thigh:parseFloat(document.getElementById('m_thigh').value)*1e-9,maxpts:parseInt(document.getElementById('m_maxpts').value),irange:parseFloat(document.getElementById('m_irange').value),vrange:parseFloat(document.getElementById('m_vrange').value)};
+function getMeasParams() {
+  return {
+    tcycle: parseFloat(document.getElementById('m_tcycle').value) * 1e-9,
+    thigh:  parseFloat(document.getElementById('m_thigh').value)  * 1e-9,
+    maxpts: parseInt(document.getElementById('m_maxpts').value),
+    irange: parseFloat(document.getElementById('m_irange').value),
+    vrange: parseFloat(document.getElementById('m_vrange').value)
+  };
 }
 
-function generate(){
-  const wfms={};
-  ['gate','drain','source','bulk'].forEach(p=>{ wfms[p]=buildProbeWaveform(p); });
-  const tTotals={};
-  ['gate','drain','source','bulk'].forEach(p=>{ tTotals[p]=wfms[p].length>1?wfms[p][wfms[p].length-1].t:0; });
-  const maxT=Math.max(...Object.values(tTotals));
-  ['gate','drain','source','bulk'].forEach(p=>{if(wfms[p].length===1){wfms[p]=[{t:0,v:wfms[p][0].v},{t:maxT||1e-6,v:wfms[p][0].v}];tTotals[p]=maxT||1e-6;}});
+function generate() {
+  const wfms = {};
+  ['gate','drain','source','bulk'].forEach(p => { wfms[p] = buildProbeWaveform(p); });
+  const tTotals = {};
+  ['gate','drain','source','bulk'].forEach(p => { tTotals[p] = wfms[p].length > 1 ? wfms[p][wfms[p].length-1].t : 0; });
+  const maxT = Math.max(...Object.values(tTotals));
+  ['gate','drain','source','bulk'].forEach(p => {
+    if (wfms[p].length === 1) { wfms[p] = [{t:0, v:wfms[p][0].v}, {t:maxT||1e-6, v:wfms[p][0].v}]; tTotals[p] = maxT || 1e-6; }
+  });
 
-  const wfms1={};
-  ['gate','drain','source','bulk'].forEach(p=>{ wfms1[p]=buildProbeWaveform(p, 1); });
-  const tTotals1={};
-  ['gate','drain','source','bulk'].forEach(p=>{ tTotals1[p]=wfms1[p].length>1?wfms1[p][wfms1[p].length-1].t:0; });
-  const maxT1=Math.max(...Object.values(tTotals1));
-  ['gate','drain','source','bulk'].forEach(p=>{if(wfms1[p].length===1){wfms1[p]=[{t:0,v:wfms1[p][0].v},{t:maxT1||1e-6,v:wfms1[p][0].v}];tTotals1[p]=maxT1||1e-6;}});
+  /* Build single-cycle waveforms for measurement scheme reference */
+  const wfms1 = {};
+  ['gate','drain','source','bulk'].forEach(p => { wfms1[p] = buildProbeWaveform(p, 1); });
+  const tTotals1 = {};
+  ['gate','drain','source','bulk'].forEach(p => { tTotals1[p] = wfms1[p].length > 1 ? wfms1[p][wfms1[p].length-1].t : 0; });
+  const maxT1 = Math.max(...Object.values(tTotals1));
+  ['gate','drain','source','bulk'].forEach(p => {
+    if (wfms1[p].length === 1) { wfms1[p] = [{t:0, v:wfms1[p][0].v}, {t:maxT1||1e-6, v:wfms1[p][0].v}]; tTotals1[p] = maxT1 || 1e-6; }
+  });
 
-  const probePulseRows={};
-  ['gate','drain','source','bulk'].forEach(p=>{ probePulseRows[p]=wfms[p].map(pt=>({t:pt.t,v:pt.v})); });
-  const maxPulsePts=Math.max(...Object.values(probePulseRows).map(r=>r.length));
-  let measRows=[],totalMeasPts=0;
+  const probePulseRows = {};
+  ['gate','drain','source','bulk'].forEach(p => { probePulseRows[p] = wfms[p].map(pt => ({t:pt.t, v:pt.v})); });
+  const maxPulsePts = Math.max(...Object.values(probePulseRows).map(r => r.length));
+  let measRows = [], totalMeasPts = 0;
 
-  if(measSchemeType==='smart'){
-    const refP=['gate','drain','source','bulk'].reduce((a,b)=>tTotals1[a]>=tTotals1[b]?a:b);
-    const newSegs=extractSegments(wfms1[refP]);
-    newSegs.forEach((ns,i)=>{
-      const ex=smartSegs[i];
-      ns.subRows=(ex&&ex.kind===ns.kind&&Math.abs(ex.tStart-ns.tStart)<1e-12)?ex.subRows:[];
+  if (measSchemeType === 'smart') {
+    const refP = ['gate','drain','source','bulk'].reduce((a, b) => tTotals1[a] >= tTotals1[b] ? a : b);
+    const newSegs = extractSegments(wfms1[refP]);
+    newSegs.forEach((ns, i) => {
+      const ex = smartSegs[i];
+      ns.subRows = (ex && ex.kind === ns.kind && Math.abs(ex.tStart - ns.tStart) < 1e-12) ? ex.subRows : [];
     });
-    smartSegs=newSegs;
+    smartSegs = newSegs;
     buildSegBrowser(smartSegs);
-    if(selSmartSeg>=0&&selSmartSeg<smartSegs.length) renderSegDetail(selSmartSeg);
+    if (selSmartSeg >= 0 && selSmartSeg < smartSegs.length) renderSegDetail(selSmartSeg);
 
-    const irange=parseFloat(document.getElementById('s_irange').value)||0.001;
-    const vrange=parseFloat(document.getElementById('s_vrange').value)||2;
-    smartSegs.forEach((seg,si)=>{
-      (seg.subRows||[]).forEach(row=>{
-        const tlow=Math.max(H.MIN_T_NS,row.tlow_ns)*1e-9;
-        const thigh=Math.max(H.MIN_T_NS,row.thigh_ns)*1e-9;
-        measRows.push({start:seg.tStart+Math.max(0,row.tOffset),npts:row.npts,tlow,thigh,irange,vrange,label:`Seg${si+1}-${capitalize(seg.kind)}`});
+    const irange = parseFloat(document.getElementById('s_irange').value) || 0;
+    const vrange = parseFloat(document.getElementById('s_vrange').value) || 0;
+    smartSegs.forEach((seg, si) => {
+      (seg.subRows || []).forEach(row => {
+        const tcycle = Math.max(H.MIN_T_NS, row.tcycle_ns) * 1e-9;
+        const thigh  = Math.max(H.MIN_T_NS, row.thigh_ns)  * 1e-9;
+        const tlow   = tcycle - thigh;
+        measRows.push({start:seg.tStart + Math.max(0, row.tOffset), npts:row.npts, tcycle, tlow, thigh, irange, vrange, label:`Seg${si+1}-${capitalize(seg.kind)}`});
       });
     });
-    measRows.sort((a,b)=>a.start-b.start);
-    totalMeasPts=measRows.reduce((a,r)=>a+r.npts,0);
-    generatedData={probePulseRows,measRows,wfms,tTotals,maxT,totalMeasPts};
+    measRows.sort((a, b) => a.start - b.start);
+    totalMeasPts = measRows.reduce((a, r) => a + r.npts, 0);
+    generatedData = {probePulseRows, measRows, wfms, tTotals, maxT, totalMeasPts};
     updateBudget();
+
   } else {
-    const meas=getMeasParams();
-    const {tlow,thigh,maxpts,irange,vrange}=meas;
-    const tPerPt=tlow+thigh,tPerRow=maxpts*tPerPt,totalT=maxT1||1e-6;
-    const numFull=Math.floor(totalT/tPerRow),lastPts=Math.ceil((totalT-numFull*tPerRow)/tPerPt);
-    const totalRows=numFull+(lastPts>0?1:0);
-    for(let r=0;r<totalRows;r++) measRows.push({start:r*tPerRow,npts:r<numFull?maxpts:lastPts,tlow,thigh,irange,vrange,label:''});
-    totalMeasPts=measRows.reduce((a,r)=>a+r.npts,0);
-    generatedData={probePulseRows,measRows,wfms,tTotals,maxT,totalMeasPts};
-    const errs=validateLinear(meas,maxPulsePts);
-    if(totalRows>H.MEAS_ROWS) errs.push(`Meas rows <strong>${totalRows}</strong> > ${H.MEAS_ROWS}.`);
-    if(totalMeasPts>H.MEAS_PTS) errs.push(`Meas pts <strong>${totalMeasPts}</strong> > ${H.MEAS_PTS}.`);
+    const meas = getMeasParams();
+    const {tcycle, thigh, maxpts, irange, vrange} = meas;
+    const tlow      = tcycle - thigh;
+    const tPerRow   = maxpts * tcycle;
+    const totalT    = maxT1 || 1e-6;
+    const numFull   = Math.floor(totalT / tPerRow);
+    const lastPts   = Math.ceil((totalT - numFull * tPerRow) / tcycle);
+    const totalRows = numFull + (lastPts > 0 ? 1 : 0);
+    for (let r = 0; r < totalRows; r++) {
+      measRows.push({start:r * tPerRow, npts:r < numFull ? maxpts : lastPts, tcycle, tlow, thigh, irange, vrange, label:''});
+    }
+    totalMeasPts = measRows.reduce((a, r) => a + r.npts, 0);
+    generatedData = {probePulseRows, measRows, wfms, tTotals, maxT, totalMeasPts};
+    const errs = validateLinear(meas, maxPulsePts);
+    if (totalRows    > H.MEAS_ROWS) errs.push(`Meas rows <strong>${totalRows}</strong> > ${H.MEAS_ROWS}.`);
+    if (totalMeasPts > H.MEAS_PTS)  errs.push(`Meas pts <strong>${totalMeasPts}</strong> > ${H.MEAS_PTS}.`);
     showBanner(errs);
   }
-  renderAllProbeTables(probePulseRows,tTotals);
-  renderMeasTable(measRows,totalMeasPts);
-  renderPreview(wfms,maxT);
-  document.getElementById('output-section').style.display='';
+
+  renderAllProbeTables(probePulseRows, tTotals);
+  renderMeasTable(measRows, totalMeasPts);
+  renderPreview(wfms, maxT);
+  document.getElementById('output-section').style.display = '';
 }
 
-function fmtE(v){return v.toExponential(4);}
-function fmtF(v,d=4){return Number(v).toFixed(d);}
+function fmtE(v) { return v.toExponential(4); }
+function fmtF(v, d=4) { return Number(v).toFixed(d); }
 
-function renderAllProbeTables(probePulseRows,tTotals){
-  ['gate','drain','source','bulk'].forEach(p=>{
-    const rows=probePulseRows[p];
-    document.getElementById('pulse-info-'+p).innerHTML=
-      `<span class="info-chip">Points: ${rows.length}</span><span class="info-chip">Total: ${(tTotals[p]*1e6).toFixed(3)} μs</span>${rows.length>H.PULSE_PTS?`<span class="info-chip err">⚠ >${H.PULSE_PTS} limit</span>`:''}`;
-    let h=`<table><thead><tr><th>Time (s)</th><th>Voltage (V)</th></tr></thead><tbody>`;
-    rows.forEach(r=>{h+=`<tr><td>${fmtE(r.t)}</td><td>${fmtF(r.v)}</td></tr>`;});
-    document.getElementById('pulse-table-'+p).innerHTML=h+'</tbody></table>';
+function renderAllProbeTables(probePulseRows, tTotals) {
+  ['gate','drain','source','bulk'].forEach(p => {
+    const rows = probePulseRows[p];
+    document.getElementById('pulse-info-'+p).innerHTML =
+      `<span class="info-chip">Points: ${rows.length}</span><span class="info-chip">Total: ${(tTotals[p]*1e6).toFixed(3)} μs</span>${rows.length > H.PULSE_PTS ? `<span class="info-chip err">⚠ >${H.PULSE_PTS} limit</span>` : ''}`;
+    let h = `<table><thead><tr><th>Time (s)</th><th>Voltage (V)</th></tr></thead><tbody>`;
+    rows.forEach(r => { h += `<tr><td>${fmtE(r.t)}</td><td>${fmtF(r.v)}</td></tr>`; });
+    document.getElementById('pulse-table-'+p).innerHTML = h + '</tbody></table>';
   });
 }
 
-function renderMeasTable(rows,totalMeasPts){
-  const isSmart=measSchemeType==='smart';
-  const rOver=rows.length>H.MEAS_ROWS,pOver=totalMeasPts>H.MEAS_PTS;
-  document.getElementById('meas-info').innerHTML=
+function renderMeasTable(rows, totalMeasPts) {
+  const isSmart = measSchemeType === 'smart';
+  const rOver = rows.length > H.MEAS_ROWS, pOver = totalMeasPts > H.MEAS_PTS;
+  document.getElementById('meas-info').innerHTML =
     `<span class="info-chip${rOver?' err':''}">Rows: ${rows.length}</span><span class="info-chip${pOver?' err':''}">Pts: ${totalMeasPts}</span><span class="info-chip${isSmart?' smart':''}">1 cycle${isSmart?' · Smart':''}</span>`;
-  let h=`<table><thead><tr><th>Start (s)</th><th>N pts</th><th>Cycle (s)</th><th>Avg time / t_high (s)</th><th>I range (A)</th><th>V range (V)</th>${isSmart?'<th>Segment</th>':''}</tr></thead><tbody>`;
-  rows.forEach(r=>{const cyc=r.tlow+r.thigh;h+=`<tr><td>${fmtE(r.start)}</td><td>${r.npts}</td><td>${fmtE(cyc)}</td><td>${fmtE(r.thigh)}</td><td>${fmtE(r.irange)}</td><td>${fmtF(r.vrange,2)}</td>${isSmart?`<td style="font-size:11px">${r.label||''}</td>`:''}</tr>`;});
-  document.getElementById('meas-table-wrap').innerHTML=h+'</tbody></table>';
+  /* Columns: Start | N pts | t_cycle | t_high | t_low (derived) | I range | V range | [Segment] */
+  let h = `<table><thead><tr><th>Start (s)</th><th>N pts</th><th>t<sub>cycle</sub> (s)</th><th>t<sub>high</sub> (s)</th><th>t<sub>low</sub> (s)</th><th>I range (A)</th><th>V range (V)</th>${isSmart?'<th>Segment</th>':''}</tr></thead><tbody>`;
+  rows.forEach(r => {
+    h += `<tr><td>${fmtE(r.start)}</td><td>${r.npts}</td><td>${fmtE(r.tcycle)}</td><td>${fmtE(r.thigh)}</td><td>${fmtE(r.tlow)}</td><td>${fmtE(r.irange)}</td><td>${fmtF(r.vrange, 2)}</td>${isSmart ? `<td style="font-size:11px">${r.label||''}</td>` : ''}</tr>`;
+  });
+  document.getElementById('meas-table-wrap').innerHTML = h + '</tbody></table>';
 }
 
-function renderPreview(wfms,maxT){
-  const W=660,H=220,pL=38,pR=12,pT=10,pB=26,pW=W-pL-pR,pH=H-pT-pB;
-  const allV=Object.values(wfms).flatMap(w=>w.map(p=>p.v));
-  const vMin=Math.min(...allV)-.1,vMax=Math.max(...allV)+.1,vSpan=vMax-vMin||1;
-  const tT=maxT||1e-6;
-  const tx=t=>pL+(t/tT)*pW,ty=v=>pT+(1-(v-vMin)/vSpan)*pH;
-  function path(wfm,col){if(wfm.length<2){const y=ty(wfm[0].v);return `<line x1="${pL}" y1="${y}" x2="${pL+pW}" y2="${y}" stroke="${col}" stroke-width="1.5"/>`;}return `<path d="${wfm.map((p,i)=>`${i===0?'M':'L'}${tx(p.t).toFixed(1)},${ty(p.v).toFixed(1)}`).join(' ')}" fill="none" stroke="${col}" stroke-width="1.5" stroke-linejoin="round"/>`;}
-  let s=`<svg class="preview" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
-  s+=`<line x1="${pL}" y1="${pT}" x2="${pL}" y2="${pT+pH}" stroke="currentColor" stroke-width="0.5" opacity="0.25"/>`;
-  s+=`<line x1="${pL}" y1="${pT+pH}" x2="${pL+pW}" y2="${pT+pH}" stroke="currentColor" stroke-width="0.5" opacity="0.25"/>`;
-  [0,.5,1].forEach(f=>{const v=vMin+f*vSpan,y=ty(v);s+=`<line x1="${pL}" y1="${y.toFixed(1)}" x2="${pL+pW}" y2="${y.toFixed(1)}" stroke="currentColor" stroke-width="0.3" opacity="0.15"/><text x="${pL-4}" y="${(y+4).toFixed(1)}" text-anchor="end" font-size="10" fill="currentColor" opacity="0.5">${v.toFixed(1)}</text>`;});
-  [0,.25,.5,.75,1].forEach(f=>{const x=pL+f*pW;s+=`<text x="${x.toFixed(1)}" y="${pT+pH+14}" text-anchor="middle" font-size="10" fill="currentColor" opacity="0.5">${(f*tT*1e6).toFixed(2)}μs</text>`;});
-  ['gate','drain','source','bulk'].forEach(p=>{s+=path(wfms[p],probeColors[p]);});
-  [['G',probeColors.gate],['D',probeColors.drain],['S',probeColors.source],['B',probeColors.bulk]].forEach(([l,c],i)=>{const lx=pL+8+i*54;s+=`<line x1="${lx}" y1="${pT+7}" x2="${lx+16}" y2="${pT+7}" stroke="${c}" stroke-width="2"/><text x="${lx+20}" y="${pT+11}" font-size="11" fill="${c}" font-weight="500">${l}</text>`;});
-  s+=`<text x="10" y="${pT+pH/2}" text-anchor="middle" font-size="10" fill="currentColor" opacity="0.45" transform="rotate(-90 10 ${pT+pH/2})">Voltage (V)</text>`;
-  s+='</svg>';
-  document.getElementById('preview-container').innerHTML=s;
+function renderPreview(wfms, maxT) {
+  const W=660, H=220, pL=38, pR=12, pT=10, pB=26, pW=W-pL-pR, pH=H-pT-pB;
+  const allV = Object.values(wfms).flatMap(w => w.map(p => p.v));
+  const vMin = Math.min(...allV) - .1, vMax = Math.max(...allV) + .1, vSpan = vMax - vMin || 1;
+  const tT = maxT || 1e-6;
+  const tx = t => pL + (t / tT) * pW, ty = v => pT + (1 - (v - vMin) / vSpan) * pH;
+  function path(wfm, col) {
+    if (wfm.length < 2) { const y = ty(wfm[0].v); return `<line x1="${pL}" y1="${y}" x2="${pL+pW}" y2="${y}" stroke="${col}" stroke-width="1.5"/>`; }
+    return `<path d="${wfm.map((p, i) => `${i===0?'M':'L'}${tx(p.t).toFixed(1)},${ty(p.v).toFixed(1)}`).join(' ')}" fill="none" stroke="${col}" stroke-width="1.5" stroke-linejoin="round"/>`;
+  }
+  let s = `<svg class="preview" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  s += `<line x1="${pL}" y1="${pT}" x2="${pL}" y2="${pT+pH}" stroke="currentColor" stroke-width="0.5" opacity="0.25"/>`;
+  s += `<line x1="${pL}" y1="${pT+pH}" x2="${pL+pW}" y2="${pT+pH}" stroke="currentColor" stroke-width="0.5" opacity="0.25"/>`;
+  [0, .5, 1].forEach(f => {
+    const v = vMin + f * vSpan, y = ty(v);
+    s += `<line x1="${pL}" y1="${y.toFixed(1)}" x2="${pL+pW}" y2="${y.toFixed(1)}" stroke="currentColor" stroke-width="0.3" opacity="0.15"/>`;
+    s += `<text x="${pL-4}" y="${(y+4).toFixed(1)}" text-anchor="end" font-size="10" fill="currentColor" opacity="0.5">${v.toFixed(1)}</text>`;
+  });
+  [0, .25, .5, .75, 1].forEach(f => {
+    const x = pL + f * pW;
+    s += `<text x="${x.toFixed(1)}" y="${pT+pH+14}" text-anchor="middle" font-size="10" fill="currentColor" opacity="0.5">${(f*tT*1e6).toFixed(2)}μs</text>`;
+  });
+  ['gate','drain','source','bulk'].forEach(p => { s += path(wfms[p], probeColors[p]); });
+  [['G',probeColors.gate],['D',probeColors.drain],['S',probeColors.source],['B',probeColors.bulk]].forEach(([l, c], i) => {
+    const lx = pL + 8 + i * 54;
+    s += `<line x1="${lx}" y1="${pT+7}" x2="${lx+16}" y2="${pT+7}" stroke="${c}" stroke-width="2"/>`;
+    s += `<text x="${lx+20}" y="${pT+11}" font-size="11" fill="${c}" font-weight="500">${l}</text>`;
+  });
+  s += `<text x="10" y="${pT+pH/2}" text-anchor="middle" font-size="10" fill="currentColor" opacity="0.45" transform="rotate(-90 10 ${pT+pH/2})">Voltage (V)</text>`;
+  s += '</svg>';
+  document.getElementById('preview-container').innerHTML = s;
 }
 
-function exportCSV(){
-  if(!generatedData) generate();
-  if(measSchemeType==='smart'&&!updateBudget()){alert('Cannot export: limits exceeded. Fix errors first.');return;}
-  const {probePulseRows,measRows}=generatedData;
-  let csv='';
-  ['gate','drain','source','bulk'].forEach(p=>{csv+=`\n${p.toUpperCase()} Probe\nTime_s,Voltage_V\n`;probePulseRows[p].forEach(r=>{csv+=`${r.t.toExponential(6)},${r.v.toFixed(4)}\n`;});});
-  csv+='\nMeasurement Scheme (1 cycle)\nStart_s,N_points,Low_Time_s,High_Time_s,Cycle_Time_s,I_range_A,V_range_V\n';
-  measRows.forEach(r=>{const cyc=r.tlow+r.thigh;csv+=`${r.start.toExponential(6)},${r.npts},${r.tlow.toExponential(6)},${r.thigh.toExponential(6)},${cyc.toExponential(6)},${r.irange.toExponential(3)},${r.vrange.toFixed(2)}\n`;});
-  Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([csv],{type:'text/csv'})),download:'pulse_sequence.csv'}).click();
+function exportCSV() {
+  if (!generatedData) generate();
+  if (measSchemeType === 'smart' && !updateBudget()) { alert('Cannot export: limits exceeded. Fix errors first.'); return; }
+  const {probePulseRows, measRows} = generatedData;
+  let csv = '';
+  ['gate','drain','source','bulk'].forEach(p => {
+    csv += `\n${p.toUpperCase()} Probe\nTime_s,Voltage_V\n`;
+    probePulseRows[p].forEach(r => { csv += `${r.t.toExponential(6)},${r.v.toFixed(4)}\n`; });
+  });
+  csv += '\nMeasurement Scheme (1 cycle)\nStart_s,N_points,Cycle_Time_s,High_Time_s,Low_Time_s,I_range_A,V_range_V\n';
+  measRows.forEach(r => {
+    csv += `${r.start.toExponential(6)},${r.npts},${r.tcycle.toExponential(6)},${r.thigh.toExponential(6)},${r.tlow.toExponential(6)},${r.irange.toExponential(3)},${r.vrange.toFixed(2)}\n`;
+  });
+  Object.assign(document.createElement('a'), {href: URL.createObjectURL(new Blob([csv], {type:'text/csv'})), download:'pulse_sequence.csv'}).click();
 }
 
 /* ─────────────────────────────────────────────
    DRAW MODE
 ───────────────────────────────────────────── */
-const PROBES=['gate','drain','source','bulk'];
-const PC={gate:'#378ADD',drain:'#1D9E75',source:'#D85A30',bulk:'#D4537E'};
-const PN={gate:'Gate',drain:'Drain',source:'Source',bulk:'Bulk'};
-const drawState={probe:'gate',tool:'add',nodes:{gate:[],drain:[],source:[],bulk:[]},drag:null,selSeg:null};
-let drawGenTimer=null;
-function scheduleDrawGen(){clearTimeout(drawGenTimer);drawGenTimer=setTimeout(drawGenerate,150);}
-const canvas=document.getElementById('pulseCanvas'),ctx=canvas.getContext('2d');
-let cW=0,cH=0,DPR=1;
-const PAD={l:46,r:12,t:12,b:36};
-function resizeCanvas(){DPR=devicePixelRatio||1;const wrap=document.getElementById('canvas-wrap');if(!wrap)return;const rect=wrap.getBoundingClientRect();cW=rect.width||600;cH=300;canvas.style.width=cW+'px';canvas.style.height=cH+'px';canvas.width=Math.round(cW*DPR);canvas.height=Math.round(cH*DPR);ctx.setTransform(1,0,0,1,0,0);ctx.scale(DPR,DPR);redraw();}
-function pW(){return cW-PAD.l-PAD.r;}function pH(){return cH-PAD.t-PAD.b;}
-function tx(f){return PAD.l+f*pW();}function ty(f){return PAD.t+(1-f)*pH();}
-function invTx(px){return(px-PAD.l)/pW();}function invTy(py){return 1-(py-PAD.t)/pH();}
-function dvMin(){return parseFloat(document.getElementById('dv_min').value)||0;}
-function dvMax(){return parseFloat(document.getElementById('dv_max').value)||1;}
-function dtTotal(){return parseFloat(document.getElementById('dt_total').value)||100;}
-function nodeToReal(n){const vm=dvMin(),vM=dvMax(),tt=dtTotal();return{t:n.t*tt,v:vm+n.v*(vM-vm)};}
-function redraw(){if(!cW||!cH)return;ctx.clearRect(0,0,cW,cH);drawGrid();PROBES.forEach(p=>{if(p!==drawState.probe)drawProbeWfm(p,PC[p],.35);});drawProbeWfm(drawState.probe,PC[drawState.probe],1);drawNodes(drawState.probe);renderSegList();scheduleDrawGen();}
-function drawGrid(){const vm=dvMin(),vM=dvMax(),tt=dtTotal(),isDark=window.matchMedia('(prefers-color-scheme:dark)').matches;ctx.save();ctx.fillStyle=isDark?'#202020':'#f8f7f5';ctx.fillRect(0,0,cW,cH);niceTicks(vm,vM,5).forEach(v=>{const f=(v-vm)/(vM-vm);if(f<0||f>1)return;const y=ty(f);ctx.strokeStyle=isDark?'rgba(255,255,255,.08)':'rgba(0,0,0,.07)';ctx.lineWidth=.5;ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(PAD.l,y);ctx.lineTo(cW-PAD.r,y);ctx.stroke();ctx.fillStyle=isDark?'rgba(200,200,180,.5)':'rgba(100,100,80,.6)';ctx.textAlign='right';ctx.textBaseline='middle';ctx.font='11px -apple-system,sans-serif';ctx.fillText(v.toFixed(1)+'V',PAD.l-4,y);});niceTicks(0,tt,6).forEach(t=>{const f=t/tt;if(f<0||f>1)return;const x=tx(f);ctx.strokeStyle=isDark?'rgba(255,255,255,.06)':'rgba(0,0,0,.07)';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(x,PAD.t);ctx.lineTo(x,cH-PAD.b);ctx.stroke();ctx.fillStyle=isDark?'rgba(200,200,180,.5)':'rgba(100,100,80,.6)';ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(t+'μs',x,cH-PAD.b+5);});ctx.strokeStyle=isDark?'rgba(255,255,255,.2)':'rgba(0,0,0,.2)';ctx.lineWidth=.5;ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(PAD.l,PAD.t);ctx.lineTo(PAD.l,cH-PAD.b);ctx.stroke();ctx.beginPath();ctx.moveTo(PAD.l,cH-PAD.b);ctx.lineTo(cW-PAD.r,cH-PAD.b);ctx.stroke();ctx.restore();}
-function drawProbeWfm(probe,color,alpha){const nodes=sortedNodes(probe);if(nodes.length<2)return;ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle=color;ctx.lineWidth=alpha>.5?2:1.5;ctx.setLineDash([]);ctx.lineJoin='round';ctx.lineCap='round';ctx.beginPath();nodes.forEach((n,i)=>{i===0?ctx.moveTo(tx(n.t),ty(n.v)):ctx.lineTo(tx(n.t),ty(n.v));});ctx.stroke();if(alpha>.5){ctx.beginPath();nodes.forEach((n,i)=>{i===0?ctx.moveTo(tx(n.t),ty(n.v)):ctx.lineTo(tx(n.t),ty(n.v));});const last=nodes[nodes.length-1],first=nodes[0];ctx.lineTo(tx(last.t),ty(0));ctx.lineTo(tx(first.t),ty(0));ctx.closePath();ctx.globalAlpha=alpha*.07;ctx.fillStyle=color;ctx.fill();}ctx.restore();}
-function drawNodes(probe){const nodes=sortedNodes(probe),color=PC[probe];nodes.forEach(n=>{const x=tx(n.t),y=ty(n.v);ctx.save();ctx.beginPath();ctx.arc(x,y,7,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle=color;ctx.lineWidth=1.8;ctx.stroke();ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,3.5,0,Math.PI*2);ctx.fill();ctx.fillStyle=color;ctx.font='bold 10px -apple-system,sans-serif';ctx.textAlign='center';ctx.textBaseline='bottom';const r=nodeToReal(n);ctx.fillText(r.v.toFixed(2)+'V',x,y-10);ctx.restore();});}
-function sortedNodes(probe){return[...drawState.nodes[probe]].sort((a,b)=>a.t-b.t);}
-function setTool(t){drawState.tool=t;canvas.style.cursor=t==='move'?'grab':'crosshair';['add','move','del'].forEach(id=>document.getElementById('tool-'+id).classList.toggle('active',id===t));}
-function setProbe(p){drawState.probe=p;PROBES.forEach(k=>document.getElementById('pb-'+k).classList.toggle('active',k===p));document.getElementById('probe-name').textContent=PN[p];drawState.selSeg=null;redraw();}
-function getPos(e){const r=canvas.getBoundingClientRect(),cli=e.touches?e.touches[0]:e;return{x:cli.clientX-r.left,y:cli.clientY-r.top};}
-function hitNode(probe,x,y,radius=12){const nodes=drawState.nodes[probe];for(let i=0;i<nodes.length;i++)if(Math.hypot(tx(nodes[i].t)-x,ty(nodes[i].v)-y)<radius)return i;return -1;}
-canvas.addEventListener('mousedown',e=>{if(e.button===2)return;const{x,y}=getPos(e),t=clamp(invTx(x),0,1),v=clamp(invTy(y),0,1),p=drawState.probe;if(drawState.tool==='add'){const hit=hitNode(p,x,y);if(hit>=0){drawState.drag={probe:p,idx:hit};return;}drawState.nodes[p].push({t,v});drawState.drag={probe:p,idx:drawState.nodes[p].length-1};redraw();}else if(drawState.tool==='move'){const hit=hitNode(p,x,y);if(hit>=0){drawState.drag={probe:p,idx:hit};canvas.style.cursor='grabbing';}}else if(drawState.tool==='del'){const hit=hitNode(p,x,y);if(hit>=0){drawState.nodes[p].splice(hit,1);redraw();}}});
-canvas.addEventListener('mousemove',e=>{if(!drawState.drag)return;const{x,y}=getPos(e),t=clamp(invTx(x),0,1),v=clamp(invTy(y),0,1),{probe,idx}=drawState.drag;drawState.nodes[probe][idx]={t,v};redraw();});
-canvas.addEventListener('mouseup',()=>{drawState.drag=null;canvas.style.cursor=drawState.tool==='move'?'grab':'crosshair';});
-canvas.addEventListener('mouseleave',()=>{drawState.drag=null;});
-canvas.addEventListener('contextmenu',e=>{e.preventDefault();const{x,y}=getPos(e),hit=hitNode(drawState.probe,x,y);if(hit>=0){drawState.nodes[drawState.probe].splice(hit,1);redraw();}});
-canvas.addEventListener('touchstart',e=>{e.preventDefault();canvas.dispatchEvent(new MouseEvent('mousedown',{clientX:e.touches[0].clientX,clientY:e.touches[0].clientY}));},{passive:false});
-canvas.addEventListener('touchmove',e=>{e.preventDefault();canvas.dispatchEvent(new MouseEvent('mousemove',{clientX:e.touches[0].clientX,clientY:e.touches[0].clientY}));},{passive:false});
-canvas.addEventListener('touchend',e=>{e.preventDefault();canvas.dispatchEvent(new MouseEvent('mouseup'));},{passive:false});
-function renderSegList(){const probe=drawState.probe,nodes=sortedNodes(probe),list=document.getElementById('seg-list');if(!list)return;if(nodes.length<2){list.innerHTML='<div style="font-size:12px;color:var(--text-ter);padding:6px 0">Add at least 2 nodes to create segments.</div>';return;}let html='';for(let i=0;i<nodes.length-1;i++){const a=nodeToReal(nodes[i]),b=nodeToReal(nodes[i+1]),sel=drawState.selSeg&&drawState.selSeg.probe===probe&&drawState.selSeg.idx===i;html+=`<div class="seg-row${sel?' selected':''}" onclick="selectSeg('${probe}',${i})"><div class="pc-dot" style="background:${PC[probe]}"></div><span class="seg-title">Seg ${i+1}</span><span class="seg-info">${a.t.toFixed(2)}μs→${b.t.toFixed(2)}μs &nbsp; ${a.v.toFixed(3)}V→${b.v.toFixed(3)}V</span><button class="seg-del" onclick="event.stopPropagation();deleteSeg('${probe}',${i})">Remove</button></div>`;if(sel)html+=`<div class="seg-inputs"><div><label>x1 (μs)</label><input type="number" step="0.1" value="${a.t.toFixed(3)}" onchange="updateNode('${probe}',${i},'t',+this.value)"></div><div><label>y1 (V)</label><input type="number" step="0.01" value="${a.v.toFixed(4)}" onchange="updateNode('${probe}',${i},'v',+this.value)"></div><div><label>x2 (μs)</label><input type="number" step="0.1" value="${b.t.toFixed(3)}" onchange="updateNode('${probe}',${i+1},'t',+this.value)"></div><div><label>y2 (V)</label><input type="number" step="0.01" value="${b.v.toFixed(4)}" onchange="updateNode('${probe}',${i+1},'v',+this.value)"></div></div>`;}list.innerHTML=html;}
-function selectSeg(probe,idx){if(drawState.selSeg&&drawState.selSeg.probe===probe&&drawState.selSeg.idx===idx)drawState.selSeg=null;else drawState.selSeg={probe,idx};renderSegList();}
-function deleteSeg(probe,idx){const nodes=sortedNodes(probe),n=nodes[idx],origIdx=drawState.nodes[probe].findIndex(x=>x===n||(Math.abs(x.t-n.t)<1e-9&&Math.abs(x.v-n.v)<1e-9));if(origIdx>=0)drawState.nodes[probe].splice(origIdx,1);drawState.selSeg=null;redraw();}
-function updateNode(probe,segNodeIdx,axis,val){const nodes=sortedNodes(probe),n=nodes[segNodeIdx],origIdx=drawState.nodes[probe].findIndex(x=>x===n);if(origIdx<0)return;const tt=dtTotal(),vm=dvMin(),vM=dvMax();if(axis==='t')drawState.nodes[probe][origIdx].t=clamp(val/tt,0,1);if(axis==='v')drawState.nodes[probe][origIdx].v=clamp((val-vm)/(vM-vm),0,1);redraw();}
-function clamp(v,mn,mx){return Math.max(mn,Math.min(mx,v));}
-function niceTicks(lo,hi,n){const raw=(hi-lo)/n,exp=Math.pow(10,Math.floor(Math.log10(raw||1))),nice=[1,2,2.5,5,10].find(f=>f*exp>=raw)*exp,start=Math.ceil(lo/nice)*nice,ticks=[];for(let t=start;t<=hi+1e-9;t=+(t+nice).toFixed(10))ticks.push(+t.toFixed(10));return ticks;}
-function snapToGrid(){const nodes=drawState.nodes[drawState.probe],tt=dtTotal(),vm=dvMin(),vM=dvMax(),tTicks=niceTicks(0,tt,6),vTicks=niceTicks(vm,vM,5);nodes.forEach(n=>{const rt=n.t*tt,rv=vm+n.v*(vM-vm),st=tTicks.reduce((a,b)=>Math.abs(b-rt)<Math.abs(a-rt)?b:a),sv=vTicks.reduce((a,b)=>Math.abs(b-rv)<Math.abs(a-rv)?b:a);n.t=clamp(st/tt,0,1);n.v=clamp((sv-vm)/(vM-vm),0,1);});redraw();}
-function clearProbe(){drawState.nodes[drawState.probe]=[];drawState.selSeg=null;redraw();}
-function clearAll(){PROBES.forEach(p=>drawState.nodes[p]=[]);drawState.selSeg=null;redraw();}
-function interpAt(probe,t_frac){const nodes=sortedNodes(probe);if(!nodes.length)return 0;if(nodes.length===1)return nodes[0].v;if(t_frac<=nodes[0].t)return nodes[0].v;if(t_frac>=nodes[nodes.length-1].t)return nodes[nodes.length-1].v;for(let i=0;i<nodes.length-1;i++){if(t_frac>=nodes[i].t&&t_frac<=nodes[i+1].t){const span=nodes[i+1].t-nodes[i].t;if(span<1e-12)return nodes[i+1].v;return nodes[i].v+(t_frac-nodes[i].t)/span*(nodes[i+1].v-nodes[i].v);}}return nodes[nodes.length-1].v;}
-function buildDrawWaveform(){const tt=dtTotal(),vm=dvMin(),vM=dvMax(),trf=parseFloat(document.getElementById('dt_rf').value)*1e-9,vSpan=vM-vm;let tFracs=new Set();PROBES.forEach(p=>{sortedNodes(p).forEach(n=>{tFracs.add(n.t);const dtF=trf/(tt*1e-6);if(n.t>dtF)tFracs.add(Math.max(0,n.t-dtF));if(n.t<1-dtF)tFracs.add(Math.min(1,n.t+dtF));});});tFracs.add(0);tFracs.add(1);return[...tFracs].sort((a,b)=>a-b).map(tf=>{const row={t:tf*tt*1e-6};PROBES.forEach(p=>{const nodes=sortedNodes(p);row[p]=nodes.length?vm+interpAt(p,tf)*vSpan:0;});return row;});}
-function drawGenerate(){
-  const rows=buildDrawWaveform(),tt=dtTotal(),totalT=tt*1e-6;
-  const tlow=parseFloat(document.getElementById('dm_tlow').value)*1e-9;
-  const thigh=parseFloat(document.getElementById('dm_thigh').value)*1e-9;
-  const maxpts=parseInt(document.getElementById('dm_maxpts').value)||4000;
-  const irange=parseFloat(document.getElementById('dm_irange').value);
-  const tPerPt=tlow+thigh,tPerRow=maxpts*tPerPt,numFull=Math.floor(totalT/tPerRow),lastPts=Math.ceil((totalT-numFull*tPerRow)/tPerPt);
-  const measRows=[];
-  for(let r=0;r<numFull+(lastPts>0?1:0);r++) measRows.push({start:r*tPerRow,npts:r<numFull?maxpts:lastPts,tlow,thigh,irange,vrange:2});
-  const totalMeasPts=measRows.reduce((a,r)=>a+r.npts,0);
-  const errs=[];
-  if(tlow<H.MIN_T_NS*1e-9) errs.push(`t<sub>low</sub> must be ≥ ${H.MIN_T_NS} ns.`);
-  if(thigh<H.MIN_T_NS*1e-9) errs.push(`t<sub>high</sub> must be ≥ ${H.MIN_T_NS} ns.`);
-  if(measRows.length>H.MEAS_ROWS) errs.push(`Meas rows <strong>${measRows.length}</strong> > ${H.MEAS_ROWS}.`);
-  if(totalMeasPts>H.MEAS_PTS) errs.push(`Meas pts <strong>${totalMeasPts}</strong> > ${H.MEAS_PTS}.`);
-  if(rows.length>H.PULSE_PTS) errs.push(`Pulse pts <strong>${rows.length}</strong> > ${H.PULSE_PTS}.`);
-  showBanner(errs);
-  renderDrawPulseTable(rows,totalT);
-  renderDrawMeasTable(measRows,totalMeasPts);
-  document.getElementById('draw-output-section').style.display='';
+const PROBES = ['gate','drain','source','bulk'];
+const PC = {gate:'#378ADD', drain:'#1D9E75', source:'#D85A30', bulk:'#D4537E'};
+const PN = {gate:'Gate', drain:'Drain', source:'Source', bulk:'Bulk'};
+const drawState = {probe:'gate', tool:'add', nodes:{gate:[], drain:[], source:[], bulk:[]}, drag:null, selSeg:null};
+let drawGenTimer = null;
+function scheduleDrawGen() { clearTimeout(drawGenTimer); drawGenTimer = setTimeout(drawGenerate, 150); }
+const canvas = document.getElementById('pulseCanvas'), ctx = canvas.getContext('2d');
+let cW = 0, cH = 0, DPR = 1;
+const PAD = {l:46, r:12, t:12, b:36};
+function resizeCanvas() {
+  DPR = devicePixelRatio || 1;
+  const wrap = document.getElementById('canvas-wrap');
+  if (!wrap) return;
+  const rect = wrap.getBoundingClientRect();
+  cW = rect.width || 600; cH = 300;
+  canvas.style.width = cW + 'px'; canvas.style.height = cH + 'px';
+  canvas.width = Math.round(cW * DPR); canvas.height = Math.round(cH * DPR);
+  ctx.setTransform(1,0,0,1,0,0); ctx.scale(DPR, DPR);
+  redraw();
 }
-function renderDrawPulseTable(rows,totalT){document.getElementById('dpulse-chips').innerHTML=`<span class="info-chip${rows.length>H.PULSE_PTS?' err':''}">Points: ${rows.length}</span> &nbsp;<span class="info-chip">Total: ${(totalT*1e6).toFixed(3)} μs</span>`;let h=`<thead><tr><th>Time (s)</th><th>V_gate</th><th>V_drain</th><th>V_source</th><th>V_bulk</th></tr></thead><tbody>`;rows.forEach(r=>{h+=`<tr><td>${r.t.toExponential(5)}</td><td>${r.gate.toFixed(4)}</td><td>${r.drain.toFixed(4)}</td><td>${r.source.toFixed(4)}</td><td>${r.bulk.toFixed(4)}</td></tr>`;});document.getElementById('dpulse-tbl').innerHTML=h+'</tbody>';}
-function renderDrawMeasTable(rows,totalMeasPts){const ro=rows.length>H.MEAS_ROWS,po=totalMeasPts>H.MEAS_PTS;document.getElementById('dmeas-chips').innerHTML=`<span class="info-chip${ro?' err':''}">Rows: ${rows.length}</span>&nbsp;<span class="info-chip${po?' err':''}">Pts: ${totalMeasPts}</span>`;let h=`<thead><tr><th>Start (s)</th><th>N pts</th><th>Cycle (s)</th><th>Avg time / t_high (s)</th><th>I range (A)</th></tr></thead><tbody>`;rows.forEach(r=>{const cyc=r.tlow+r.thigh;h+=`<tr><td>${r.start.toExponential(5)}</td><td>${r.npts}</td><td>${cyc.toExponential(4)}</td><td>${r.thigh.toExponential(4)}</td><td>${r.irange.toExponential(3)}</td></tr>`;});document.getElementById('dmeas-tbl').innerHTML=h+'</tbody>';}
-function switchDrawOut(tab){['pulse','meas'].forEach(t=>{document.getElementById('dot-'+t).classList.toggle('active',t===tab);document.getElementById('dop-'+t).classList.toggle('active',t===tab);document.getElementById('dop-'+t).style.display=t===tab?'':'none';});}
-function exportDrawCSV(){drawGenerate();const rows=document.getElementById('dpulse-tbl').querySelectorAll('tr');const csv=[...rows].map(r=>[...r.querySelectorAll('th,td')].map(c=>c.textContent).join(',')).join('\n');Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([csv],{type:'text/csv'})),download:'custom_waveform.csv'}).click();}
+function pW() { return cW - PAD.l - PAD.r; }
+function pH() { return cH - PAD.t - PAD.b; }
+function tx(f)    { return PAD.l + f * pW(); }
+function ty(f)    { return PAD.t + (1 - f) * pH(); }
+function invTx(px){ return (px - PAD.l) / pW(); }
+function invTy(py){ return 1 - (py - PAD.t) / pH(); }
+function dvMin()  { return parseFloat(document.getElementById('dv_min').value) || 0; }
+function dvMax()  { return parseFloat(document.getElementById('dv_max').value) || 1; }
+function dtTotal(){ return parseFloat(document.getElementById('dt_total').value) || 100; }
+function nodeToReal(n) { const vm=dvMin(),vM=dvMax(),tt=dtTotal(); return {t:n.t*tt, v:vm+n.v*(vM-vm)}; }
+function redraw() {
+  if (!cW || !cH) return;
+  ctx.clearRect(0, 0, cW, cH);
+  drawGrid();
+  PROBES.forEach(p => { if (p !== drawState.probe) drawProbeWfm(p, PC[p], .35); });
+  drawProbeWfm(drawState.probe, PC[drawState.probe], 1);
+  drawNodes(drawState.probe);
+  renderSegList();
+  scheduleDrawGen();
+}
+function drawGrid() {
+  const vm=dvMin(),vM=dvMax(),tt=dtTotal(),isDark=window.matchMedia('(prefers-color-scheme:dark)').matches;
+  ctx.save();
+  ctx.fillStyle = isDark ? '#202020' : '#f8f7f5';
+  ctx.fillRect(0, 0, cW, cH);
+  niceTicks(vm, vM, 5).forEach(v => {
+    const f = (v - vm) / (vM - vm);
+    if (f < 0 || f > 1) return;
+    const y = ty(f);
+    ctx.strokeStyle = isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.07)';
+    ctx.lineWidth = .5; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(PAD.l, y); ctx.lineTo(cW - PAD.r, y); ctx.stroke();
+    ctx.fillStyle = isDark ? 'rgba(200,200,180,.5)' : 'rgba(100,100,80,.6)';
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    ctx.font = '11px -apple-system,sans-serif';
+    ctx.fillText(v.toFixed(1) + 'V', PAD.l - 4, y);
+  });
+  niceTicks(0, tt, 6).forEach(t => {
+    const f = t / tt;
+    if (f < 0 || f > 1) return;
+    const x = tx(f);
+    ctx.strokeStyle = isDark ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.07)';
+    ctx.lineWidth = .5;
+    ctx.beginPath(); ctx.moveTo(x, PAD.t); ctx.lineTo(x, cH - PAD.b); ctx.stroke();
+    ctx.fillStyle = isDark ? 'rgba(200,200,180,.5)' : 'rgba(100,100,80,.6)';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    ctx.fillText(t + 'μs', x, cH - PAD.b + 5);
+  });
+  ctx.strokeStyle = isDark ? 'rgba(255,255,255,.2)' : 'rgba(0,0,0,.2)';
+  ctx.lineWidth = .5; ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(PAD.l, PAD.t); ctx.lineTo(PAD.l, cH - PAD.b); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(PAD.l, cH - PAD.b); ctx.lineTo(cW - PAD.r, cH - PAD.b); ctx.stroke();
+  ctx.restore();
+}
+function drawProbeWfm(probe, color, alpha) {
+  const nodes = sortedNodes(probe);
+  if (nodes.length < 2) return;
+  ctx.save(); ctx.globalAlpha = alpha; ctx.strokeStyle = color;
+  ctx.lineWidth = alpha > .5 ? 2 : 1.5; ctx.setLineDash([]); ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+  ctx.beginPath();
+  nodes.forEach((n, i) => { i === 0 ? ctx.moveTo(tx(n.t), ty(n.v)) : ctx.lineTo(tx(n.t), ty(n.v)); });
+  ctx.stroke();
+  if (alpha > .5) {
+    ctx.beginPath();
+    nodes.forEach((n, i) => { i === 0 ? ctx.moveTo(tx(n.t), ty(n.v)) : ctx.lineTo(tx(n.t), ty(n.v)); });
+    const last = nodes[nodes.length-1], first = nodes[0];
+    ctx.lineTo(tx(last.t), ty(0)); ctx.lineTo(tx(first.t), ty(0)); ctx.closePath();
+    ctx.globalAlpha = alpha * .07; ctx.fillStyle = color; ctx.fill();
+  }
+  ctx.restore();
+}
+function drawNodes(probe) {
+  const nodes = sortedNodes(probe), color = PC[probe];
+  nodes.forEach(n => {
+    const x = tx(n.t), y = ty(n.v);
+    ctx.save();
+    ctx.beginPath(); ctx.arc(x, y, 7, 0, Math.PI*2); ctx.fillStyle = '#fff'; ctx.fill();
+    ctx.strokeStyle = color; ctx.lineWidth = 1.8; ctx.stroke();
+    ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x, y, 3.5, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = color; ctx.font = 'bold 10px -apple-system,sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    const r = nodeToReal(n);
+    ctx.fillText(r.v.toFixed(2) + 'V', x, y - 10);
+    ctx.restore();
+  });
+}
+function sortedNodes(probe) { return [...drawState.nodes[probe]].sort((a, b) => a.t - b.t); }
+function setTool(t) {
+  drawState.tool = t; canvas.style.cursor = t === 'move' ? 'grab' : 'crosshair';
+  ['add','move','del'].forEach(id => document.getElementById('tool-'+id).classList.toggle('active', id === t));
+}
+function setProbe(p) {
+  drawState.probe = p;
+  PROBES.forEach(k => document.getElementById('pb-'+k).classList.toggle('active', k === p));
+  document.getElementById('probe-name').textContent = PN[p];
+  drawState.selSeg = null; redraw();
+}
+function getPos(e) { const r = canvas.getBoundingClientRect(), cli = e.touches ? e.touches[0] : e; return {x: cli.clientX - r.left, y: cli.clientY - r.top}; }
+function hitNode(probe, x, y, radius=12) {
+  const nodes = drawState.nodes[probe];
+  for (let i = 0; i < nodes.length; i++) if (Math.hypot(tx(nodes[i].t) - x, ty(nodes[i].v) - y) < radius) return i;
+  return -1;
+}
+canvas.addEventListener('mousedown', e => {
+  if (e.button === 2) return;
+  const {x, y} = getPos(e), t = clamp(invTx(x), 0, 1), v = clamp(invTy(y), 0, 1), p = drawState.probe;
+  if (drawState.tool === 'add') {
+    const hit = hitNode(p, x, y);
+    if (hit >= 0) { drawState.drag = {probe:p, idx:hit}; return; }
+    drawState.nodes[p].push({t, v}); drawState.drag = {probe:p, idx:drawState.nodes[p].length-1}; redraw();
+  } else if (drawState.tool === 'move') {
+    const hit = hitNode(p, x, y);
+    if (hit >= 0) { drawState.drag = {probe:p, idx:hit}; canvas.style.cursor = 'grabbing'; }
+  } else if (drawState.tool === 'del') {
+    const hit = hitNode(p, x, y);
+    if (hit >= 0) { drawState.nodes[p].splice(hit, 1); redraw(); }
+  }
+});
+canvas.addEventListener('mousemove', e => {
+  if (!drawState.drag) return;
+  const {x, y} = getPos(e), t = clamp(invTx(x), 0, 1), v = clamp(invTy(y), 0, 1), {probe, idx} = drawState.drag;
+  drawState.nodes[probe][idx] = {t, v}; redraw();
+});
+canvas.addEventListener('mouseup', () => { drawState.drag = null; canvas.style.cursor = drawState.tool === 'move' ? 'grab' : 'crosshair'; });
+canvas.addEventListener('mouseleave', () => { drawState.drag = null; });
+canvas.addEventListener('contextmenu', e => {
+  e.preventDefault();
+  const {x, y} = getPos(e), hit = hitNode(drawState.probe, x, y);
+  if (hit >= 0) { drawState.nodes[drawState.probe].splice(hit, 1); redraw(); }
+});
+canvas.addEventListener('touchstart', e => { e.preventDefault(); canvas.dispatchEvent(new MouseEvent('mousedown', {clientX:e.touches[0].clientX, clientY:e.touches[0].clientY})); }, {passive:false});
+canvas.addEventListener('touchmove',  e => { e.preventDefault(); canvas.dispatchEvent(new MouseEvent('mousemove',  {clientX:e.touches[0].clientX, clientY:e.touches[0].clientY})); }, {passive:false});
+canvas.addEventListener('touchend',   e => { e.preventDefault(); canvas.dispatchEvent(new MouseEvent('mouseup')); }, {passive:false});
+
+function renderSegList() {
+  const probe = drawState.probe, nodes = sortedNodes(probe), list = document.getElementById('seg-list');
+  if (!list) return;
+  if (nodes.length < 2) { list.innerHTML = '<div style="font-size:12px;color:var(--text-ter);padding:6px 0">Add at least 2 nodes to create segments.</div>'; return; }
+  let html = '';
+  for (let i = 0; i < nodes.length - 1; i++) {
+    const a = nodeToReal(nodes[i]), b = nodeToReal(nodes[i+1]);
+    const sel = drawState.selSeg && drawState.selSeg.probe === probe && drawState.selSeg.idx === i;
+    html += `<div class="seg-row${sel?' selected':''}" onclick="selectSeg('${probe}',${i})">
+      <div class="pc-dot" style="background:${PC[probe]}"></div>
+      <span class="seg-title">Seg ${i+1}</span>
+      <span class="seg-info">${a.t.toFixed(2)}μs→${b.t.toFixed(2)}μs &nbsp; ${a.v.toFixed(3)}V→${b.v.toFixed(3)}V</span>
+      <button class="seg-del" onclick="event.stopPropagation();deleteSeg('${probe}',${i})">Remove</button>
+    </div>`;
+    if (sel) html += `<div class="seg-inputs">
+      <div><label>x1 (μs)</label><input type="number" step="0.1" value="${a.t.toFixed(3)}" onchange="updateNode('${probe}',${i},'t',+this.value)"></div>
+      <div><label>y1 (V)</label><input type="number" step="0.01" value="${a.v.toFixed(4)}" onchange="updateNode('${probe}',${i},'v',+this.value)"></div>
+      <div><label>x2 (μs)</label><input type="number" step="0.1" value="${b.t.toFixed(3)}" onchange="updateNode('${probe}',${i+1},'t',+this.value)"></div>
+      <div><label>y2 (V)</label><input type="number" step="0.01" value="${b.v.toFixed(4)}" onchange="updateNode('${probe}',${i+1},'v',+this.value)"></div>
+    </div>`;
+  }
+  list.innerHTML = html;
+}
+function selectSeg(probe, idx) {
+  if (drawState.selSeg && drawState.selSeg.probe === probe && drawState.selSeg.idx === idx) drawState.selSeg = null;
+  else drawState.selSeg = {probe, idx};
+  renderSegList();
+}
+function deleteSeg(probe, idx) {
+  const nodes = sortedNodes(probe), n = nodes[idx];
+  const origIdx = drawState.nodes[probe].findIndex(x => x === n || (Math.abs(x.t - n.t) < 1e-9 && Math.abs(x.v - n.v) < 1e-9));
+  if (origIdx >= 0) drawState.nodes[probe].splice(origIdx, 1);
+  drawState.selSeg = null; redraw();
+}
+function updateNode(probe, segNodeIdx, axis, val) {
+  const nodes = sortedNodes(probe), n = nodes[segNodeIdx];
+  const origIdx = drawState.nodes[probe].findIndex(x => x === n);
+  if (origIdx < 0) return;
+  const tt = dtTotal(), vm = dvMin(), vM = dvMax();
+  if (axis === 't') drawState.nodes[probe][origIdx].t = clamp(val / tt, 0, 1);
+  if (axis === 'v') drawState.nodes[probe][origIdx].v = clamp((val - vm) / (vM - vm), 0, 1);
+  redraw();
+}
+function clamp(v, mn, mx) { return Math.max(mn, Math.min(mx, v)); }
+function niceTicks(lo, hi, n) {
+  const raw = (hi - lo) / n, exp = Math.pow(10, Math.floor(Math.log10(raw || 1)));
+  const nice = [1, 2, 2.5, 5, 10].find(f => f * exp >= raw) * exp;
+  const start = Math.ceil(lo / nice) * nice, ticks = [];
+  for (let t = start; t <= hi + 1e-9; t = +(t + nice).toFixed(10)) ticks.push(+t.toFixed(10));
+  return ticks;
+}
+function snapToGrid() {
+  const nodes = drawState.nodes[drawState.probe], tt = dtTotal(), vm = dvMin(), vM = dvMax();
+  const tTicks = niceTicks(0, tt, 6), vTicks = niceTicks(vm, vM, 5);
+  nodes.forEach(n => {
+    const rt = n.t * tt, rv = vm + n.v * (vM - vm);
+    const st = tTicks.reduce((a, b) => Math.abs(b - rt) < Math.abs(a - rt) ? b : a);
+    const sv = vTicks.reduce((a, b) => Math.abs(b - rv) < Math.abs(a - rv) ? b : a);
+    n.t = clamp(st / tt, 0, 1); n.v = clamp((sv - vm) / (vM - vm), 0, 1);
+  });
+  redraw();
+}
+function clearProbe() { drawState.nodes[drawState.probe] = []; drawState.selSeg = null; redraw(); }
+function clearAll() { PROBES.forEach(p => drawState.nodes[p] = []); drawState.selSeg = null; redraw(); }
+function interpAt(probe, t_frac) {
+  const nodes = sortedNodes(probe);
+  if (!nodes.length) return 0;
+  if (nodes.length === 1) return nodes[0].v;
+  if (t_frac <= nodes[0].t) return nodes[0].v;
+  if (t_frac >= nodes[nodes.length-1].t) return nodes[nodes.length-1].v;
+  for (let i = 0; i < nodes.length - 1; i++) {
+    if (t_frac >= nodes[i].t && t_frac <= nodes[i+1].t) {
+      const span = nodes[i+1].t - nodes[i].t;
+      if (span < 1e-12) return nodes[i+1].v;
+      return nodes[i].v + (t_frac - nodes[i].t) / span * (nodes[i+1].v - nodes[i].v);
+    }
+  }
+  return nodes[nodes.length-1].v;
+}
+function buildDrawWaveform() {
+  const tt = dtTotal(), vm = dvMin(), vM = dvMax(), trf = parseFloat(document.getElementById('dt_rf').value) * 1e-9, vSpan = vM - vm;
+  let tFracs = new Set();
+  PROBES.forEach(p => {
+    sortedNodes(p).forEach(n => {
+      tFracs.add(n.t);
+      const dtF = trf / (tt * 1e-6);
+      if (n.t > dtF) tFracs.add(Math.max(0, n.t - dtF));
+      if (n.t < 1 - dtF) tFracs.add(Math.min(1, n.t + dtF));
+    });
+  });
+  tFracs.add(0); tFracs.add(1);
+  return [...tFracs].sort((a, b) => a - b).map(tf => {
+    const row = {t: tf * tt * 1e-6};
+    PROBES.forEach(p => { const nodes = sortedNodes(p); row[p] = nodes.length ? vm + interpAt(p, tf) * vSpan : 0; });
+    return row;
+  });
+}
+
+function drawGenerate() {
+  const rows = buildDrawWaveform(), tt = dtTotal(), totalT = tt * 1e-6;
+  const tcycle = parseFloat(document.getElementById('dm_tcycle').value) * 1e-9;
+  const thigh  = parseFloat(document.getElementById('dm_thigh').value)  * 1e-9;
+  const tlow   = tcycle - thigh;
+  const maxpts = parseInt(document.getElementById('dm_maxpts').value) || 4000;
+  const irange = parseFloat(document.getElementById('dm_irange').value);
+  const tPerRow  = maxpts * tcycle;
+  const numFull  = Math.floor(totalT / tPerRow);
+  const lastPts  = Math.ceil((totalT - numFull * tPerRow) / tcycle);
+  const measRows = [];
+  for (let r = 0; r < numFull + (lastPts > 0 ? 1 : 0); r++) {
+    measRows.push({start: r * tPerRow, npts: r < numFull ? maxpts : lastPts, tcycle, tlow, thigh, irange, vrange:0});
+  }
+  const totalMeasPts = measRows.reduce((a, r) => a + r.npts, 0);
+  const errs = [];
+  if (tcycle < H.MIN_T_NS * 1e-9)    errs.push(`t<sub>cycle</sub> must be ≥ ${H.MIN_T_NS} ns.`);
+  if (thigh  < H.MIN_T_NS * 1e-9)    errs.push(`t<sub>high</sub> must be ≥ ${H.MIN_T_NS} ns.`);
+  if (measRows.length > H.MEAS_ROWS)  errs.push(`Meas rows <strong>${measRows.length}</strong> > ${H.MEAS_ROWS}.`);
+  if (totalMeasPts    > H.MEAS_PTS)   errs.push(`Meas pts <strong>${totalMeasPts}</strong> > ${H.MEAS_PTS}.`);
+  if (rows.length     > H.PULSE_PTS)  errs.push(`Pulse pts <strong>${rows.length}</strong> > ${H.PULSE_PTS}.`);
+  showBanner(errs);
+  renderDrawPulseTable(rows, totalT);
+  renderDrawMeasTable(measRows, totalMeasPts);
+  document.getElementById('draw-output-section').style.display = '';
+}
+
+function renderDrawPulseTable(rows, totalT) {
+  document.getElementById('dpulse-chips').innerHTML =
+    `<span class="info-chip${rows.length > H.PULSE_PTS ? ' err' : ''}">Points: ${rows.length}</span> &nbsp;<span class="info-chip">Total: ${(totalT*1e6).toFixed(3)} μs</span>`;
+  let h = `<thead><tr><th>Time (s)</th><th>V_gate</th><th>V_drain</th><th>V_source</th><th>V_bulk</th></tr></thead><tbody>`;
+  rows.forEach(r => { h += `<tr><td>${r.t.toExponential(5)}</td><td>${r.gate.toFixed(4)}</td><td>${r.drain.toFixed(4)}</td><td>${r.source.toFixed(4)}</td><td>${r.bulk.toFixed(4)}</td></tr>`; });
+  document.getElementById('dpulse-tbl').innerHTML = h + '</tbody>';
+}
+
+function renderDrawMeasTable(rows, totalMeasPts) {
+  const ro = rows.length > H.MEAS_ROWS, po = totalMeasPts > H.MEAS_PTS;
+  document.getElementById('dmeas-chips').innerHTML =
+    `<span class="info-chip${ro ? ' err' : ''}">Rows: ${rows.length}</span>&nbsp;<span class="info-chip${po ? ' err' : ''}">Pts: ${totalMeasPts}</span>`;
+  let h = `<thead><tr><th>Start (s)</th><th>N pts</th><th>t<sub>cycle</sub> (s)</th><th>t<sub>high</sub> (s)</th><th>t<sub>low</sub> (s)</th><th>I range (A)</th></tr></thead><tbody>`;
+  rows.forEach(r => {
+    h += `<tr><td>${r.start.toExponential(5)}</td><td>${r.npts}</td><td>${r.tcycle.toExponential(4)}</td><td>${r.thigh.toExponential(4)}</td><td>${r.tlow.toExponential(4)}</td><td>${r.irange.toExponential(3)}</td></tr>`;
+  });
+  document.getElementById('dmeas-tbl').innerHTML = h + '</tbody>';
+}
+
+function switchDrawOut(tab) {
+  ['pulse','meas'].forEach(t => {
+    document.getElementById('dot-'+t).classList.toggle('active', t === tab);
+    document.getElementById('dop-'+t).classList.toggle('active', t === tab);
+    document.getElementById('dop-'+t).style.display = t === tab ? '' : 'none';
+  });
+}
+
+function exportDrawCSV() {
+  drawGenerate();
+  const rows = document.getElementById('dpulse-tbl').querySelectorAll('tr');
+  const csv = [...rows].map(r => [...r.querySelectorAll('th,td')].map(c => c.textContent).join(',')).join('\n');
+  Object.assign(document.createElement('a'), {href: URL.createObjectURL(new Blob([csv], {type:'text/csv'})), download:'custom_waveform.csv'}).click();
+}
 
 /* ── Init ── */
-['gate','drain','source','bulk'].forEach(p=>renderProbePanel(p));
-const canvasWrap=document.getElementById('canvas-wrap');
-if(canvasWrap) new ResizeObserver(()=>{if(appMode==='draw')resizeCanvas();}).observe(canvasWrap);
-(function(){const tt=parseFloat(document.getElementById('dt_total').value)||100,vm=dvMin(),vM=dvMax();drawState.nodes.drain=[{t:0,v:(1.8-vm)/(vM-vm)},{t:1,v:(1.8-vm)/(vM-vm)}];drawState.nodes.gate=[{t:0,v:clamp((1-vm)/(vM-vm),0,1)},{t:10/tt,v:clamp((1-vm)/(vM-vm),0,1)},{t:10.1/tt,v:clamp((0-vm)/(vM-vm),0,1)},{t:60/tt,v:clamp((0-vm)/(vM-vm),0,1)},{t:60.1/tt,v:clamp((1-vm)/(vM-vm),0,1)},{t:1,v:clamp((1-vm)/(vM-vm),0,1)}];})();
+['gate','drain','source','bulk'].forEach(p => renderProbePanel(p));
+const canvasWrap = document.getElementById('canvas-wrap');
+if (canvasWrap) new ResizeObserver(() => { if (appMode === 'draw') resizeCanvas(); }).observe(canvasWrap);
+(function() {
+  const tt = parseFloat(document.getElementById('dt_total').value) || 100;
+  const vm = dvMin(), vM = dvMax();
+  drawState.nodes.drain = [{t:0, v:(0-vm)/(vM-vm)}, {t:1, v:(0-vm)/(vM-vm)}];
+  drawState.nodes.gate  = [
+    {t:0,           v:clamp((0 -vm)/(vM-vm),0,1)},
+    {t:10/tt,       v:clamp((0 -vm)/(vM-vm),0,1)},
+    {t:10.1/tt,     v:clamp((0 -vm)/(vM-vm),0,1)},
+    {t:60/tt,       v:clamp((0 -vm)/(vM-vm),0,1)},
+    {t:60.1/tt,     v:clamp((0 -vm)/(vM-vm),0,1)},
+    {t:1,           v:clamp((0 -vm)/(vM-vm),0,1)}
+  ];
+})();
 generate();
 </script>
 </body>
