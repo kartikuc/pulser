@@ -13,7 +13,7 @@
     --text-info:#185fa5; --text-smart:#166a3a; --text-err:#b83232;
     --border:rgba(0,0,0,0.12); --border-sec:rgba(0,0,0,0.22); --border-pri:rgba(0,0,0,0.35);
     --border-info:#85b7eb; --border-smart:#5cb87a; --border-err:#e08080;
-    --radius-md:8px; --radius-lg:12px;
+    --radius-md:6px; --radius-lg:10px;
     --font:-apple-system,'Segoe UI',system-ui,sans-serif;
     --font-mono:'SF Mono','Fira Code','Consolas',monospace;
     --canvas-bg:#f8f7f5;
@@ -29,135 +29,167 @@
       --canvas-bg:#202020;
     }
   }
-  body { font-family:var(--font); font-size:14px; color:var(--text); background:var(--bg-ter); min-height:100vh; padding:1.5rem 1rem 3rem; }
-  .container { max-width:960px; margin:0 auto; }
-  h1 { font-size:18px; font-weight:500; margin-bottom:.25rem; }
-  .subtitle { font-size:13px; color:var(--text-sec); margin-bottom:1.25rem; }
-  .section { background:var(--bg); border:.5px solid var(--border); border-radius:var(--radius-lg); padding:1rem 1.25rem; margin-bottom:1rem; }
-  .section-title { font-size:11px; font-weight:500; color:var(--text-ter); text-transform:uppercase; letter-spacing:.07em; margin-bottom:.75rem; }
-  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-  .grid3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
-  .grid4 { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
-  .grid5 { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px; }
+  body { font-family:var(--font); font-size:13px; color:var(--text); background:var(--bg-ter); min-height:100vh; padding:1rem 0.5rem 2.5rem; }
+  .container { max-width:1100px; margin:0 auto; padding:0 0.5rem; }
+
+  /* Header */
+  .app-header { display:flex; align-items:baseline; gap:12px; margin-bottom:1rem; flex-wrap:wrap; }
+  h1 { font-size:16px; font-weight:600; }
+  .subtitle { font-size:12px; color:var(--text-ter); }
+
+  .section { background:var(--bg); border:.5px solid var(--border); border-radius:var(--radius-lg); padding:.75rem 1rem; margin-bottom:.75rem; }
+  .section-title { font-size:10px; font-weight:600; color:var(--text-ter); text-transform:uppercase; letter-spacing:.08em; margin-bottom:.6rem; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .grid3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+  .grid4 { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }
+  .grid5 { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; }
   @media(max-width:600px) { .grid4,.grid5 { grid-template-columns:1fr 1fr; } .grid3 { grid-template-columns:1fr 1fr; } }
-  label { font-size:11px; color:var(--text-sec); display:block; margin-bottom:3px; }
-  input[type=number],input[type=text],select { width:100%; padding:6px 8px; font-size:13px; font-family:var(--font); border:.5px solid var(--border-sec); border-radius:var(--radius-md); background:var(--bg-sec); color:var(--text); outline:none; transition:border-color .15s; }
+  label { font-size:10px; color:var(--text-sec); display:block; margin-bottom:2px; }
+  input[type=number],input[type=text],select { width:100%; padding:5px 7px; font-size:12px; font-family:var(--font); border:.5px solid var(--border-sec); border-radius:var(--radius-md); background:var(--bg-sec); color:var(--text); outline:none; transition:border-color .15s; }
   input[type=number]:focus,select:focus { border-color:var(--border-pri); }
   input.invalid { border-color:var(--border-err)!important; background:var(--bg-err); }
   input[type=checkbox] { cursor:pointer; }
-  .mode-switcher { display:flex; gap:6px; margin-bottom:1rem; align-items:center; flex-wrap:wrap; }
-  .msw-btn { padding:6px 16px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:var(--bg-sec); color:var(--text-sec); cursor:pointer; font-size:13px; font-weight:500; font-family:var(--font); transition:all .15s; }
+
+  /* Mode switcher */
+  .mode-switcher { display:flex; gap:5px; margin-bottom:.75rem; align-items:center; flex-wrap:wrap; }
+  .msw-btn { padding:5px 14px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:var(--bg-sec); color:var(--text-sec); cursor:pointer; font-size:12px; font-weight:500; font-family:var(--font); transition:all .15s; }
   .msw-btn.active { background:var(--text); color:var(--bg); border-color:var(--text); }
-  .meas-scheme-toggle { display:flex; gap:6px; margin-bottom:.75rem; align-items:center; flex-wrap:wrap; }
-  .mst-btn { padding:5px 14px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:var(--bg-sec); color:var(--text-sec); cursor:pointer; font-size:12px; font-family:var(--font); transition:all .15s; }
+
+  /* Meas scheme toggle */
+  .meas-scheme-toggle { display:flex; gap:5px; margin-bottom:.65rem; align-items:center; flex-wrap:wrap; }
+  .mst-btn { padding:4px 12px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:var(--bg-sec); color:var(--text-sec); cursor:pointer; font-size:11px; font-family:var(--font); transition:all .15s; }
   .mst-btn.active-linear { background:var(--bg-info); color:var(--text-info); border-color:var(--border-info); }
   .mst-btn.active-smart  { background:var(--bg-smart); color:var(--text-smart); border-color:var(--border-smart); }
-  .probe-tabs { display:flex; gap:6px; margin-bottom:1rem; flex-wrap:wrap; }
-  .probe-tab { padding:5px 16px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:var(--bg-sec); color:var(--text-sec); cursor:pointer; font-size:13px; font-weight:500; font-family:var(--font); transition:all .15s; }
+
+  /* Probe tabs */
+  .probe-tabs { display:flex; gap:4px; margin-bottom:.65rem; flex-wrap:wrap; }
+  .probe-tab { padding:4px 13px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:var(--bg-sec); color:var(--text-sec); cursor:pointer; font-size:12px; font-weight:500; font-family:var(--font); transition:all .15s; }
   .probe-tab.active { background:var(--bg); color:var(--text); border-color:var(--border-pri); }
   .probe-panel { display:none; }
   .probe-panel.active { display:block; }
-  .pulse-mode-row { display:flex; gap:8px; margin-bottom:.75rem; align-items:center; flex-wrap:wrap; }
-  .mode-btn { padding:4px 12px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:var(--bg-sec); color:var(--text-sec); cursor:pointer; font-size:12px; font-family:var(--font); transition:all .15s; }
+
+  /* Pulse mode */
+  .pulse-mode-row { display:flex; gap:6px; margin-bottom:.65rem; align-items:center; flex-wrap:wrap; }
+  .mode-btn { padding:3px 11px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:var(--bg-sec); color:var(--text-sec); cursor:pointer; font-size:11px; font-family:var(--font); transition:all .15s; }
   .mode-btn.active { background:var(--bg-info); color:var(--text-info); border-color:var(--border-info); }
-  .timing-subsection { background:var(--bg-sec); border:.5px solid var(--border); border-radius:var(--radius-md); padding:8px 10px; margin-bottom:10px; }
-  .timing-subsection-title { font-size:10px; font-weight:500; color:var(--text-ter); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px; }
-  .pulse-list { display:flex; flex-direction:column; gap:6px; margin-bottom:.5rem; }
-  .pulse-item { background:var(--bg-sec); border:.5px solid var(--border); border-radius:var(--radius-md); padding:8px 10px; }
-  .pulse-item-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
-  .pulse-label { font-size:12px; font-weight:500; color:var(--text-sec); }
+
+  .timing-subsection { background:var(--bg-sec); border:.5px solid var(--border); border-radius:var(--radius-md); padding:7px 9px; margin-bottom:8px; }
+  .timing-subsection-title { font-size:9px; font-weight:600; color:var(--text-ter); text-transform:uppercase; letter-spacing:.06em; margin-bottom:5px; }
+  .pulse-list { display:flex; flex-direction:column; gap:5px; margin-bottom:.4rem; }
+  .pulse-item { background:var(--bg-sec); border:.5px solid var(--border); border-radius:var(--radius-md); padding:7px 9px; }
+  .pulse-item-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; }
+  .pulse-label { font-size:11px; font-weight:500; color:var(--text-sec); }
   .del-btn { font-size:11px; color:#e24b4a; cursor:pointer; background:none; border:none; padding:0; font-family:var(--font); }
-  .add-btn { padding:5px 12px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:none; color:var(--text-sec); cursor:pointer; font-size:12px; font-family:var(--font); width:100%; margin-top:4px; transition:background .15s; }
+  .add-btn { padding:4px 10px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:none; color:var(--text-sec); cursor:pointer; font-size:11px; font-family:var(--font); width:100%; margin-top:3px; transition:background .15s; }
   .add-btn:hover { background:var(--bg-sec); }
-  .action-row { display:flex; gap:8px; margin-bottom:1rem; flex-wrap:wrap; }
-  .gen-btn { padding:8px 20px; border-radius:var(--radius-md); border:.5px solid var(--border-pri); background:var(--bg); color:var(--text); cursor:pointer; font-size:13px; font-weight:500; font-family:var(--font); transition:background .15s; }
+
+  /* Actions */
+  .action-row { display:flex; gap:6px; margin-bottom:.75rem; flex-wrap:wrap; align-items:center; }
+  .gen-btn { padding:6px 18px; border-radius:var(--radius-md); border:.5px solid var(--border-pri); background:var(--bg); color:var(--text); cursor:pointer; font-size:12px; font-weight:500; font-family:var(--font); transition:background .15s; }
   .gen-btn:hover { background:var(--bg-sec); }
-  .table-wrap { overflow-x:auto; margin-top:.5rem; }
-  table { width:100%; border-collapse:collapse; font-size:12px; font-family:var(--font-mono); }
-  th { background:var(--bg-sec); padding:5px 8px; text-align:left; border-bottom:.5px solid var(--border); font-weight:500; white-space:nowrap; font-family:var(--font); font-size:11px; color:var(--text-sec); }
-  td { padding:4px 8px; border-bottom:.5px solid var(--border); white-space:nowrap; color:var(--text); }
+
+  /* Tables */
+  .table-wrap { overflow-x:auto; margin-top:.4rem; }
+  table { width:100%; border-collapse:collapse; font-size:11px; font-family:var(--font-mono); }
+  th { background:var(--bg-sec); padding:4px 7px; text-align:left; border-bottom:.5px solid var(--border); font-weight:500; white-space:nowrap; font-family:var(--font); font-size:10px; color:var(--text-sec); }
+  td { padding:3px 7px; border-bottom:.5px solid var(--border); white-space:nowrap; color:var(--text); }
   tr:last-child td { border-bottom:none; }
-  .out-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:.5rem; flex-wrap:wrap; gap:6px; }
-  .btn-group { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
-  .copy-btn { font-size:11px; padding:4px 12px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:none; color:var(--text-sec); cursor:pointer; font-family:var(--font); transition:all .15s; }
+
+  /* Output header */
+  .out-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:.4rem; flex-wrap:wrap; gap:4px; }
+  .btn-group { display:flex; gap:5px; align-items:center; flex-wrap:wrap; }
+  .copy-btn { font-size:10px; padding:3px 10px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:none; color:var(--text-sec); cursor:pointer; font-family:var(--font); transition:all .15s; }
   .copy-btn:hover { background:var(--bg-sec); }
   .copy-btn.copied { color:#1D9E75; border-color:#1D9E75; }
-  .excel-btn { font-size:11px; padding:4px 12px; border-radius:var(--radius-md); border:.5px solid #5cb87a; background:var(--bg-smart); color:var(--text-smart); cursor:pointer; font-family:var(--font); font-weight:500; transition:all .15s; display:flex; align-items:center; gap:4px; }
+  .excel-btn { font-size:10px; padding:3px 10px; border-radius:var(--radius-md); border:.5px solid #5cb87a; background:var(--bg-smart); color:var(--text-smart); cursor:pointer; font-family:var(--font); font-weight:500; transition:all .15s; display:flex; align-items:center; gap:3px; }
   .excel-btn:hover { background:#c6e9d2; }
   .excel-btn.copied { background:#1D9E75; color:#fff; border-color:#1D9E75; }
-  .excel-icon { font-size:13px; line-height:1; }
-  .excel-hint { background:var(--bg-smart); border:.5px solid var(--border-smart); border-radius:var(--radius-md); padding:7px 12px; font-size:11px; color:var(--text-smart); margin-bottom:.6rem; display:flex; align-items:center; gap:6px; }
-  .excel-hint-icon { font-size:14px; }
-  .tabs-output { display:flex; gap:6px; margin-bottom:.75rem; flex-wrap:wrap; }
-  .out-tab { padding:4px 12px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:var(--bg-sec); color:var(--text-sec); cursor:pointer; font-size:12px; font-family:var(--font); transition:all .15s; }
+  .excel-icon { font-size:11px; line-height:1; }
+
+  /* Output tabs */
+  .tabs-output { display:flex; gap:4px; margin-bottom:.6rem; flex-wrap:wrap; }
+  .out-tab { padding:3px 11px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:var(--bg-sec); color:var(--text-sec); cursor:pointer; font-size:11px; font-family:var(--font); transition:all .15s; }
   .out-tab.active { background:var(--bg); color:var(--text); border-color:var(--border-pri); }
   .out-panel { display:none; }
   .out-panel.active { display:block; }
-  .probe-out-tabs { display:flex; gap:5px; margin-bottom:.5rem; flex-wrap:wrap; }
-  .probe-out-tab { padding:3px 10px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:var(--bg-sec); color:var(--text-sec); cursor:pointer; font-size:11px; font-family:var(--font); transition:all .15s; }
+  .probe-out-tabs { display:flex; gap:4px; margin-bottom:.4rem; flex-wrap:wrap; }
+  .probe-out-tab { padding:3px 9px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:var(--bg-sec); color:var(--text-sec); cursor:pointer; font-size:10px; font-family:var(--font); transition:all .15s; }
   .probe-out-tab.active { background:var(--bg); color:var(--text); border-color:var(--border-pri); }
   .probe-out-panel { display:none; }
   .probe-out-panel.active { display:block; }
-  .info-row { display:flex; gap:8px; margin-bottom:.5rem; flex-wrap:wrap; align-items:center; }
-  .info-chip { font-size:11px; color:var(--text-sec); background:var(--bg-sec); border-radius:var(--radius-md); padding:2px 8px; border:.5px solid var(--border); }
+
+  /* Info chips */
+  .info-row { display:flex; gap:5px; flex-wrap:wrap; align-items:center; }
+  .info-chip { font-size:10px; color:var(--text-sec); background:var(--bg-sec); border-radius:var(--radius-md); padding:2px 7px; border:.5px solid var(--border); white-space:nowrap; }
   .info-chip.smart { color:var(--text-smart); background:var(--bg-smart); border-color:var(--border-smart); }
   .info-chip.err   { color:var(--text-err);   background:var(--bg-err);   border-color:var(--border-err); }
+
   svg.preview { width:100%; border-radius:var(--radius-md); background:var(--bg-sec); display:block; }
-  .err-banner { background:var(--bg-err); border:.5px solid var(--border-err); border-radius:var(--radius-md); padding:8px 12px; margin-bottom:.75rem; font-size:12px; color:var(--text-err); display:none; }
+  .err-banner { background:var(--bg-err); border:.5px solid var(--border-err); border-radius:var(--radius-md); padding:7px 10px; margin-bottom:.6rem; font-size:11px; color:var(--text-err); display:none; }
   .err-banner.visible { display:block; }
-  .err-banner ul { margin:4px 0 0 16px; }
-  .smart-outer { display:flex; gap:12px; }
+  .err-banner ul { margin:3px 0 0 14px; }
+
+  /* Smart layout */
+  .smart-outer { display:flex; gap:10px; }
   @media(max-width:640px) { .smart-outer { flex-direction:column; } }
-  .seg-browser { flex:0 0 250px; min-width:0; }
+  .seg-browser { flex:0 0 220px; min-width:0; }
   .seg-detail { flex:1; min-width:0; }
-  .seg-browser-title { font-size:10px; font-weight:600; color:var(--text-ter); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px; }
-  .seg-browser-list { display:flex; flex-direction:column; gap:4px; max-height:400px; overflow-y:auto; padding-right:2px; }
-  .seg-item { padding:7px 10px; border-radius:var(--radius-md); border:.5px solid var(--border); background:var(--bg-sec); cursor:pointer; transition:all .12s; }
+  .seg-browser-title { font-size:9px; font-weight:600; color:var(--text-ter); text-transform:uppercase; letter-spacing:.06em; margin-bottom:5px; }
+  .seg-browser-list { display:flex; flex-direction:column; gap:3px; max-height:380px; overflow-y:auto; padding-right:2px; }
+  .seg-item { padding:6px 9px; border-radius:var(--radius-md); border:.5px solid var(--border); background:var(--bg-sec); cursor:pointer; transition:all .12s; }
   .seg-item:hover { border-color:var(--border-sec); }
   .seg-item.sel { background:var(--bg-smart); border-color:var(--border-smart); }
-  .seg-item-head { font-size:11px; font-weight:600; color:var(--text-sec); display:flex; align-items:center; gap:5px; }
+  .seg-item-head { font-size:10px; font-weight:600; color:var(--text-sec); display:flex; align-items:center; gap:4px; }
   .seg-item.sel .seg-item-head { color:var(--text-smart); }
-  .seg-item-meta { font-size:10px; color:var(--text-ter); font-family:var(--font-mono); margin-top:2px; }
-  .pts-badge { font-size:9px; padding:0 5px; border-radius:4px; background:var(--bg-info); color:var(--text-info); border:.5px solid var(--border-info); }
-  .seg-detail-empty { font-size:12px; color:var(--text-ter); padding:24px 0; text-align:center; }
-  .seg-global { background:var(--bg-sec); border:.5px solid var(--border); border-radius:var(--radius-md); padding:8px 10px; margin-bottom:10px; }
-  .seg-global-title { font-size:10px; font-weight:600; color:var(--text-ter); text-transform:uppercase; letter-spacing:.06em; margin-bottom:7px; }
-  .budget-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:10px; }
-  .budget-item-label { font-size:10px; color:var(--text-ter); margin-bottom:2px; display:flex; justify-content:space-between; }
-  .budget-bar-bg { height:7px; background:var(--bg-sec); border-radius:4px; border:.5px solid var(--border); overflow:hidden; }
-  .budget-bar { height:100%; border-radius:4px; transition:width .2s,background .2s; }
-  .subseg-list { display:flex; flex-direction:column; gap:6px; margin-bottom:6px; }
-  .subseg-row { background:var(--bg-sec); border:.5px solid var(--border); border-radius:var(--radius-md); padding:8px 10px; }
-  .subseg-row-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:7px; }
-  .subseg-lbl { font-size:11px; font-weight:600; color:var(--text-sec); }
-  .toolbar { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:.75rem; align-items:center; }
-  .tool-btn { padding:5px 13px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:var(--bg-sec); color:var(--text-sec); cursor:pointer; font-size:12px; font-family:var(--font); transition:all .15s; }
+  .seg-item-meta { font-size:9px; color:var(--text-ter); font-family:var(--font-mono); margin-top:2px; }
+  .pts-badge { font-size:8px; padding:0 4px; border-radius:3px; background:var(--bg-info); color:var(--text-info); border:.5px solid var(--border-info); }
+  .seg-detail-empty { font-size:11px; color:var(--text-ter); padding:20px 0; text-align:center; }
+  .seg-global { background:var(--bg-sec); border:.5px solid var(--border); border-radius:var(--radius-md); padding:7px 9px; margin-bottom:8px; }
+  .seg-global-title { font-size:9px; font-weight:600; color:var(--text-ter); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px; }
+  .budget-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin-bottom:8px; }
+  .budget-item-label { font-size:9px; color:var(--text-ter); margin-bottom:2px; display:flex; justify-content:space-between; }
+  .budget-bar-bg { height:5px; background:var(--bg-sec); border-radius:3px; border:.5px solid var(--border); overflow:hidden; }
+  .budget-bar { height:100%; border-radius:3px; transition:width .2s,background .2s; }
+  .subseg-list { display:flex; flex-direction:column; gap:5px; margin-bottom:5px; }
+  .subseg-row { background:var(--bg-sec); border:.5px solid var(--border); border-radius:var(--radius-md); padding:7px 9px; }
+  .subseg-row-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+  .subseg-lbl { font-size:10px; font-weight:600; color:var(--text-sec); }
+
+  /* Draw mode toolbar */
+  .toolbar { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:.6rem; align-items:center; }
+  .tool-btn { padding:4px 11px; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:var(--bg-sec); color:var(--text-sec); cursor:pointer; font-size:11px; font-family:var(--font); transition:all .15s; }
   .tool-btn:hover { background:var(--bg-ter); }
   .tool-btn.active { background:var(--bg-info); color:var(--text-info); border-color:var(--border-info); }
-  .tool-sep { width:.5px; height:20px; background:var(--border-sec); margin:0 2px; }
-  .hint { font-size:11px; color:var(--text-ter); margin-left:auto; }
+  .tool-sep { width:.5px; height:18px; background:var(--border-sec); margin:0 2px; }
+  .hint { font-size:10px; color:var(--text-ter); margin-left:auto; }
   .canvas-wrap { position:relative; overflow:hidden; border-radius:var(--radius-md); border:.5px solid var(--border-sec); background:var(--canvas-bg); touch-action:none; cursor:crosshair; }
-  #pulseCanvas { display:block; width:100%; height:300px; }
-  .seg-list { display:flex; flex-direction:column; gap:5px; margin-top:.5rem; }
-  .seg-row { display:flex; align-items:center; gap:6px; background:var(--bg-sec); border:.5px solid var(--border); border-radius:var(--radius-md); padding:6px 9px; cursor:pointer; transition:border-color .15s; }
+  #pulseCanvas { display:block; width:100%; height:280px; }
+  .seg-list { display:flex; flex-direction:column; gap:4px; margin-top:.4rem; }
+  .seg-row { display:flex; align-items:center; gap:5px; background:var(--bg-sec); border:.5px solid var(--border); border-radius:var(--radius-md); padding:5px 8px; cursor:pointer; transition:border-color .15s; }
   .seg-row.selected { border-color:var(--border-info); background:var(--bg-info); }
-  .pc-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
-  .seg-title { font-size:12px; font-weight:500; flex:1; }
-  .seg-info { font-size:11px; color:var(--text-ter); font-family:var(--font-mono); }
-  .seg-del { font-size:11px; color:#e24b4a; cursor:pointer; background:none; border:none; padding:0 2px; font-family:var(--font); flex-shrink:0; }
-  .seg-inputs { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:6px; }
+  .pc-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .seg-title { font-size:11px; font-weight:500; flex:1; }
+  .seg-info { font-size:10px; color:var(--text-ter); font-family:var(--font-mono); }
+  .seg-del { font-size:10px; color:#e24b4a; cursor:pointer; background:none; border:none; padding:0 2px; font-family:var(--font); flex-shrink:0; }
+  .seg-inputs { display:grid; grid-template-columns:repeat(4,1fr); gap:5px; margin-top:5px; }
   @media(max-width:560px){ .seg-inputs { grid-template-columns:1fr 1fr; } }
-  .probe-colors { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-  .pc { display:flex; align-items:center; gap:5px; font-size:12px; color:var(--text-sec); }
+  .probe-colors { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+  .pc { display:flex; align-items:center; gap:4px; font-size:11px; color:var(--text-sec); }
+
+  /* Inline label+switch row */
+  .inline-label { font-size:11px; color:var(--text-sec); display:flex; align-items:center; gap:5px; }
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>Pulse configurator</h1>
-  <p class="subtitle">Piecewise linear pulse table + measurement scheme generator</p>
+
+  <div class="app-header">
+    <h1>Pulse Configurator</h1>
+    <span class="subtitle">Piecewise linear pulse table + measurement scheme</span>
+  </div>
 
   <div class="mode-switcher">
-    <span style="font-size:12px;color:var(--text-sec);margin-right:4px;">Mode:</span>
+    <span style="font-size:11px;color:var(--text-sec);margin-right:2px;">Mode:</span>
     <button class="msw-btn active" id="sw-config" onclick="switchAppMode('config')">Configurator</button>
     <button class="msw-btn" id="sw-draw" onclick="switchAppMode('draw')">✦ Custom waveform</button>
   </div>
@@ -170,7 +202,7 @@
     <div class="section">
       <div class="section-title">Measurement scheme</div>
       <div class="meas-scheme-toggle">
-        <span style="font-size:11px;color:var(--text-sec);font-weight:500;margin-right:2px;">Scheme type:</span>
+        <span style="font-size:10px;color:var(--text-sec);font-weight:500;margin-right:2px;">Type:</span>
         <button class="mst-btn active-linear" id="mst-linear" onclick="setMeasScheme('linear')">Linear (uniform)</button>
         <button class="mst-btn" id="mst-smart" onclick="setMeasScheme('smart')">Smart (per-segment)</button>
       </div>
@@ -183,8 +215,8 @@
           <div><label>Max pts / row</label><input type="number" id="m_maxpts" value="4000" step="100" min="1" oninput="autoGenerate()"></div>
           <div><label>Current range (A)</label><input type="number" id="m_irange" value="0" step="0.0001" oninput="autoGenerate()"></div>
         </div>
-        <div class="grid2" style="margin-top:10px;">
-          <div><label>Voltage range (V)</label><input type="number" id="m_vrange" value="0" step="0.5" oninput="autoGenerate()"></div>
+        <div style="margin-top:8px;max-width:260px;">
+          <label>Voltage range (V)</label><input type="number" id="m_vrange" value="0" step="0.5" oninput="autoGenerate()">
         </div>
       </div>
 
@@ -217,7 +249,7 @@
           <div class="seg-browser">
             <div class="seg-browser-title">Segments (1 cycle, reference probe)</div>
             <div class="seg-browser-list" id="seg-browser-list">
-              <div style="font-size:12px;color:var(--text-ter);padding:8px 0">Generate pulse first.</div>
+              <div style="font-size:11px;color:var(--text-ter);padding:6px 0">Generate pulse first.</div>
             </div>
           </div>
           <div class="seg-detail" id="seg-detail">
@@ -248,10 +280,6 @@
 
     <div class="section" id="output-section" style="display:none">
       <div class="section-title">Output</div>
-      <div class="excel-hint">
-        <span class="excel-hint-icon">📋</span>
-        <span>Use <strong>Copy for software</strong> on any table — this copies a fully-structured HTML table that pastes directly into your measurement software or Excel with each value in its own cell.</span>
-      </div>
       <div class="tabs-output">
         <div class="out-tab active" onclick="switchOut('pulse')">Pulse sequence</div>
         <div class="out-tab" onclick="switchOut('meas')">Measurement scheme</div>
@@ -266,7 +294,7 @@
         </div>
         <div id="probe-out-gate" class="probe-out-panel active">
           <div class="out-header">
-            <div class="info-row" id="pulse-info-gate" style="margin:0"></div>
+            <div class="info-row" id="pulse-info-gate"></div>
             <div class="btn-group">
               <button class="copy-btn" onclick="copyTablePlain('pulse-table-gate',this)">Copy text</button>
               <button class="excel-btn" onclick="copyTableExcel('pulse-table-gate',this)"><span class="excel-icon">⊞</span> Copy for software</button>
@@ -276,7 +304,7 @@
         </div>
         <div id="probe-out-drain" class="probe-out-panel">
           <div class="out-header">
-            <div class="info-row" id="pulse-info-drain" style="margin:0"></div>
+            <div class="info-row" id="pulse-info-drain"></div>
             <div class="btn-group">
               <button class="copy-btn" onclick="copyTablePlain('pulse-table-drain',this)">Copy text</button>
               <button class="excel-btn" onclick="copyTableExcel('pulse-table-drain',this)"><span class="excel-icon">⊞</span> Copy for software</button>
@@ -286,7 +314,7 @@
         </div>
         <div id="probe-out-source" class="probe-out-panel">
           <div class="out-header">
-            <div class="info-row" id="pulse-info-source" style="margin:0"></div>
+            <div class="info-row" id="pulse-info-source"></div>
             <div class="btn-group">
               <button class="copy-btn" onclick="copyTablePlain('pulse-table-source',this)">Copy text</button>
               <button class="excel-btn" onclick="copyTableExcel('pulse-table-source',this)"><span class="excel-icon">⊞</span> Copy for software</button>
@@ -296,7 +324,7 @@
         </div>
         <div id="probe-out-bulk" class="probe-out-panel">
           <div class="out-header">
-            <div class="info-row" id="pulse-info-bulk" style="margin:0"></div>
+            <div class="info-row" id="pulse-info-bulk"></div>
             <div class="btn-group">
               <button class="copy-btn" onclick="copyTablePlain('pulse-table-bulk',this)">Copy text</button>
               <button class="excel-btn" onclick="copyTableExcel('pulse-table-bulk',this)"><span class="excel-icon">⊞</span> Copy for software</button>
@@ -307,7 +335,7 @@
       </div>
       <div id="out-meas" class="out-panel">
         <div class="out-header">
-          <div class="info-row" id="meas-info" style="margin:0"></div>
+          <div class="info-row" id="meas-info"></div>
           <div class="btn-group">
             <button class="copy-btn" onclick="copyTablePlain('meas-table-wrap',this)">Copy text</button>
             <button class="excel-btn" onclick="copyTableExcel('meas-table-wrap',this)"><span class="excel-icon">⊞</span> Copy for software</button>
@@ -325,7 +353,7 @@
   <div id="draw-mode" style="display:none">
     <div class="section">
       <div class="section-title">Active probe</div>
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;">
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px;">
         <button class="tool-btn active" id="pb-gate"   onclick="setProbe('gate')">Gate (G)</button>
         <button class="tool-btn"        id="pb-drain"  onclick="setProbe('drain')">Drain (D)</button>
         <button class="tool-btn"        id="pb-source" onclick="setProbe('source')">Source (S)</button>
@@ -362,7 +390,7 @@
     <div class="section">
       <div class="section-title">Segments — <span id="probe-name" style="color:var(--text-sec)">Gate</span></div>
       <div id="seg-list" class="seg-list"></div>
-      <div style="margin-top:8px;font-size:11px;color:var(--text-ter)">Click a segment to edit its exact values.</div>
+      <div style="margin-top:6px;font-size:10px;color:var(--text-ter)">Click a segment to edit its exact values.</div>
     </div>
     <div class="section">
       <div class="section-title">Measurement scheme params</div>
@@ -376,11 +404,7 @@
     <div class="action-row"><button class="gen-btn" onclick="exportDrawCSV()">Export CSV</button></div>
     <div id="draw-output-section" class="section" style="display:none">
       <div class="section-title">Output</div>
-      <div class="excel-hint">
-        <span class="excel-hint-icon">📋</span>
-        <span>Use <strong>Copy for software</strong> on any table — pastes directly into your measurement software or Excel.</span>
-      </div>
-      <div style="display:flex;gap:6px;margin-bottom:.75rem;flex-wrap:wrap">
+      <div style="display:flex;gap:4px;margin-bottom:.6rem;flex-wrap:wrap">
         <div class="out-tab active" id="dot-pulse" onclick="switchDrawOut('pulse')">Pulse sequence</div>
         <div class="out-tab" id="dot-meas" onclick="switchDrawOut('meas')">Measurement scheme</div>
       </div>
@@ -440,11 +464,6 @@ function setMeasScheme(type) {
 
 /* ─────────────────────────────────────────────
    PROBE STATE
-   - "pulse" mode: each segment has its own voltage (vlo field)
-   - "multipulse" mode: same as pulse but each segment can independently
-     sweep its voltage across cycles (vlo → vhi by vstep, over N cycles)
-   - "constant" mode: single fixed voltage
-   - sweep mode removed
 ───────────────────────────────────────────── */
 const probeState = {
   gate:   { mode:'pulse',    pulses:[{tpulse:1000,repeat:1,sweep:false,vlo:0,vhi:1,vstep:0.1}], constant:0, timing:{tgap:10,trise:100,tfall:100,ncycles:1,vbase:0} },
@@ -536,11 +555,7 @@ function switchProbe(p) {
 
 function renderProbePanel(p) {
   const s = probeState[p], t = s.timing, el = document.getElementById('probe-'+p);
-
-  /* Mode buttons — no sweep */
   const mb = (m) => `<button class="mode-btn ${s.mode===m?'active':''}" onclick="setMode('${p}','${m}')">${{constant:'Constant',pulse:'Pulsed',multipulse:'Multi-pulse'}[m]}</button>`;
-
-  /* Timing block shown for pulsed & multipulse — no vpulse field */
   const showTiming = s.mode === 'pulse' || s.mode === 'multipulse';
   const timingHtml = showTiming ? `
     <div class="timing-subsection">
@@ -551,8 +566,8 @@ function renderProbePanel(p) {
         <div><label>t<sub>fall</sub> (ns)</label><input type="number" step="10" min="1" value="${t.tfall}" onchange="probeState['${p}'].timing.tfall=parseFloat(this.value);autoGenerate()"></div>
         <div><label>N cycles</label><input type="number" step="1" min="1" value="${t.ncycles}" onchange="probeState['${p}'].timing.ncycles=parseInt(this.value);autoGenerate()"></div>
       </div>
-      <div class="grid2" style="margin-top:8px;">
-        <div><label>V<sub>base</sub> (V)</label><input type="number" step="0.1" value="${t.vbase}" onchange="probeState['${p}'].timing.vbase=parseFloat(this.value);autoGenerate()"></div>
+      <div style="margin-top:7px;max-width:160px;">
+        <label>V<sub>base</sub> (V)</label><input type="number" step="0.1" value="${t.vbase}" onchange="probeState['${p}'].timing.vbase=parseFloat(this.value);autoGenerate()">
       </div>
     </div>` : '';
 
@@ -562,7 +577,6 @@ function renderProbePanel(p) {
     body = `<div style="max-width:160px;"><label>Voltage (V)</label><input type="number" step="0.1" value="${s.constant}" onchange="probeState['${p}'].constant=parseFloat(this.value);autoGenerate()"></div>`;
 
   } else if (s.mode === 'pulse') {
-    /* Pulsed: segments each with their own voltage */
     let items = '';
     s.pulses.forEach((pu, i) => {
       items += `<div class="pulse-item">
@@ -577,21 +591,16 @@ function renderProbePanel(p) {
     body = `<div class="pulse-list">${items}</div><button class="add-btn" onclick="addPulse('${p}')">+ Add segment</button>`;
 
   } else if (s.mode === 'multipulse') {
-    /*
-      Multi-pulse: same structure as pulsed (each segment has its own tpulse, repeat, vlo)
-      but each segment independently optionally sweeps its voltage across cycles.
-      vlo → vhi by vstep over N cycles. N cycles is set in the timing block.
-    */
     let items = '';
     s.pulses.forEach((pu, i) => {
       const sweepBlock = pu.sweep ? `
-        <div class="grid3" style="margin-top:6px;">
+        <div class="grid3" style="margin-top:5px;">
           <div><label>V lo (V)</label><input type="number" step="0.1" value="${pu.vlo!==undefined?pu.vlo:0}" onchange="probeState['${p}'].pulses[${i}].vlo=parseFloat(this.value);autoGenerate()"></div>
           <div><label>V hi (V)</label><input type="number" step="0.1" value="${pu.vhi!==undefined?pu.vhi:1}" onchange="probeState['${p}'].pulses[${i}].vhi=parseFloat(this.value);autoGenerate()"></div>
           <div><label>V step (V)</label><input type="number" step="0.1" value="${pu.vstep!==undefined?pu.vstep:0.1}" onchange="probeState['${p}'].pulses[${i}].vstep=parseFloat(this.value);autoGenerate()"></div>
         </div>` : `
-        <div style="margin-top:6px;">
-          <div style="max-width:160px;"><label>V pulse (V)</label><input type="number" step="0.1" value="${pu.vlo!==undefined?pu.vlo:0}" onchange="probeState['${p}'].pulses[${i}].vlo=parseFloat(this.value);autoGenerate()"></div>
+        <div style="margin-top:5px;max-width:160px;">
+          <label>V pulse (V)</label><input type="number" step="0.1" value="${pu.vlo!==undefined?pu.vlo:0}" onchange="probeState['${p}'].pulses[${i}].vlo=parseFloat(this.value);autoGenerate()">
         </div>`;
       items += `<div class="pulse-item">
         <div class="pulse-item-header"><span class="pulse-label">Segment ${i+1}</span><button class="del-btn" onclick="delPulse('${p}',${i})">Remove</button></div>
@@ -599,8 +608,8 @@ function renderProbePanel(p) {
           <div><label>t<sub>pulse</sub> (μs)</label><input type="number" step="1" min="0" value="${pu.tpulse}" onchange="probeState['${p}'].pulses[${i}].tpulse=parseFloat(this.value);autoGenerate()"></div>
           <div><label>Repeat (per cycle)</label><input type="number" step="1" min="1" value="${pu.repeat||1}" onchange="probeState['${p}'].pulses[${i}].repeat=parseInt(this.value);autoGenerate()"></div>
         </div>
-        <div style="margin-top:6px;">
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+        <div style="margin-top:5px;">
+          <label class="inline-label">
             <input type="checkbox" ${pu.sweep?'checked':''} onchange="probeState['${p}'].pulses[${i}].sweep=this.checked;renderProbePanel('${p}');autoGenerate()">
             Sweep voltage across cycles
           </label>
@@ -611,7 +620,7 @@ function renderProbePanel(p) {
     body = `<div class="pulse-list">${items}</div><button class="add-btn" onclick="addPulse('${p}')">+ Add segment</button>`;
   }
 
-  el.innerHTML = `<div class="pulse-mode-row"><span style="font-size:12px;color:var(--text-sec)">Mode:</span>${mb('constant')}${mb('pulse')}${mb('multipulse')}</div>${timingHtml}${body}`;
+  el.innerHTML = `<div class="pulse-mode-row"><span style="font-size:11px;color:var(--text-sec)">Mode:</span>${mb('constant')}${mb('pulse')}${mb('multipulse')}</div>${timingHtml}${body}`;
 }
 
 function setMode(p, m) {
@@ -646,10 +655,6 @@ function switchProbeOut(probe, btn) {
 
 /* ─────────────────────────────────────────────
    WAVEFORM BUILDER
-   Multi-pulse sweep logic:
-     Each cycle c (0-indexed), for each segment with sweep enabled,
-     the voltage for that cycle = vlo + c * vstep (clamped to vhi direction).
-     Fixed segments just use vlo every cycle.
 ───────────────────────────────────────────── */
 function addPt(pts, t, v) {
   if (pts.length > 0 && Math.abs(t - pts[pts.length-1].t) < 1e-18) {
@@ -673,11 +678,8 @@ function buildProbeWaveform(probe, overrideNcycles) {
   addPt(pts, 0, vbase);
 
   for (let c = 0; c < ncycles; c++) {
-    /* Build the list of {tpulse, voltage} for this cycle */
     let segs = [];
-
     if (s.mode === 'pulse') {
-      /* Fixed voltage per segment, repeat times */
       s.pulses.forEach(pu => {
         const v = pu.vlo !== undefined ? pu.vlo : 0;
         for (let r = 0; r < (pu.repeat || 1); r++) {
@@ -685,7 +687,6 @@ function buildProbeWaveform(probe, overrideNcycles) {
         }
       });
     } else if (s.mode === 'multipulse') {
-      /* Per segment, voltage either fixed or swept over cycles */
       s.pulses.forEach(pu => {
         const reps = pu.repeat || 1;
         let v;
@@ -739,7 +740,7 @@ function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 ───────────────────────────────────────────── */
 function buildSegBrowser(segs) {
   const list = document.getElementById('seg-browser-list');
-  if (!segs.length) { list.innerHTML = '<div style="font-size:12px;color:var(--text-ter);padding:8px 0">No variable segments.</div>'; return; }
+  if (!segs.length) { list.innerHTML = '<div style="font-size:11px;color:var(--text-ter);padding:6px 0">No variable segments.</div>'; return; }
   list.innerHTML = segs.map((seg, i) => {
     const pts  = (seg.subRows || []).reduce((a, r) => a + r.npts, 0);
     const rows = (seg.subRows || []).length;
@@ -763,8 +764,8 @@ function renderSegDetail(i) {
   if (i < 0 || i >= smartSegs.length) { det.innerHTML = '<div class="seg-detail-empty">Select a segment to configure its measurement rows.</div>'; return; }
   const seg = smartSegs[i];
   if (!seg.subRows) seg.subRows = [];
-  let html = `<div style="font-size:12px;font-weight:600;color:var(--text-sec);margin-bottom:8px;">${kindIcon(seg.kind)} ${capitalize(seg.kind)} &nbsp;<span style="font-size:11px;font-weight:400;color:var(--text-ter)">${fmtUS(seg.tStart)} → ${fmtUS(seg.tEnd)} (Δt=${fmtUS(seg.dur)})</span></div>`;
-  if (seg.subRows.length === 0) { html += '<div style="font-size:11px;color:var(--text-ter);margin-bottom:8px;">No measurement rows defined for this segment yet.</div>'; }
+  let html = `<div style="font-size:11px;font-weight:600;color:var(--text-sec);margin-bottom:7px;">${kindIcon(seg.kind)} ${capitalize(seg.kind)} &nbsp;<span style="font-size:10px;font-weight:400;color:var(--text-ter)">${fmtUS(seg.tStart)} → ${fmtUS(seg.tEnd)} (Δt=${fmtUS(seg.dur)})</span></div>`;
+  if (seg.subRows.length === 0) { html += '<div style="font-size:10px;color:var(--text-ter);margin-bottom:7px;">No measurement rows defined for this segment yet.</div>'; }
   html += '<div class="subseg-list">';
   seg.subRows.forEach((row, ri) => {
     const tcErr = row.tcycle_ns < H.MIN_T_NS, thErr = row.thigh_ns < H.MIN_T_NS;
@@ -891,7 +892,6 @@ function generate() {
     if (wfms[p].length === 1) { wfms[p] = [{t:0, v:wfms[p][0].v}, {t:maxT||1e-6, v:wfms[p][0].v}]; tTotals[p] = maxT || 1e-6; }
   });
 
-  /* Build single-cycle waveforms for measurement scheme reference */
   const wfms1 = {};
   ['gate','drain','source','bulk'].forEach(p => { wfms1[p] = buildProbeWaveform(p, 1); });
   const tTotals1 = {};
@@ -961,32 +961,42 @@ function generate() {
 function fmtE(v) { return v.toExponential(4); }
 function fmtF(v, d=4) { return Number(v).toFixed(d); }
 
+/* ── CHANGE 1: Show total pts across all cycles ── */
 function renderAllProbeTables(probePulseRows, tTotals) {
   ['gate','drain','source','bulk'].forEach(p => {
     const rows = probePulseRows[p];
+    // Total pts across all cycles = rows.length (these ARE the all-cycles points)
+    // Single-cycle pts for reference
+    const wfm1 = buildProbeWaveform(p, 1);
+    const singleCyclePts = wfm1.length;
+    const ncycles = (probeState[p].mode !== 'constant') ? probeState[p].timing.ncycles : 1;
+    const overLimitChip = rows.length > H.PULSE_PTS ? `<span class="info-chip err">⚠ >${H.PULSE_PTS} limit</span>` : '';
     document.getElementById('pulse-info-'+p).innerHTML =
-      `<span class="info-chip">Points: ${rows.length}</span><span class="info-chip">Total: ${(tTotals[p]*1e6).toFixed(3)} μs</span>${rows.length > H.PULSE_PTS ? `<span class="info-chip err">⚠ >${H.PULSE_PTS} limit</span>` : ''}`;
+      `<span class="info-chip">Points (all cycles): ${rows.length}</span>`+
+      `<span class="info-chip">1-cycle pts: ${singleCyclePts}</span>`+
+      `<span class="info-chip">Total: ${(tTotals[p]*1e6).toFixed(3)} μs</span>`+
+      overLimitChip;
     let h = `<table><thead><tr><th>Time (s)</th><th>Voltage (V)</th></tr></thead><tbody>`;
     rows.forEach(r => { h += `<tr><td>${fmtE(r.t)}</td><td>${fmtF(r.v)}</td></tr>`; });
     document.getElementById('pulse-table-'+p).innerHTML = h + '</tbody></table>';
   });
 }
 
+/* ── CHANGE 3: t_low removed from meas table ── */
 function renderMeasTable(rows, totalMeasPts) {
   const isSmart = measSchemeType === 'smart';
   const rOver = rows.length > H.MEAS_ROWS, pOver = totalMeasPts > H.MEAS_PTS;
   document.getElementById('meas-info').innerHTML =
     `<span class="info-chip${rOver?' err':''}">Rows: ${rows.length}</span><span class="info-chip${pOver?' err':''}">Pts: ${totalMeasPts}</span><span class="info-chip${isSmart?' smart':''}">1 cycle${isSmart?' · Smart':''}</span>`;
-  /* Columns: Start | N pts | t_cycle | t_high | t_low (derived) | I range | V range | [Segment] */
-  let h = `<table><thead><tr><th>Start (s)</th><th>N pts</th><th>t<sub>cycle</sub> (s)</th><th>t<sub>high</sub> (s)</th><th>t<sub>low</sub> (s)</th><th>I range (A)</th><th>V range (V)</th>${isSmart?'<th>Segment</th>':''}</tr></thead><tbody>`;
+  let h = `<table><thead><tr><th>Start (s)</th><th>N pts</th><th>t<sub>cycle</sub> (s)</th><th>t<sub>high</sub> (s)</th><th>I range (A)</th><th>V range (V)</th>${isSmart?'<th>Segment</th>':''}</tr></thead><tbody>`;
   rows.forEach(r => {
-    h += `<tr><td>${fmtE(r.start)}</td><td>${r.npts}</td><td>${fmtE(r.tcycle)}</td><td>${fmtE(r.thigh)}</td><td>${fmtE(r.tlow)}</td><td>${fmtE(r.irange)}</td><td>${fmtF(r.vrange, 2)}</td>${isSmart ? `<td style="font-size:11px">${r.label||''}</td>` : ''}</tr>`;
+    h += `<tr><td>${fmtE(r.start)}</td><td>${r.npts}</td><td>${fmtE(r.tcycle)}</td><td>${fmtE(r.thigh)}</td><td>${fmtE(r.irange)}</td><td>${fmtF(r.vrange, 2)}</td>${isSmart ? `<td style="font-size:10px">${r.label||''}</td>` : ''}</tr>`;
   });
   document.getElementById('meas-table-wrap').innerHTML = h + '</tbody></table>';
 }
 
 function renderPreview(wfms, maxT) {
-  const W=660, H=220, pL=38, pR=12, pT=10, pB=26, pW=W-pL-pR, pH=H-pT-pB;
+  const W=660, H=200, pL=38, pR=12, pT=10, pB=26, pW=W-pL-pR, pH=H-pT-pB;
   const allV = Object.values(wfms).flatMap(w => w.map(p => p.v));
   const vMin = Math.min(...allV) - .1, vMax = Math.max(...allV) + .1, vSpan = vMax - vMin || 1;
   const tT = maxT || 1e-6;
@@ -1027,9 +1037,9 @@ function exportCSV() {
     csv += `\n${p.toUpperCase()} Probe\nTime_s,Voltage_V\n`;
     probePulseRows[p].forEach(r => { csv += `${r.t.toExponential(6)},${r.v.toFixed(4)}\n`; });
   });
-  csv += '\nMeasurement Scheme (1 cycle)\nStart_s,N_points,Cycle_Time_s,High_Time_s,Low_Time_s,I_range_A,V_range_V\n';
+  csv += '\nMeasurement Scheme (1 cycle)\nStart_s,N_points,Cycle_Time_s,High_Time_s,I_range_A,V_range_V\n';
   measRows.forEach(r => {
-    csv += `${r.start.toExponential(6)},${r.npts},${r.tcycle.toExponential(6)},${r.thigh.toExponential(6)},${r.tlow.toExponential(6)},${r.irange.toExponential(3)},${r.vrange.toFixed(2)}\n`;
+    csv += `${r.start.toExponential(6)},${r.npts},${r.tcycle.toExponential(6)},${r.thigh.toExponential(6)},${r.irange.toExponential(3)},${r.vrange.toFixed(2)}\n`;
   });
   Object.assign(document.createElement('a'), {href: URL.createObjectURL(new Blob([csv], {type:'text/csv'})), download:'pulse_sequence.csv'}).click();
 }
@@ -1051,7 +1061,7 @@ function resizeCanvas() {
   const wrap = document.getElementById('canvas-wrap');
   if (!wrap) return;
   const rect = wrap.getBoundingClientRect();
-  cW = rect.width || 600; cH = 300;
+  cW = rect.width || 600; cH = 280;
   canvas.style.width = cW + 'px'; canvas.style.height = cH + 'px';
   canvas.width = Math.round(cW * DPR); canvas.height = Math.round(cH * DPR);
   ctx.setTransform(1,0,0,1,0,0); ctx.scale(DPR, DPR);
@@ -1194,7 +1204,7 @@ canvas.addEventListener('touchend',   e => { e.preventDefault(); canvas.dispatch
 function renderSegList() {
   const probe = drawState.probe, nodes = sortedNodes(probe), list = document.getElementById('seg-list');
   if (!list) return;
-  if (nodes.length < 2) { list.innerHTML = '<div style="font-size:12px;color:var(--text-ter);padding:6px 0">Add at least 2 nodes to create segments.</div>'; return; }
+  if (nodes.length < 2) { list.innerHTML = '<div style="font-size:11px;color:var(--text-ter);padding:5px 0">Add at least 2 nodes to create segments.</div>'; return; }
   let html = '';
   for (let i = 0; i < nodes.length - 1; i++) {
     const a = nodeToReal(nodes[i]), b = nodeToReal(nodes[i+1]);
@@ -1318,19 +1328,20 @@ function drawGenerate() {
 
 function renderDrawPulseTable(rows, totalT) {
   document.getElementById('dpulse-chips').innerHTML =
-    `<span class="info-chip${rows.length > H.PULSE_PTS ? ' err' : ''}">Points: ${rows.length}</span> &nbsp;<span class="info-chip">Total: ${(totalT*1e6).toFixed(3)} μs</span>`;
+    `<span class="info-chip${rows.length > H.PULSE_PTS ? ' err' : ''}">Points: ${rows.length}</span>&nbsp;<span class="info-chip">Total: ${(totalT*1e6).toFixed(3)} μs</span>`;
   let h = `<thead><tr><th>Time (s)</th><th>V_gate</th><th>V_drain</th><th>V_source</th><th>V_bulk</th></tr></thead><tbody>`;
   rows.forEach(r => { h += `<tr><td>${r.t.toExponential(5)}</td><td>${r.gate.toFixed(4)}</td><td>${r.drain.toFixed(4)}</td><td>${r.source.toFixed(4)}</td><td>${r.bulk.toFixed(4)}</td></tr>`; });
   document.getElementById('dpulse-tbl').innerHTML = h + '</tbody>';
 }
 
+/* ── CHANGE 3: t_low removed from draw meas table ── */
 function renderDrawMeasTable(rows, totalMeasPts) {
   const ro = rows.length > H.MEAS_ROWS, po = totalMeasPts > H.MEAS_PTS;
   document.getElementById('dmeas-chips').innerHTML =
     `<span class="info-chip${ro ? ' err' : ''}">Rows: ${rows.length}</span>&nbsp;<span class="info-chip${po ? ' err' : ''}">Pts: ${totalMeasPts}</span>`;
-  let h = `<thead><tr><th>Start (s)</th><th>N pts</th><th>t<sub>cycle</sub> (s)</th><th>t<sub>high</sub> (s)</th><th>t<sub>low</sub> (s)</th><th>I range (A)</th></tr></thead><tbody>`;
+  let h = `<thead><tr><th>Start (s)</th><th>N pts</th><th>t<sub>cycle</sub> (s)</th><th>t<sub>high</sub> (s)</th><th>I range (A)</th></tr></thead><tbody>`;
   rows.forEach(r => {
-    h += `<tr><td>${r.start.toExponential(5)}</td><td>${r.npts}</td><td>${r.tcycle.toExponential(4)}</td><td>${r.thigh.toExponential(4)}</td><td>${r.tlow.toExponential(4)}</td><td>${r.irange.toExponential(3)}</td></tr>`;
+    h += `<tr><td>${r.start.toExponential(5)}</td><td>${r.npts}</td><td>${r.tcycle.toExponential(4)}</td><td>${r.thigh.toExponential(4)}</td><td>${r.irange.toExponential(3)}</td></tr>`;
   });
   document.getElementById('dmeas-tbl').innerHTML = h + '</tbody>';
 }
