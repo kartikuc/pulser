@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pulse Configurator</title>
+<title>MOSFET Pulse Configurator</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -184,8 +184,8 @@
 <div class="container">
 
   <div class="app-header">
-    <h1>Pulse Configurator</h1>
-    <span class="subtitle">Piecewise linear pulse table + measurement scheme</span>
+    <h1>MOSFET Pulse Configurator</h1>
+    <span class="subtitle">Depletion-mode · piecewise linear pulse table + measurement scheme</span>
   </div>
 
   <div class="mode-switcher">
@@ -274,8 +274,12 @@
       <div id="probe-bulk" class="probe-panel"></div>
     </div>
 
+    <!-- CHANGED: 4 separate export buttons, one per probe -->
     <div class="action-row">
-      <button class="gen-btn" onclick="exportCSV()">Export CSV</button>
+      <button class="gen-btn" onclick="exportProbeCSV('gate')">Export Gate (G) CSV</button>
+      <button class="gen-btn" onclick="exportProbeCSV('drain')">Export Drain (D) CSV</button>
+      <button class="gen-btn" onclick="exportProbeCSV('source')">Export Source (S) CSV</button>
+      <button class="gen-btn" onclick="exportProbeCSV('bulk')">Export Bulk (B) CSV</button>
     </div>
 
     <div class="section" id="output-section" style="display:none">
@@ -961,15 +965,11 @@ function generate() {
 function fmtE(v) { return v.toExponential(4); }
 function fmtF(v, d=4) { return Number(v).toFixed(d); }
 
-/* ── CHANGE 1: Show total pts across all cycles ── */
 function renderAllProbeTables(probePulseRows, tTotals) {
   ['gate','drain','source','bulk'].forEach(p => {
     const rows = probePulseRows[p];
-    // Total pts across all cycles = rows.length (these ARE the all-cycles points)
-    // Single-cycle pts for reference
     const wfm1 = buildProbeWaveform(p, 1);
     const singleCyclePts = wfm1.length;
-    const ncycles = (probeState[p].mode !== 'constant') ? probeState[p].timing.ncycles : 1;
     const overLimitChip = rows.length > H.PULSE_PTS ? `<span class="info-chip err">⚠ >${H.PULSE_PTS} limit</span>` : '';
     document.getElementById('pulse-info-'+p).innerHTML =
       `<span class="info-chip">Points (all cycles): ${rows.length}</span>`+
@@ -982,7 +982,6 @@ function renderAllProbeTables(probePulseRows, tTotals) {
   });
 }
 
-/* ── CHANGE 3: t_low removed from meas table ── */
 function renderMeasTable(rows, totalMeasPts) {
   const isSmart = measSchemeType === 'smart';
   const rOver = rows.length > H.MEAS_ROWS, pOver = totalMeasPts > H.MEAS_PTS;
@@ -1028,20 +1027,19 @@ function renderPreview(wfms, maxT) {
   document.getElementById('preview-container').innerHTML = s;
 }
 
-function exportCSV() {
+/* ─────────────────────────────────────────────
+   CHANGED: exportProbeCSV — one probe at a time, no headers
+───────────────────────────────────────────── */
+function exportProbeCSV(probe) {
   if (!generatedData) generate();
   if (measSchemeType === 'smart' && !updateBudget()) { alert('Cannot export: limits exceeded. Fix errors first.'); return; }
-  const {probePulseRows, measRows} = generatedData;
+  const rows = generatedData.probePulseRows[probe];
   let csv = '';
-  ['gate','drain','source','bulk'].forEach(p => {
-    csv += `\n${p.toUpperCase()} Probe\nTime_s,Voltage_V\n`;
-    probePulseRows[p].forEach(r => { csv += `${r.t.toExponential(6)},${r.v.toFixed(4)}\n`; });
-  });
-  csv += '\nMeasurement Scheme (1 cycle)\nStart_s,N_points,Cycle_Time_s,High_Time_s,I_range_A,V_range_V\n';
-  measRows.forEach(r => {
-    csv += `${r.start.toExponential(6)},${r.npts},${r.tcycle.toExponential(6)},${r.thigh.toExponential(6)},${r.irange.toExponential(3)},${r.vrange.toFixed(2)}\n`;
-  });
-  Object.assign(document.createElement('a'), {href: URL.createObjectURL(new Blob([csv], {type:'text/csv'})), download:'pulse_sequence.csv'}).click();
+  rows.forEach(r => { csv += `${r.t.toExponential(6)},${r.v.toFixed(4)}\n`; });
+  Object.assign(document.createElement('a'), {
+    href: URL.createObjectURL(new Blob([csv], {type:'text/csv'})),
+    download: `pulse_${probe}.csv`
+  }).click();
 }
 
 /* ─────────────────────────────────────────────
@@ -1334,7 +1332,6 @@ function renderDrawPulseTable(rows, totalT) {
   document.getElementById('dpulse-tbl').innerHTML = h + '</tbody>';
 }
 
-/* ── CHANGE 3: t_low removed from draw meas table ── */
 function renderDrawMeasTable(rows, totalMeasPts) {
   const ro = rows.length > H.MEAS_ROWS, po = totalMeasPts > H.MEAS_PTS;
   document.getElementById('dmeas-chips').innerHTML =
